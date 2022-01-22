@@ -19,12 +19,12 @@ public class Drive extends SubsystemBase {
   private DifferentialDrive m_drive;
   /** Creates a new Drive. */
   public Drive() {
-    m_leftLeader = new WPI_TalonFX(1);
-    m_leftFollower = new WPI_TalonFX(2);
+    m_leftLeader = new WPI_TalonFX(13);
+    m_leftFollower = new WPI_TalonFX(14);
     m_leftFollower.follow(m_leftLeader);
 
-    m_rightLeader = new WPI_TalonFX(3);
-    m_rightFollower = new WPI_TalonFX(4);
+    m_rightLeader = new WPI_TalonFX(11);
+    m_rightFollower = new WPI_TalonFX(12);
     m_rightFollower.follow(m_rightLeader);
 
     m_drive = new DifferentialDrive(m_leftLeader, m_rightLeader);
