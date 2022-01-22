@@ -23,6 +23,9 @@ public class Drive extends SubsystemBase {
     m_leftFollower = new WPI_TalonFX(14);
     m_leftFollower.follow(m_leftLeader);
 
+    m_leftFollower.setInverted(true);
+    m_leftLeader.setInverted(true);
+
     m_rightLeader = new WPI_TalonFX(11);
     m_rightFollower = new WPI_TalonFX(12);
     m_rightFollower.follow(m_rightLeader);
