@@ -67,9 +67,26 @@ SYSID_R_ANGLE    = 8
 # Position is measured in rotations
 # Velocity is measured in rotations per second
 
-# So, in order to correct the incorrect gearing we need to multiply the gearing by 26.04 twice.
-# The first multiply gets our position/velocity measurements in reference to the builtin Falcon encoder
-# The second multiply gets our position/velocity measures in reference to the rotations of the robot wheels.
+# This is how the SysID converts the encoder value to rotations
+# https://github.com/wpilibsuite/sysid/blob/main/sysid-library/src/main/cpp/generation/SysIdSetup.cpp#L144
+#   position = [=] { return talonController->GetSelectedSensorPosition() / cpr; };
+#   rate = [=] {
+#     return talonController->GetSelectedSensorVelocity() / cpr /
+#            0.1;  // Conversion factor from 100 ms to seconds
+#   };
+
+# What the calculation should be:
+# cpr = 2048 * (26.04/1) = 53,329.92
+# rotations = position / (53,329.92)
+
+# What we ended up with the incorrect gear ratio:
+# cpr = 2048 * (1/26.04) = 53,329.92
+# rotations = position / (78.65)
+
+# So, in order to correct the incorrect gearing we need to divide the gearing by 26.04 twice. Basically we want to make
+# the denominator 78.65 turn into 53,329.92.
+# 1. The first divide gets our position/velocity measurements in reference to the builtin Falcon encoder
+# 2. The second divide gets our position/velocity measures in reference to the rotations of the robot wheels.
 
 gearing = 26.04
 for test_name in ["fast-backward", "fast-forward", "slow-backward", "slow-forward"]:
@@ -77,7 +94,7 @@ for test_name in ["fast-backward", "fast-forward", "slow-backward", "slow-forwar
 
         # Fix up the metrics from this datapoint
         for metric in [SYSID_L_POSITION, SYSID_R_POSITION, SYSID_L_VELOCITY, SYSID_R_VELOCITY]:
-            datapoint[metric] = datapoint[metric] * gearing * gearing
+            datapoint[metric] = datapoint[metric] / gearing / gearing
 
 # Write out correct sysid data file
 output_file_path = Path(sys.argv[1])
