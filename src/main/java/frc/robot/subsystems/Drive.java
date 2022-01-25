@@ -12,6 +12,29 @@ import frc.robot.Constants;
 
 public class Drive extends SubsystemBase {
 
+  // Drive
+
+  public static final double ksVolts = 0.5805;
+  public static final double kvVoltSecondsPerMeter = 5.9;
+  public static final double kaVoltSecondsSquaredPerMeter = 0.63211;
+  
+
+  // kP value for PID
+  
+  public static final double kPDriveVel = 7.524;
+
+  public static final double kTrackwidthMeters = 0.6096; //24 inches
+
+  public static final DifferentialDriveKinematics kDriveKinematics =
+    new DifferentialDriveKinematics(kTrackwidthMeters);
+
+  public static final double kMaxSpeedMetersPerSecond = 1.09; //3 feet per second
+  public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+
+  // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+  public static final double kRamseteB = 2;
+  public static final double kRamseteZeta = 0.7;
+
   private WPI_TalonFX m_leftLeader;
   private WPI_TalonFX m_leftFollower;
   private WPI_TalonFX m_rightLeader;
