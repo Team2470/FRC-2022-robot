@@ -25,12 +25,5 @@ public final class Constants {
 
     public static final int kControllerA = 0;
 
-    // Drive
-
-    public static final double ksVolts = 0.5805;
-    public static final double kvVoltSecondsPerMeter = 5.9;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.63211;
-
-    // kP value for PID
-    public static final double kPDriveVel = 7.524;
+    
 }
