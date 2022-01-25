@@ -27,7 +27,7 @@ public class DriveWithGamepadCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.arcadeDrive(-m_controller.getLeftY(),m_controller.getRightX());
+    m_drive.arcadeDrive(-m_controller.getLeftY(),-m_controller.getRightX());
   }
   
   // Called once the command ends or is interrupted.
