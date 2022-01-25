@@ -20,7 +20,7 @@ public class RobotContainer {
   // Subsystems
   private final Drive m_drive = new Drive();
 
-  private final XboxController m_controller = new XboxController(0);
+  private final XboxController m_controller = new XboxController(Constants.kControllerA);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
