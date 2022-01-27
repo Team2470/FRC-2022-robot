@@ -21,6 +21,8 @@ public final class Constants {
     public static final int kDriveTalonLeftAId  = 13;
     public static final int kDriveTalonLeftBId  = 14;
 
+    public static final int kShooterNeoLeaderId = 1;
+    public static final int kShooterNeoFollowerId= 3;
     // Controllers
 
     public static final int kControllerA = 0;

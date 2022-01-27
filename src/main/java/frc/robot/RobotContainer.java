@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveWithGamepadCommand;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   // Subsystems
   private final Drive m_drive = new Drive();
+  private final Shooter m_shooter = new Shooter();
 
   private final XboxController m_controller = new XboxController(Constants.kControllerA);
 
