@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -22,13 +23,18 @@ public class Drive extends SubsystemBase {
   public static final double ksVolts = 0.5805;
   public static final double kvVoltSecondsPerMeter = 5.9;
   public static final double kaVoltSecondsSquaredPerMeter = 0.63211;
+
+  public static final double gearRatio = 12.75; //2020 robot ratio: 26.04
+  public static final double wheelDiameter = 6;
+  public static final double encoderCounts = 2048;
   
 
   // kP value for PID
   
   public static final double kPDriveVel = 7.524;
-
   public static final double kTrackwidthMeters = 0.6096; //24 inches
+
+  
 
   public static final DifferentialDriveKinematics kDriveKinematics =
     new DifferentialDriveKinematics(kTrackwidthMeters);
@@ -56,20 +62,27 @@ public class Drive extends SubsystemBase {
   /** Creates a new Drive. */
   public Drive() {
     m_leftLeader = new WPI_TalonFX(Constants.kDriveTalonLeftAId);
+    m_leftLeader.configFactoryDefault();
+  
     m_leftFollower = new WPI_TalonFX(Constants.kDriveTalonLeftBId);
     m_leftFollower.follow(m_leftLeader);
+    m_leftFollower.configFactoryDefault();
 
     m_leftFollower.setInverted(true);
     m_leftLeader.setInverted(true);
 
     m_rightLeader = new WPI_TalonFX(Constants.kDriveTalonRightAId);
+    m_rightLeader.configFactoryDefault();
+
     m_rightFollower = new WPI_TalonFX(Constants.kDriveTalonRightBId);
     m_rightFollower.follow(m_rightLeader);
+    m_rightFollower.configFactoryDefault();
+
 
     m_drive = new DifferentialDrive(m_leftLeader, m_rightLeader);
 
     resetEncoders();
-    m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
+    m_odometry = new DifferentialDriveOdometry(getHeading());
   }
   
 
@@ -86,7 +99,7 @@ public class Drive extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
-        m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+        getHeading(), getLeftEncoderDistance(), getRightEncoderDistance());
   }
 
   /**
@@ -104,7 +117,7 @@ public class Drive extends SubsystemBase {
    * @return The current wheel speeds.
    */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(m_leftEncoder.getRate(), m_rightEncoder.getRate());
+    return new DifferentialDriveWheelSpeeds(getLeftEncoderRate(), getRightEncoderRate());
   }
 
   /**
@@ -141,7 +154,7 @@ public class Drive extends SubsystemBase {
    * @return the average of the two encoder readings
    */
   public double getAverageEncoderDistance() {
-    return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance()) / 2.0;
+    return (getLeftEncoderDistance() + getRightEncoderDistance()) / 2.0;
   }
 
   /**
@@ -149,8 +162,9 @@ public class Drive extends SubsystemBase {
    *
    * @return the left drive encoder
    */
-  public Encoder getLeftEncoder() {
-    return m_leftEncoder;
+  public double getLeftEncoderDistance() {
+    double leftCounts = m_leftLeader.getSelectedSensorPosition();
+    return ((leftCounts * Math.PI * wheelDiameter) / (encoderCounts * 34.37 * gearRatio));
   }
 
   /**
@@ -158,8 +172,19 @@ public class Drive extends SubsystemBase {
    *
    * @return the right drive encoder
    */
-  public Encoder getRightEncoder() {
-    return m_rightEncoder;
+  public double getRightEncoderDistance() {
+    double rightCounts = m_rightLeader.getSelectedSensorPosition();
+    return ((rightCounts * Math.PI * wheelDiameter) / (encoderCounts * 34.37 * gearRatio));
+  }
+
+  public double getRightEncoderRate() {
+    double rightCounts = m_rightLeader.getSelectedSensorPosition();
+    return ((10 * Math.PI * wheelDiameter * rightCounts) / (39.37 * encoderCounts * gearRatio));
+  }
+
+  public double getLeftEncoderRate() {
+    double leftCounts = m_leftLeader.getSelectedSensorPosition();
+    return ((10 * Math.PI * wheelDiameter * leftCounts) / (39.37 * encoderCounts * gearRatio));
   }
 
   /**
