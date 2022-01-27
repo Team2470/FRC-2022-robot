@@ -51,6 +51,7 @@ public class Drive extends SubsystemBase {
   private WPI_TalonFX m_leftFollower;
   private WPI_TalonFX m_rightLeader;
   private WPI_TalonFX m_rightFollower;
+  private WPI_TalonFX m_gyroTalon;
 
   private DifferentialDrive m_drive;
 
@@ -76,6 +77,7 @@ public class Drive extends SubsystemBase {
     m_leftFollower.setInverted(false);
     m_rightLeader.setInverted(true);
     m_rightFollower.setInverted(true);
+    m_gyroTalon = new WPI_TalonFX(Constants.kGyroTalon);
 
     // Use brake mode to stop our robot coasting.
     m_leftLeader.setNeutralMode(NeutralMode.Brake);
