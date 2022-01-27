@@ -50,6 +50,7 @@ public class Drive extends SubsystemBase {
   private WPI_TalonFX m_leftFollower;
   private WPI_TalonFX m_rightLeader;
   private WPI_TalonFX m_rightFollower;
+  private WPI_TalonFX m_gyroTalon;
 
   private DifferentialDrive m_drive;
 
@@ -77,6 +78,8 @@ public class Drive extends SubsystemBase {
     m_rightFollower = new WPI_TalonFX(Constants.kDriveTalonRightBId);
     m_rightFollower.follow(m_rightLeader);
     m_rightFollower.configFactoryDefault();
+
+    m_gyroTalon = new WPI_TalonFX(Constants.kGyroTalon);
 
 
     m_drive = new DifferentialDrive(m_leftLeader, m_rightLeader);

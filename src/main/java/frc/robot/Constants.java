@@ -22,6 +22,7 @@ public final class Constants {
     public static final int kDriveTalonRightBId = 12;
     public static final int kDriveTalonLeftAId  = 13;
     public static final int kDriveTalonLeftBId  = 14;
+    public static final int kGyroTalon = 15;
 
     // Controllers
 
