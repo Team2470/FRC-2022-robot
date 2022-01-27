@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -50,7 +51,7 @@ public class Drive extends SubsystemBase {
   private WPI_TalonFX m_leftFollower;
   private WPI_TalonFX m_rightLeader;
   private WPI_TalonFX m_rightFollower;
-  private WPI_TalonFX m_gyroTalon;
+  private WPI_TalonSRX m_gyroTalon;
 
   private DifferentialDrive m_drive;
 
@@ -69,8 +70,6 @@ public class Drive extends SubsystemBase {
     m_leftFollower.follow(m_leftLeader);
     m_leftFollower.configFactoryDefault();
 
-    m_leftFollower.setInverted(true);
-    m_leftLeader.setInverted(true);
 
     m_rightLeader = new WPI_TalonFX(Constants.kDriveTalonRightAId);
     m_rightLeader.configFactoryDefault();
@@ -79,8 +78,10 @@ public class Drive extends SubsystemBase {
     m_rightFollower.follow(m_rightLeader);
     m_rightFollower.configFactoryDefault();
 
-    m_gyroTalon = new WPI_TalonFX(Constants.kGyroTalon);
+    m_gyroTalon = new WPI_TalonSRX(Constants.kGyroTalon);
 
+    m_rightFollower.setInverted(true);
+    m_rightLeader.setInverted(true);
 
     m_drive = new DifferentialDrive(m_leftLeader, m_rightLeader);
 
