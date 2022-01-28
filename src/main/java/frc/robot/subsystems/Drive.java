@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -20,20 +21,22 @@ import frc.robot.Constants;
 public class Drive extends SubsystemBase {
 
   // Drive
-
-  public static final double ksVolts = 0.5805;
-  public static final double kvVoltSecondsPerMeter = 5.9;
-  public static final double kaVoltSecondsSquaredPerMeter = 0.63211;
-
   public static final double gearRatio = 12.75; //2020 robot ratio: 26.04
-  public static final double wheelDiameter = 6;
+  public static final double wheelDiameterMeters = Units.inchesToMeters(6);
   public static final double encoderCounts = 2048;
-  
+
+  public static double encoderCountsToMeters(double counts) {
+    return counts * ((Math.PI * wheelDiameterMeters) / (encoderCounts * gearRatio));
+  }
+
+  public static double encoderRateToMetersPerSecond(double rate) {
+    return encoderCountsToMeters(rate) * 10;
+  }
+
 
   // kP value for PID
-  
   public static final double kPDriveVel = 7.524;
-  public static final double kTrackwidthMeters = 0.6096; //24 inches
+  public static final double kTrackwidthMeters = Units.inchesToMeters(24);
 
   
 
@@ -162,33 +165,39 @@ public class Drive extends SubsystemBase {
   }
 
   /**
-   * Gets the left drive encoder.
+   * Gets the left drive encoder distance.
    *
-   * @return the left drive encoder
+   * @return meters
    */
   public double getLeftEncoderDistance() {
-    double leftCounts = m_leftLeader.getSelectedSensorPosition();
-    return ((leftCounts * Math.PI * wheelDiameter) / (encoderCounts * 34.37 * gearRatio));
+    return encoderCountsToMeters(m_leftLeader.getSelectedSensorPosition());
   }
 
   /**
-   * Gets the right drive encoder.
+   * Gets the right drive encoder distance.
    *
-   * @return the right drive encoder
+   * @return meters
    */
   public double getRightEncoderDistance() {
-    double rightCounts = m_rightLeader.getSelectedSensorPosition();
-    return ((rightCounts * Math.PI * wheelDiameter) / (encoderCounts * 34.37 * gearRatio));
+    return encoderCountsToMeters(m_rightLeader.getSelectedSensorPosition());
   }
 
-  public double getRightEncoderRate() {
-    double rightCounts = m_rightLeader.getSelectedSensorPosition();
-    return ((10 * Math.PI * wheelDiameter * rightCounts) / (39.37 * encoderCounts * gearRatio));
-  }
-
+  /**
+   * Gets the left drive encoder rate.
+   *
+   * @return meters/second
+   */
   public double getLeftEncoderRate() {
-    double leftCounts = m_leftLeader.getSelectedSensorPosition();
-    return ((10 * Math.PI * wheelDiameter * leftCounts) / (39.37 * encoderCounts * gearRatio));
+    return encoderRateToMetersPerSecond(m_leftLeader.getSelectedSensorVelocity());
+  }
+
+  /**
+   * Gets the right drive encoder rate.
+   *
+   * @return meters/second
+   */
+  public double getRightEncoderRate() {
+    return encoderRateToMetersPerSecond(m_rightLeader.getSelectedSensorVelocity());
   }
 
   /**
