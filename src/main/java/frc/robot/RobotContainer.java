@@ -18,6 +18,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.DriveAlongTrajectoryCommand;
 import frc.robot.commands.DriveWithGamepadCommand;
 import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -65,59 +66,14 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
 
-    // Create a voltage constraint to ensure we don't accelerate too fast
-    var autoVoltageConstraint =
-        new DifferentialDriveVoltageConstraint(
-            new SimpleMotorFeedforward(
-                Constants.ksVolts,
-                Constants.kvVoltSecondsPerMeter,
-                Constants.kaVoltSecondsSquaredPerMeter),
-            Constants.kDriveKinematics,
-            10);
-
-    // Create config for trajectory
-    TrajectoryConfig config =
-        new TrajectoryConfig(
-                Constants.kMaxSpeedMetersPerSecond,
-                Constants.kMaxAccelerationMetersPerSecondSquared)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(Constants.kDriveKinematics)
-            // Apply the voltage constraint
-            .addConstraint(autoVoltageConstraint);
-
-    // An example trajectory to follow.  All units in meters.
-    Trajectory exampleTrajectory =
-        TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(0)),
-            // Pass through these two interior waypoints, making an 's' curve path
             List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-            // End 3 meters straight ahead of where we started, facing forward
             new Pose2d(3, 0, new Rotation2d(0)),
-            // Pass config
-            config);
+            Constants.kTrajectoryConfig
+    );
 
-    RamseteCommand ramseteCommand =
-        new RamseteCommand(
-            exampleTrajectory,
-            m_drive::getPose,
-            new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
-            new SimpleMotorFeedforward(
-                Constants.ksVolts,
-                Constants.kvVoltSecondsPerMeter,
-                Constants.kaVoltSecondsSquaredPerMeter),
-            Constants.kDriveKinematics,
-            m_drive::getWheelSpeeds,
-            new PIDController(Constants.kPDriveVel, 0, 0),
-            new PIDController(Constants.kPDriveVel, 0, 0),
-            // RamseteCommand passes volts to the callback
-            m_drive::tankDriveVolts,
-            m_drive);
-
-    // Reset odometry to the starting pose of the trajectory.
-    m_drive.resetOdometry(exampleTrajectory.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> m_drive.tankDriveVolts(0, 0));
+    return new DriveAlongTrajectoryCommand(m_drive, trajectory)
+            .andThen(() -> m_drive.tankDriveVolts(0, 0));
   }
 }

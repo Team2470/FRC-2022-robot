@@ -4,7 +4,17 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+
+import java.util.List;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -43,5 +53,24 @@ public final class Constants {
     public static final DifferentialDriveKinematics kDriveKinematics =
     new DifferentialDriveKinematics(kTrackwidthMeters);
 
-    
+    // Create a voltage constraint to ensure we don't accelerate too fast
+    public static final DifferentialDriveVoltageConstraint kAutoVoltageConstraint =
+            new DifferentialDriveVoltageConstraint(
+                    new SimpleMotorFeedforward(
+                            Constants.ksVolts,
+                            Constants.kvVoltSecondsPerMeter,
+                            Constants.kaVoltSecondsSquaredPerMeter),
+                    Constants.kDriveKinematics,
+                    10);
+
+    // Create config for trajectory
+    public static final TrajectoryConfig kTrajectoryConfig =
+            new TrajectoryConfig(
+                    Constants.kMaxSpeedMetersPerSecond,
+                    Constants.kMaxAccelerationMetersPerSecondSquared)
+                    // Add kinematics to ensure max speed is actually obeyed
+                    .setKinematics(Constants.kDriveKinematics)
+                    // Apply the voltage constraint
+                    .addConstraint(kAutoVoltageConstraint);
+
 }
