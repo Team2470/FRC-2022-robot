@@ -34,13 +34,13 @@ public class RobotContainer {
     m_drive.setDefaultCommand(new DriveWithGamepadCommand(m_drive,m_controller));
 
     JoystickButton rpmButton1 = new JoystickButton(m_controller, XboxController.Button.kA.value);
-    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, 1000));
+    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, 3000));
 
     JoystickButton rpmButton2 = new JoystickButton(m_controller, XboxController.Button.kX.value);
-    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, 2000));
+    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, 4000));
 
     JoystickButton rpmButton3 = new JoystickButton(m_controller, XboxController.Button.kB.value);
-    rpmButton3.whileHeld(new RunShooterCommand(m_shooter, 3000));
+    rpmButton3.whileHeld(new RunShooterCommand(m_shooter, 5000));
 
     
   }

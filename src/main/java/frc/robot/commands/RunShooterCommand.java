@@ -8,12 +8,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
 public class RunShooterCommand extends CommandBase {
-  private Shooter m_shooter;
-  private double m_setPoint;
+  private final Shooter m_shooter;
+  private final double m_setPoint;
   /** Creates a new RunShooterCommand. */
   public RunShooterCommand(Shooter shooter, double setPoint) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
+    m_setPoint = setPoint;
+
 
     addRequirements(m_shooter);
   }
