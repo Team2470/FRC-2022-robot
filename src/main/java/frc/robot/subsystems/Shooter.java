@@ -36,8 +36,8 @@ public class Shooter extends SubsystemBase {
 
     m_shooterLeader.setSmartCurrentLimit(40);
     m_shooterFollower.setSmartCurrentLimit(40);
-    m_shooterLeader.enableVoltageCompensation(10);
-    m_shooterFollower.enableVoltageCompensation(10);
+    //m_shooterLeader.enableVoltageCompensation(10);
+    //m_shooterFollower.enableVoltageCompensation(10);
 
     m_pidController = m_shooterLeader.getPIDController();
     m_encoder = m_shooterLeader.getEncoder();
