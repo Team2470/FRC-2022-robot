@@ -11,6 +11,8 @@ import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -18,14 +20,14 @@ import frc.robot.Constants;
 public class FrontClimber extends SubsystemBase {
 
   private WPI_TalonFX m_frontClimber;
-  private CANCoder m_frontCanCoder; 
+  private CANCoder m_frontCanCoder;
+  private Solenoid m_ratchetSolenoid;
 
   /** Creates a new Climber. */
   public FrontClimber() {
     m_frontClimber = new WPI_TalonFX(Constants.kFrontClimberTalonId, Constants.kCanivoreName);
     m_frontCanCoder = new CANCoder(Constants.kFrontCanCoderId, Constants.kCanivoreName);
-
-  
+    m_ratchetSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.kRatchetSolenoid);
 
     m_frontCanCoder.configFactoryDefault();
     m_frontCanCoder.configMagnetOffset(Constants.kFrontClimberCanCoderOffset);
@@ -53,6 +55,7 @@ public class FrontClimber extends SubsystemBase {
   }
 
   public void startClimbMotor(int direction, double speed) {
+    m_ratchetSolenoid.set(direction > 0);
     m_frontClimber.set(ControlMode.PercentOutput, direction*speed);
   }
 

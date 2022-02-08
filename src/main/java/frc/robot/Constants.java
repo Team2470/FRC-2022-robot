@@ -31,6 +31,10 @@ public final class Constants {
     public static final int kBackCanCoderId = 7;
     public static final String kCanivoreName = "Canivore0";
 
+    // Pneumatics
+
+    public static final int kRatchetSolenoid = 0;
+
     // Controllers
 
     public static final int kControllerA = 0;
@@ -45,4 +49,6 @@ public final class Constants {
     public static final int kBackClimberReverseLimit  = -1024;
     public static final int kBackClimberForwardLimit = 1024;
     public static final double kBackClimberCanCoderOffset = 208;
+
+
 }
