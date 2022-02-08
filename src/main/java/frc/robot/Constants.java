@@ -27,6 +27,8 @@ public final class Constants {
     public static final int kDriveTalonLeftBId  = 12;
     public static final int kFrontClimberTalonId  = 10;
     public static final int kFrontCanCoderId = 9;
+    public static final int kBackClimberTalonId = 8;
+    public static final int kBackCanCoderId = 7;
     public static final String kCanivoreName = "Canivore0";
 
     // Controllers
@@ -40,5 +42,7 @@ public final class Constants {
     public static final double kFrontClimberCanCoderOffset = 208;
     public static final double kClimberSpeed = 0.2;
 
-    
+    public static final int kBackClimberReverseLimit  = -1024;
+    public static final int kBackClimberForwardLimit = 1024;
+    public static final double kBackClimberCanCoderOffset = 208;
 }
