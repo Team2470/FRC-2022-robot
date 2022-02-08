@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-
+import frc.robot.Constants;
 
 
 public class Vision extends SubsystemBase {
@@ -17,7 +17,17 @@ private NetworkTable m_limelightTable = NetworkTableInstance.getDefault().getTab
 private NetworkTableEntry m_tx = m_limelightTable.getEntry("tx");
 private NetworkTableEntry m_ty = m_limelightTable.getEntry("ty");
 private NetworkTableEntry m_ta = m_limelightTable.getEntry("ta");
+private NetworkTableEntry m_tv = m_limelightTable.getEntry("tv");
+private NetworkTableEntry m_usbCam = m_limelightTable.getEntry("stream");
 
+
+  /** Creates a new Vision. */
+  public Vision() {
+    m_usbCam.setNumber(1);
+  }
+
+  @Override
+  public void periodic() {
 //read values periodically
 double x = m_tx.getDouble(0.0);
 double y = m_ty.getDouble(0.0);
@@ -27,12 +37,39 @@ double area = m_ta.getDouble(0.0);
 SmartDashboard.putNumber("LimelightX", x);
 SmartDashboard.putNumber("LimelightY", y);
 SmartDashboard.putNumber("LimelightArea", area);
-  
-  /** Creates a new Vision. */
-  public Vision() {}
-
-  @Override
-  public void periodic() {
     // This method will be called once per scheduler run
+}
+
+    /**
+   * Finds the distance from the base of the robot to the base of the target
+   * @return Distance in degrees from the base of the camera to the base of the target
+   */
+  public double geTargetDistanceM() {
+    if(m_tv.getDouble(0.0) == 1.0)  {
+      double yDegree = m_ty.getDouble(0.0);
+      return (Constants.kTargetHeightM - Constants.kCameraHeightM) / Math.tan( (Constants.kCameraAngleD + yDegree) * (Math.PI / 180) );    
+    } else {
+      return 0;
+    }
+  }
+  /**
+   * Returns if target is found
+   * @return true if found 
+   */
+  public boolean getTargetFound() {
+
+    if(m_tv.getDouble(0.0) == 1.0) {
+
+      return true;
+    } else {
+      return false;
+    }
+  }
+  public double getHorizontalAngleD() {
+    if(m_tv.getDouble(0.0) == 1.0)  {
+      return m_tx.getDouble(0.0);  
+    } else {
+      return 0;
+    }
   }
 }
