@@ -7,6 +7,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveWithGamepadCommand;
+import frc.robot.commands.RunConveyerDown;
+import frc.robot.commands.RunConveyerUp;
+import frc.robot.subsystems.Conveyer;
 import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -19,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   // Subsystems
   private final Drive m_drive = new Drive();
+  private final Conveyer m_conveyer = new Conveyer();
 
   private final XboxController m_controller = new XboxController(Constants.kControllerA);
 
@@ -28,6 +32,12 @@ public class RobotContainer {
     configureButtonBindings();
 
     m_drive.setDefaultCommand(new DriveWithGamepadCommand(m_drive,m_controller));
+    JoystickButton conveyerUp = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
+    conveyerUp.whileHeld(new RunConveyerUp(m_conveyer));
+
+    JoystickButton conveyerDown = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
+    conveyerDown.whileHeld(new RunConveyerDown(m_conveyer));
+
   }
 
   /**
