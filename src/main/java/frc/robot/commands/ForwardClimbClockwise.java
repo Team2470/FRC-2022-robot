@@ -4,20 +4,19 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drive;
+import frc.robot.Constants;
+import frc.robot.subsystems.FrontClimber;
 
-public class DriveWithGamepadCommand extends CommandBase {
-  private Drive m_drive;
-  private XboxController m_controller;
-  /** Creates a new DriveWithGamepadCommand. */
-  public DriveWithGamepadCommand(Drive drive, XboxController controller) {
+public class ForwardClimbClockwise extends CommandBase {
+
+  private FrontClimber m_frontClimber; 
+  /** Creates a new ForwardClimbClockwise. */
+  public ForwardClimbClockwise(FrontClimber frontClimber) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drive = drive;
-    m_controller = controller;
+    m_frontClimber = frontClimber;
 
-    addRequirements(m_drive);
+    addRequirements(m_frontClimber);
   }
 
   // Called when the command is initially scheduled.
@@ -27,20 +26,16 @@ public class DriveWithGamepadCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    double xSpeed = -m_controller.getLeftY();
-    double zRotation = m_controller.getRightX();
-    boolean quickTurn = m_controller.getLeftBumper();
-
-    m_drive.curvatureDrive(xSpeed, zRotation, quickTurn);
+    System.out.println("Forward");
+    m_frontClimber.startClimbMotor(Constants.kClockwise, Constants.kClimberSpeed);
   }
-  
+
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.stop();
+    m_frontClimber.stopClimbMotor();
   }
-    
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
