@@ -52,5 +52,8 @@ public final class Constants {
     public static final int kBackClimberForwardLimit = 1024;
     public static final double kBackClimberCanCoderOffset = 208;
 
+    // Drive switch
+    public static final boolean kArcadeDrive = false;
+
 
 }

@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
 
 public class DriveWithGamepadCommand extends CommandBase {
@@ -32,8 +33,12 @@ public class DriveWithGamepadCommand extends CommandBase {
     double zRotation = m_controller.getRightX();
     boolean quickTurn = m_controller.getLeftBumper();
 
-    //m_drive.curvatureDrive(xSpeed, zRotation, quickTurn);
-    m_drive.arcadeDrive(xSpeed, zRotation);
+    if (Constants.kArcadeDrive) {
+      m_drive.arcadeDrive(xSpeed, zRotation);
+    }
+    else {
+      m_drive.curvatureDrive(xSpeed, zRotation, quickTurn);
+    }
   }
   
   // Called once the command ends or is interrupted.
