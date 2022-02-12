@@ -5,26 +5,25 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Conveyer extends SubsystemBase {
+public class Conveyor extends SubsystemBase {
   /** Creates a new Conveyer. */
-  private WPI_TalonFX m_conveyerMotor;
+  private WPI_TalonFX m_conveyorMotor;
 
-  public Conveyer() {
-    m_conveyerMotor = new WPI_TalonFX(Constants.kConveyerMotorID);
+  public Conveyor() {
+    m_conveyorMotor = new WPI_TalonFX(Constants.kConveyorMotorID);
   }
 
   public void move(int direction, double speed) {
-    m_conveyerMotor.set(ControlMode.PercentOutput, direction*speed);
+    m_conveyorMotor.set(ControlMode.PercentOutput, direction*speed);
   }
 
   public void stop() {
-    m_conveyerMotor.stopMotor();
+    m_conveyorMotor.stopMotor();
   }
 
   @Override

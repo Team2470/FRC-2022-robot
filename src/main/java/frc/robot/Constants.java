@@ -21,13 +21,13 @@ public final class Constants {
     public static final int kDriveTalonLeftAId  = 11;
     public static final int kDriveTalonLeftBId  = 12;
 
-    public static final int kConveyerMotorID = 18;
+    public static final int kConveyorMotorID = 18;
 
-    // Conveyer constants
+    // Conveyor constants
 
-    public static final int kConveyerUp = 1;
-    public static final int kConveyerDown = -1;
-    public static final double kConveyerSpeed = 0.1;
+    public static final int kConveyorUp = 1;
+    public static final int kConveyorDown = -1;
+    public static final double kConveyorSpeed = 0.1;
 
     // Controllers
 
