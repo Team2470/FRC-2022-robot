@@ -35,10 +35,12 @@ public final class Constants {
 
     public static final int kRatchetSolenoid = 0;
 
+    public static final int kShooterNeoLeaderId = 1;
+    public static final int kShooterNeoFollowerId= 3;
     // Controllers
 
     public static final int kControllerA = 0;
-
+  
     // Climber
 
     public static final int kFrontClimberReverseLimit  = -1024;

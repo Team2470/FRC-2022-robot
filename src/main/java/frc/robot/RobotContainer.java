@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.BackwardClimbClockwise;
 import frc.robot.commands.BackwardClimbCounterClockwise;
 import frc.robot.commands.DriveWithGamepadCommand;
+import frc.robot.commands.RunShooterCommand;
+import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Shooter;
 import frc.robot.commands.ForwardClimbClockwise;
 import frc.robot.commands.ForwardClimbCounterClockwise;
 import frc.robot.subsystems.BackClimber;
@@ -26,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // Subsystems
   private final Drive m_drive = new Drive();
+  private final Shooter m_shooter = new Shooter();
 
   private final FrontClimber m_frontClimber = new FrontClimber();
 
@@ -49,7 +53,16 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    JoystickButton ForwardClimbClockwiseButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
+    JoystickButton rpmButton1 = new JoystickButton(m_controller, XboxController.Button.kA.value);
+    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, 3000));
+
+    JoystickButton rpmButton2 = new JoystickButton(m_controller, XboxController.Button.kX.value);
+    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, 4000));
+
+    JoystickButton rpmButton3 = new JoystickButton(m_controller, XboxController.Button.kB.value);
+    rpmButton3.whileHeld(new RunShooterCommand(m_shooter, 5000));
+
+    /*JoystickButton ForwardClimbClockwiseButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
     ForwardClimbClockwiseButton.whileHeld(new ForwardClimbClockwise(m_frontClimber));
 
     JoystickButton ForwardClimbCounterClockwiseButton = new JoystickButton(m_controller, XboxController.Button.kB.value);
@@ -59,7 +72,7 @@ public class RobotContainer {
     BackwardClimbClockwiseButton.whileHeld(new BackwardClimbClockwise(m_backClimber));
 
     JoystickButton BackwardClimbCounterClockwiseButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
-    BackwardClimbCounterClockwiseButton.whileHeld(new BackwardClimbCounterClockwise(m_backClimber));
+    BackwardClimbCounterClockwiseButton.whileHeld(new BackwardClimbCounterClockwise(m_backClimber));*/
   }
 
   /**
