@@ -32,7 +32,8 @@ public class DriveWithGamepadCommand extends CommandBase {
     double zRotation = m_controller.getRightX();
     boolean quickTurn = m_controller.getLeftBumper();
 
-    m_drive.curvatureDrive(xSpeed, zRotation, quickTurn);
+    //m_drive.curvatureDrive(xSpeed, zRotation, quickTurn);
+    m_drive.arcadeDrive(xSpeed, zRotation);
   }
   
   // Called once the command ends or is interrupted.
