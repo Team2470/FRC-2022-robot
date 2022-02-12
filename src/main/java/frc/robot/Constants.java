@@ -42,6 +42,7 @@ public final class Constants {
     public static final int kBackClimberTalonId = 8;
     public static final int kBackCanCoderId = 7;
     public static final String kCanivoreName = "Canivore0";
+    public static final int kGyroTalon = 15;
 
     // Pneumatics
 
