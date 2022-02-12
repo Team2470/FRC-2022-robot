@@ -21,12 +21,12 @@ public class Drive extends SubsystemBase {
   private DifferentialDrive m_drive;
   /** Creates a new Drive. */
   public Drive() {
-    m_leftLeader = new WPI_TalonFX(Constants.kDriveTalonLeftAId);
-    m_leftFollower = new WPI_TalonFX(Constants.kDriveTalonLeftBId);
+    m_leftLeader = new WPI_TalonFX(Constants.kDriveTalonLeftAId, Constants.kCanivoreName);
+    m_leftFollower = new WPI_TalonFX(Constants.kDriveTalonLeftBId, Constants.kCanivoreName);
     m_leftFollower.follow(m_leftLeader);
 
-    m_rightLeader = new WPI_TalonFX(Constants.kDriveTalonRightAId);
-    m_rightFollower = new WPI_TalonFX(Constants.kDriveTalonRightBId);
+    m_rightLeader = new WPI_TalonFX(Constants.kDriveTalonRightAId, Constants.kCanivoreName);
+    m_rightFollower = new WPI_TalonFX(Constants.kDriveTalonRightBId, Constants.kCanivoreName);
     m_rightFollower.follow(m_rightLeader);
 
     m_leftLeader.setInverted(false);
