@@ -43,17 +43,6 @@ public class RobotContainer {
     configureButtonBindings();
 
     m_drive.setDefaultCommand(new DriveWithGamepadCommand(m_drive,m_controller));
-
-    JoystickButton rpmButton1 = new JoystickButton(m_controller, XboxController.Button.kA.value);
-    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, 3000));
-
-    JoystickButton rpmButton2 = new JoystickButton(m_controller, XboxController.Button.kX.value);
-    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, 4000));
-
-    JoystickButton rpmButton3 = new JoystickButton(m_controller, XboxController.Button.kB.value);
-    rpmButton3.whileHeld(new RunShooterCommand(m_shooter, 5000));
-
-    
   }
 
   /**
@@ -64,7 +53,16 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    JoystickButton ForwardClimbClockwiseButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
+    JoystickButton rpmButton1 = new JoystickButton(m_controller, XboxController.Button.kA.value);
+    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, 3000));
+
+    JoystickButton rpmButton2 = new JoystickButton(m_controller, XboxController.Button.kX.value);
+    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, 4000));
+
+    JoystickButton rpmButton3 = new JoystickButton(m_controller, XboxController.Button.kB.value);
+    rpmButton3.whileHeld(new RunShooterCommand(m_shooter, 5000));
+
+    /*JoystickButton ForwardClimbClockwiseButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
     ForwardClimbClockwiseButton.whileHeld(new ForwardClimbClockwise(m_frontClimber));
 
     JoystickButton ForwardClimbCounterClockwiseButton = new JoystickButton(m_controller, XboxController.Button.kB.value);
@@ -74,7 +72,7 @@ public class RobotContainer {
     BackwardClimbClockwiseButton.whileHeld(new BackwardClimbClockwise(m_backClimber));
 
     JoystickButton BackwardClimbCounterClockwiseButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
-    BackwardClimbCounterClockwiseButton.whileHeld(new BackwardClimbCounterClockwise(m_backClimber));
+    BackwardClimbCounterClockwiseButton.whileHeld(new BackwardClimbCounterClockwise(m_backClimber));*/
   }
 
   /**
