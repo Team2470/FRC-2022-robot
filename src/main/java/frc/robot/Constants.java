@@ -89,16 +89,6 @@ public final class Constants {
                     // Apply the voltage constraint
                     .addConstraint(kAutoVoltageConstraint);
 
-    
-    // Drive
-
-    public static final double ksVolts = 0.5805;
-    public static final double kvVoltSecondsPerMeter = 5.9;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.63211;
-
-    // kP value for PID
-    public static final double kPDriveVel = 7.524;
-  
     // Climber
 
     public static final int kFrontClimberReverseLimit  = -1024;
