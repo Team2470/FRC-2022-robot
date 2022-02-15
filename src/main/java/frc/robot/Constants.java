@@ -35,9 +35,9 @@ public final class Constants {
 
     // Conveyor constants
 
-    public static final int kConveyorUp = 1;
-    public static final int kConveyorDown = -1;
-    public static final double kConveyorSpeed = 0.1;
+    public static final int kConveyorUp = -1;
+    public static final int kConveyorDown = 1;
+    public static final double kConveyorSpeed = 0.5;
 
     // Pneumatics
 
