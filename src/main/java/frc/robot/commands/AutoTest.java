@@ -19,27 +19,29 @@ public class AutoTest extends CommandBase {
   private Shooter m_Shooter;
   private Drive m_Drive;
 
-  public AutoTest() {
+  public AutoTest(Conveyor conveyor, Shooter shooter, Drive drive) {
     // Use addRequirements() here to declare subsystem dependencies.
+
+    m_conveyor = conveyor;
+    m_Shooter = shooter;
+    m_Drive = drive;
+      
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    schedule(
+
       new SequentialCommandGroup(
         new RunShooterCommand(m_Shooter, -2500),
         new WaitCommand(2),
-        new ParallelCommandGroup(
-          new RunShooterCommand(m_Shooter, -2500)
-          
-        ),
+        new RunConveyorCommand(m_conveyor, -Constants.kConveyorSpeed),
         new WaitCommand(5),
         new ParallelCommandGroup(
-            new RunShooterCommand(m_Shooter, 0)
+            new RunShooterCommand(m_Shooter, 0),
+            new RunConveyorCommand(m_conveyor, 0)
         )
-      )
-    );
+      ).schedule();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

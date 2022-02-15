@@ -5,11 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Conveyor;
+import frc.robot.Constants;
 
-public class RunConveyprCommand extends CommandBase {
-  /** Creates a new RunConveyprCommand. */
-  public RunConveyprCommand() {
+public class RunConveyorCommand extends CommandBase {
+  /** Creates a new RunConveyorCommand. */
+  private Conveyor m_conveyor;
+  public  double conveyorSpeed;
+  
+  public RunConveyorCommand(Conveyor conveyor, double conveyorSpeed) {
+    m_conveyor = conveyor;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_conveyor);    
   }
 
   // Called when the command is initially scheduled.
@@ -18,7 +25,9 @@ public class RunConveyprCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_conveyor.moveAtSpeed(conveyorSpeed);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -27,6 +36,6 @@ public class RunConveyprCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

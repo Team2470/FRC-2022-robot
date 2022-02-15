@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.AutoTest;
 import frc.robot.commands.BackwardClimbClockwise;
 import frc.robot.commands.BackwardClimbCounterClockwise;
 import frc.robot.commands.DriveWithGamepadCommand;
@@ -95,6 +96,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // Return null for no autonomous command
 
-    return null;
+    return new AutoTest(m_conveyor, m_shooter, m_drive);
   }
 }
