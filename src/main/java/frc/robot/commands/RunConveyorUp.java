@@ -11,6 +11,7 @@ import frc.robot.subsystems.Conveyor;
 public class RunConveyorUp extends CommandBase {
   /** Creates a new RunConveyerUp. */
   private Conveyor m_conveyor;
+
   public RunConveyorUp(Conveyor conveyor) {
     m_conveyor = conveyor;
     // Use addRequirements() here to declare subsystem dependencies.
