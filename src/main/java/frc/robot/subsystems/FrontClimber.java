@@ -49,9 +49,9 @@ public class FrontClimber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("CLimber Front Angle", m_frontCanCoder.getPosition());
-    SmartDashboard.putNumber("CLimber Front Absolute Angle", m_frontCanCoder.getAbsolutePosition());
-    SmartDashboard.putNumber("CLimber Front Selected Sensor postion", m_frontClimber.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Climber Front Angle", m_frontCanCoder.getPosition());
+    SmartDashboard.putNumber("Climber Front Absolute Angle", m_frontCanCoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Climber Front Selected Sensor position", m_frontClimber.getSelectedSensorPosition());
   }
 
   public void startClimbMotor(int direction, double speed) {
