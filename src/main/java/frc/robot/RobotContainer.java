@@ -6,15 +6,15 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.commands.*;
-import frc.robot.subsystems.Conveyor;
-import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.BackClimber;
-import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.FrontClimber;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.DriveWithGamepadCommand;
+import frc.robot.commands.RunConveyorCommand;
+import frc.robot.commands.RunShooterCommand;
+import frc.robot.subsystems.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -92,5 +92,15 @@ public class RobotContainer {
                     new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
             )
     );
+
+//    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+//            new Pose2d(0, 0, new Rotation2d(0)),
+//            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+//            new Pose2d(3, 0, new Rotation2d(0)),
+//            Constants.kTrajectoryConfig
+//    );
+//
+//    return new DriveAlongTrajectoryCommand(m_drive, trajectory)
+//            .andThen(() -> m_drive.tankDriveVolts(0, 0));
   }
 }
