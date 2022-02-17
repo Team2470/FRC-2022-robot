@@ -6,21 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.BackwardClimbClockwise;
-import frc.robot.commands.BackwardClimbCounterClockwise;
-import frc.robot.commands.DriveWithGamepadCommand;
-import frc.robot.commands.RunConveyorDown;
-import frc.robot.commands.RunConveyorUp;
+import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.commands.*;
 import frc.robot.subsystems.Conveyor;
-import frc.robot.commands.RunShooterCommand;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Shooter;
-import frc.robot.commands.ForwardClimbClockwise;
-import frc.robot.commands.ForwardClimbCounterClockwise;
 import frc.robot.subsystems.BackClimber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.FrontClimber;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -48,10 +41,10 @@ public class RobotContainer {
 
     m_drive.setDefaultCommand(new DriveWithGamepadCommand(m_drive,m_controller));
     JoystickButton conveyorUp = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
-    conveyorUp.whileHeld(new RunConveyorUp(m_conveyor));
+    conveyorUp.whileHeld(new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp));
 
     JoystickButton conveyorDown = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
-    conveyorDown.whileHeld(new RunConveyorDown(m_conveyor));
+    conveyorDown.whileHeld(new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kDown));
 
   }
 
@@ -92,6 +85,12 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // Return null for no autonomous command
-    return null;
+    return new ParallelCommandGroup(
+            new RunShooterCommand(m_shooter, 2500),
+            new SequentialCommandGroup(
+                    new WaitCommand(2),
+                    new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
+            )
+    );
   }
 }

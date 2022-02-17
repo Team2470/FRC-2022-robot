@@ -22,6 +22,11 @@ public class Conveyor extends SubsystemBase {
     m_conveyorMotor.set(ControlMode.PercentOutput, direction*speed);
   }
 
+  public void moveAtSpeed (double speed) {
+    m_conveyorMotor.set(ControlMode.PercentOutput, speed);
+
+  }
+
   public void stop() {
     m_conveyorMotor.stopMotor();
   }

@@ -5,28 +5,45 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.Conveyor;
+import frc.robot.Constants;
 
-public class RunConveyorUp extends CommandBase {
-  /** Creates a new RunConveyerUp. */
-  private Conveyor m_conveyor;
-  public RunConveyorUp(Conveyor conveyor) {
+public class RunConveyorCommand extends CommandBase {
+  /** Creates a new RunConveyorCommand. */
+  private final Conveyor m_conveyor;
+  private final Direction m_direction;
+  private final double m_speed;
+
+  public enum Direction {
+    kUp,
+    kDown
+  }
+
+  public RunConveyorCommand(Conveyor conveyor, Direction direction) {
+    this(conveyor, direction, Constants.kConveyorSpeed);
+  }
+
+  public RunConveyorCommand(Conveyor conveyor, Direction direction, double speed) {
     m_conveyor = conveyor;
+    m_direction = direction;
+    m_speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_conveyor);
+    addRequirements(m_conveyor);    
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_conveyor.move(Constants.kConveyorUp, Constants.kConveyorSpeed);
+    switch (m_direction) {
+      case kUp:
+        m_conveyor.moveAtSpeed(Math.abs(m_speed));
+      case kDown:
+        m_conveyor.moveAtSpeed(-Math.abs(m_speed));
+    }
   }
 
   // Called once the command ends or is interrupted.
