@@ -47,9 +47,9 @@ public class BackClimber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("CLimber Front Angle", m_backCanCoder.getPosition());
-    SmartDashboard.putNumber("CLimber Front Absolute Angle", m_backCanCoder.getAbsolutePosition());
-    SmartDashboard.putNumber("CLimber Front Selected Sensor postion", m_backClimber.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Climber Back Angle", m_backCanCoder.getPosition());
+    SmartDashboard.putNumber("Climber Back Absolute Angle", m_backCanCoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Climber Back Selected Sensor position", m_backClimber.getSelectedSensorPosition());
   }
 
   public void startClimbMotor(int direction, double speed) {
