@@ -31,6 +31,14 @@ public final class Constants {
     public static final int kBackCanCoderId = 7;
     public static final String kCanivoreName = "Canivore0";
 
+    public static final int kConveyorMotorID = 18;
+
+    // Conveyor constants
+
+    public static final int kConveyorUp = -1;
+    public static final int kConveyorDown = 1;
+    public static final double kConveyorSpeed = 0.5;
+
     // Pneumatics
 
     public static final int kRatchetSolenoid = 0;

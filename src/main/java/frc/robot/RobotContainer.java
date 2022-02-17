@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.BackwardClimbClockwise;
 import frc.robot.commands.BackwardClimbCounterClockwise;
 import frc.robot.commands.DriveWithGamepadCommand;
+import frc.robot.commands.RunConveyorDown;
+import frc.robot.commands.RunConveyorUp;
+import frc.robot.subsystems.Conveyor;
 import frc.robot.commands.RunShooterCommand;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Shooter;
@@ -29,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // Subsystems
   private final Drive m_drive = new Drive();
+  private final Conveyor m_conveyor = new Conveyor();
   private final Shooter m_shooter = new Shooter();
 
   private final FrontClimber m_frontClimber = new FrontClimber();
@@ -43,6 +47,12 @@ public class RobotContainer {
     configureButtonBindings();
 
     m_drive.setDefaultCommand(new DriveWithGamepadCommand(m_drive,m_controller));
+    JoystickButton conveyorUp = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
+    conveyorUp.whileHeld(new RunConveyorUp(m_conveyor));
+
+    JoystickButton conveyorDown = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
+    conveyorDown.whileHeld(new RunConveyorDown(m_conveyor));
+
   }
 
   /**
@@ -54,13 +64,13 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     JoystickButton rpmButton1 = new JoystickButton(m_controller, XboxController.Button.kA.value);
-    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, 3000));
+    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, 1500));
 
     JoystickButton rpmButton2 = new JoystickButton(m_controller, XboxController.Button.kX.value);
-    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, 4000));
+    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, 2000));
 
     JoystickButton rpmButton3 = new JoystickButton(m_controller, XboxController.Button.kB.value);
-    rpmButton3.whileHeld(new RunShooterCommand(m_shooter, 5000));
+    rpmButton3.whileHeld(new RunShooterCommand(m_shooter, 2500));
 
     /*JoystickButton ForwardClimbClockwiseButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
     ForwardClimbClockwiseButton.whileHeld(new ForwardClimbClockwise(m_frontClimber));
