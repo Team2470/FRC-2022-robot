@@ -10,11 +10,23 @@ import frc.robot.Constants;
 
 public class RunConveyorCommand extends CommandBase {
   /** Creates a new RunConveyorCommand. */
-  private Conveyor m_conveyor;
-  public  double conveyorSpeed;
-  
-  public RunConveyorCommand(Conveyor conveyor, double conveyorSpeed) {
+  private final Conveyor m_conveyor;
+  private final Direction m_direction;
+  private final double m_speed;
+
+  public enum Direction {
+    kUp,
+    kDown
+  }
+
+  public RunConveyorCommand(Conveyor conveyor, Direction direction) {
+    this(conveyor, direction, Constants.kConveyorSpeed);
+  }
+
+  public RunConveyorCommand(Conveyor conveyor, Direction direction, double speed) {
     m_conveyor = conveyor;
+    m_direction = direction;
+    m_speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_conveyor);    
   }
@@ -26,16 +38,23 @@ public class RunConveyorCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_conveyor.moveAtSpeed(conveyorSpeed);
+    switch (m_direction) {
+      case kUp:
+        m_conveyor.moveAtSpeed(Math.abs(m_speed));
+      case kDown:
+        m_conveyor.moveAtSpeed(-Math.abs(m_speed));
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_conveyor.stop();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }
