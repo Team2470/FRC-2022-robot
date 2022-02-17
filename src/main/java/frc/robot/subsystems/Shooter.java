@@ -34,6 +34,9 @@ public class Shooter extends SubsystemBase {
     m_shooterFollower = new CANSparkMax(Constants.kShooterNeoFollowerId, MotorType.kBrushless);
     m_shooterFollower.follow(m_shooterLeader,true);
 
+    m_shooterLeader.setInverted(true);
+    m_shooterFollower.setInverted(true);
+
     m_shooterLeader.setSmartCurrentLimit(40);
     m_shooterFollower.setSmartCurrentLimit(40);
     //m_shooterLeader.enableVoltageCompensation(10);

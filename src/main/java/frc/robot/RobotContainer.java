@@ -64,13 +64,13 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     JoystickButton rpmButton1 = new JoystickButton(m_controller, XboxController.Button.kA.value);
-    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, -1500));
+    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, 1500));
 
     JoystickButton rpmButton2 = new JoystickButton(m_controller, XboxController.Button.kX.value);
-    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, -2000));
+    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, 2000));
 
     JoystickButton rpmButton3 = new JoystickButton(m_controller, XboxController.Button.kB.value);
-    rpmButton3.whileHeld(new RunShooterCommand(m_shooter, -2500));
+    rpmButton3.whileHeld(new RunShooterCommand(m_shooter, 2500));
 
     /*JoystickButton ForwardClimbClockwiseButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
     ForwardClimbClockwiseButton.whileHeld(new ForwardClimbClockwise(m_frontClimber));
