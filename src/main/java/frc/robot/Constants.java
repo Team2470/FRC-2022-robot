@@ -109,6 +109,8 @@ public final class Constants {
     public static final int kBackClimberForwardLimit = 1024;
     public static final double kBackClimberCanCoderOffset = 208;
 
+    public static final double kClimberErrorBound = 1; // Degrees
+
     // Intake
     public static final double kIntakeSpeed = 0.2;
 

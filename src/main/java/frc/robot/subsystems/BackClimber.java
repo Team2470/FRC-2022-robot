@@ -11,6 +11,7 @@ import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -56,7 +57,7 @@ public class BackClimber extends SubsystemBase implements Climber {
     m_backClimber.set(ControlMode.PercentOutput, direction*speed);
   }
 
-  public double getAngle() { return this.m_backCanCoder.getAbsolutePosition(); }
+  public Rotation2d getAngle() { return Rotation2d.fromDegrees(this.m_backCanCoder.getAbsolutePosition()); }
 
   public void stopClimbMotor() {
     m_backClimber.neutralOutput();

@@ -11,6 +11,7 @@ import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -54,7 +55,7 @@ public class FrontClimber extends SubsystemBase implements Climber {
     SmartDashboard.putNumber("Climber Front Selected Sensor position", m_frontClimber.getSelectedSensorPosition());
   }
 
-  public double getAngle() { return this.m_frontCanCoder.getAbsolutePosition(); }
+  public Rotation2d getAngle() { return Rotation2d.fromDegrees(this.m_frontCanCoder.getAbsolutePosition()); }
 
   public void startClimbMotor(int direction, double speed) {
     m_ratchetSolenoid.set(direction > 0);
