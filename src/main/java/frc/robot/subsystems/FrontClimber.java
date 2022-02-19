@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class FrontClimber extends SubsystemBase {
+public class FrontClimber extends SubsystemBase implements Climber {
 
   private WPI_TalonFX m_frontClimber;
   private CANCoder m_frontCanCoder;
@@ -53,6 +53,8 @@ public class FrontClimber extends SubsystemBase {
     SmartDashboard.putNumber("Climber Front Absolute Angle", m_frontCanCoder.getAbsolutePosition());
     SmartDashboard.putNumber("Climber Front Selected Sensor position", m_frontClimber.getSelectedSensorPosition());
   }
+
+  public double getAngle() { return this.m_frontCanCoder.getAbsolutePosition(); }
 
   public void startClimbMotor(int direction, double speed) {
     m_ratchetSolenoid.set(direction > 0);

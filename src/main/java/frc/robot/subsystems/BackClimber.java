@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class BackClimber extends SubsystemBase {
+public class BackClimber extends SubsystemBase implements Climber {
 
   private WPI_TalonFX m_backClimber;
   private CANCoder m_backCanCoder; 
@@ -55,6 +55,8 @@ public class BackClimber extends SubsystemBase {
   public void startClimbMotor(int direction, double speed) {
     m_backClimber.set(ControlMode.PercentOutput, direction*speed);
   }
+
+  public double getAngle() { return this.m_backCanCoder.getAbsolutePosition(); }
 
   public void stopClimbMotor() {
     m_backClimber.neutralOutput();

@@ -15,8 +15,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -69,16 +67,16 @@ public class RobotContainer {
     rpmButton3.whileHeld(new RunShooterCommand(m_shooter, 2500));
     //: Climber control
     DPadTrigger ForwardClimbClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kUp);
-    ForwardClimbClockwiseButton.whileActiveContinuous(new ForwardClimbClockwise(m_frontClimber));
+    ForwardClimbClockwiseButton.whileActiveContinuous(new ClimbClockwise(m_frontClimber));
 
     DPadTrigger ForwardClimbCounterClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kRight);
-    ForwardClimbCounterClockwiseButton.whileActiveContinuous(new ForwardClimbCounterClockwise(m_frontClimber));
+    ForwardClimbCounterClockwiseButton.whileActiveContinuous(new ClimbCounterClockwise(m_frontClimber));
 
     DPadTrigger BackwardClimbClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.KLeft);
-    BackwardClimbClockwiseButton.whileActiveContinuous(new BackwardClimbClockwise(m_backClimber));
+    BackwardClimbClockwiseButton.whileActiveContinuous(new ClimbClockwise(m_backClimber));
 
     DPadTrigger BackwardClimbCounterClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.KDown);
-    BackwardClimbCounterClockwiseButton.whileActiveContinuous(new BackwardClimbCounterClockwise(m_backClimber));
+    BackwardClimbCounterClockwiseButton.whileActiveContinuous(new ClimbCounterClockwise(m_backClimber));
     //: Intake control
     JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
     deployIntakeButton.whileHeld(new DeployIntakeCommand(m_intake));

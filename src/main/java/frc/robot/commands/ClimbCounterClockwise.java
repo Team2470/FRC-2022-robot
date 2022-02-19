@@ -6,17 +6,18 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.FrontClimber;
 
-public class ForwardClimbCounterClockwise extends CommandBase {
+public class ClimbCounterClockwise extends CommandBase {
 
-  private FrontClimber m_frontClimber; 
+  private Climber m_climber;
   /** Creates a new ForwardClimbClockwise. */
-  public ForwardClimbCounterClockwise(FrontClimber frontClimber) {
+  public ClimbCounterClockwise(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_frontClimber = frontClimber;
+    m_climber = climber;
 
-    addRequirements(m_frontClimber);
+    addRequirements(m_climber);
   }
 
   // Called when the command is initially scheduled.
@@ -28,13 +29,13 @@ public class ForwardClimbCounterClockwise extends CommandBase {
   public void execute() {
     System.out.println("Forward");
 
-    m_frontClimber.startClimbMotor(Constants.kCounterClockwise, Constants.kClimberSpeed);
+    m_climber.startClimbMotor(Constants.kCounterClockwise, Constants.kClimberSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_frontClimber.stopClimbMotor();
+    m_climber.stopClimbMotor();
   }
 
   // Returns true when the command should end.
