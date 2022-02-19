@@ -30,10 +30,12 @@ public final class Constants {
     public static final int kBackClimberTalonId = 8;
     public static final int kBackCanCoderId = 7;
     public static final String kCanivoreName = "Canivore0";
+    public static final int kIntakeMotorId = 16;
 
     // Pneumatics
 
     public static final int kRatchetSolenoid = 0;
+    public static final int kIntakeSolenoid = 1;
 
     public static final int kShooterNeoLeaderId = 1;
     public static final int kShooterNeoFollowerId= 3;
