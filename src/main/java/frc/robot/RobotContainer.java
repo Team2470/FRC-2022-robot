@@ -7,6 +7,9 @@ package frc.robot;
 import com.kennedyrobotics.triggers.DPadTrigger;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
+import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -26,11 +29,11 @@ public class RobotContainer {
   private final Drive m_drive = new Drive();
   private final Conveyor m_conveyor = new Conveyor();
   private final Shooter m_shooter = new Shooter();
-
+  private final Intake m_intake = new Intake();
   private final FrontClimber m_frontClimber = new FrontClimber();
-
   private final BackClimber m_backClimber = new BackClimber();
 
+  // Controller
   private final XboxController m_controller = new XboxController(Constants.kControllerA);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -39,6 +42,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     m_drive.setDefaultCommand(new DriveWithGamepadCommand(m_drive,m_controller));
+    m_intake.setDefaultCommand(new RetractIntakeCommand(m_intake));
   }
 
   /**
@@ -70,11 +74,15 @@ public class RobotContainer {
     DPadTrigger ForwardClimbCounterClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kRight);
     ForwardClimbCounterClockwiseButton.whileActiveContinuous(new ForwardClimbCounterClockwise(m_frontClimber));
 
+
     DPadTrigger BackwardClimbClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.KLeft);
     BackwardClimbClockwiseButton.whileActiveContinuous(new BackwardClimbClockwise(m_backClimber));
 
     DPadTrigger BackwardClimbCounterClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.KDown);
     BackwardClimbCounterClockwiseButton.whileActiveContinuous(new BackwardClimbCounterClockwise(m_backClimber));
+    //: Intake control
+    JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
+    deployIntakeButton.whileHeld(new DeployIntakeCommand(m_intake));
   }
 
   /**

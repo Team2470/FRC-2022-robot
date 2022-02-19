@@ -44,6 +44,7 @@ public final class Constants {
     public static final String kCanivoreName = "Canivore0";
     public static final int kGyroTalon = 15;
     public static final int kGyroId = 6;
+    public static final int kIntakeMotorId = 16;
 
     public static final int kConveyorMotorID = 18;
 
@@ -56,6 +57,7 @@ public final class Constants {
     // Pneumatics
 
     public static final int kRatchetSolenoid = 0;
+    public static final int kIntakeSolenoid = 1;
 
     public static final int kShooterNeoLeaderId = 1;
     public static final int kShooterNeoFollowerId= 3;
@@ -108,5 +110,9 @@ public final class Constants {
     public static final int kBackClimberReverseLimit  = -1024;
     public static final int kBackClimberForwardLimit = 1024;
     public static final double kBackClimberCanCoderOffset = 208;
+
+    // Intake
+    public static final double kIntakeSpeed = 0.2;
+
 
 }
