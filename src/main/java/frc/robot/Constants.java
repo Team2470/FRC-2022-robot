@@ -54,5 +54,8 @@ public final class Constants {
     public static final int kBackClimberForwardLimit = 1024;
     public static final double kBackClimberCanCoderOffset = 208;
 
+    // Intake
+    public static final double kIntakeSpeed = 0.2;
+
 
 }
