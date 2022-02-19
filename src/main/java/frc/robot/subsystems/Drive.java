@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -59,7 +60,7 @@ public class Drive extends SubsystemBase {
   private DifferentialDrive m_drive;
 
   // The gyro sensor
-  private final PigeonIMU m_gyro = new PigeonIMU(1);
+  private final PigeonIMU m_gyro;
 
   // Odometry class for tracking robot pose
   private final DifferentialDriveOdometry m_odometry;
@@ -89,12 +90,11 @@ public class Drive extends SubsystemBase {
     m_rightFollower.setNeutralMode(NeutralMode.Brake);
     
     m_drive = new DifferentialDrive(m_leftLeader, m_rightLeader);
+    m_gyro = new WPI_PigeonIMU(Constants.kGyroTalon);
 
     resetEncoders();
     m_odometry = new DifferentialDriveOdometry(getHeading());
   }
-
-
 
 
   public void arcadeDrive(double forward, double rotate){
