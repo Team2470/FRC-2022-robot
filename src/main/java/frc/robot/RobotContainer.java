@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.kennedyrobotics.triggers.DPadTrigger;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -11,9 +12,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.DriveWithGamepadCommand;
-import frc.robot.commands.RunConveyorCommand;
-import frc.robot.commands.RunShooterCommand;
+import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
 /**
@@ -65,17 +64,17 @@ public class RobotContainer {
     JoystickButton rpmButton3 = new JoystickButton(m_controller, XboxController.Button.kB.value);
     rpmButton3.whileHeld(new RunShooterCommand(m_shooter, 2500));
 
-    /*JoystickButton ForwardClimbClockwiseButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
-    ForwardClimbClockwiseButton.whileHeld(new ForwardClimbClockwise(m_frontClimber));
+    DPadTrigger ForwardClimbClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kUp);
+    ForwardClimbClockwiseButton.whileActiveContinuous(new ForwardClimbClockwise(m_frontClimber));
 
-    JoystickButton ForwardClimbCounterClockwiseButton = new JoystickButton(m_controller, XboxController.Button.kB.value);
-    ForwardClimbCounterClockwiseButton.whileHeld(new ForwardClimbCounterClockwise(m_frontClimber));
+    DPadTrigger ForwardClimbCounterClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kRight);
+    ForwardClimbCounterClockwiseButton.whileActiveContinuous(new ForwardClimbCounterClockwise(m_frontClimber));
 
-    JoystickButton BackwardClimbClockwiseButton = new JoystickButton(m_controller, XboxController.Button.kX.value);
-    BackwardClimbClockwiseButton.whileHeld(new BackwardClimbClockwise(m_backClimber));
+    DPadTrigger BackwardClimbClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.KLeft);
+    BackwardClimbClockwiseButton.whileActiveContinuous(new BackwardClimbClockwise(m_backClimber));
 
-    JoystickButton BackwardClimbCounterClockwiseButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
-    BackwardClimbCounterClockwiseButton.whileHeld(new BackwardClimbCounterClockwise(m_backClimber));*/
+    DPadTrigger BackwardClimbCounterClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.KDown);
+    BackwardClimbCounterClockwiseButton.whileActiveContinuous(new BackwardClimbCounterClockwise(m_backClimber));
   }
 
   /**
