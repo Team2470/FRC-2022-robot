@@ -6,17 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.BackwardClimbClockwise;
-import frc.robot.commands.BackwardClimbCounterClockwise;
-import frc.robot.commands.DriveWithGamepadCommand;
-import frc.robot.commands.RunShooterCommand;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Shooter;
-import frc.robot.commands.ForwardClimbClockwise;
-import frc.robot.commands.ForwardClimbCounterClockwise;
-import frc.robot.subsystems.BackClimber;
-import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.FrontClimber;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -30,11 +22,11 @@ public class RobotContainer {
   // Subsystems
   private final Drive m_drive = new Drive();
   private final Shooter m_shooter = new Shooter();
-
+  private final Intake m_intake = new Intake();
   private final FrontClimber m_frontClimber = new FrontClimber();
-
   private final BackClimber m_backClimber = new BackClimber();
 
+  // Controller
   private final XboxController m_controller = new XboxController(Constants.kControllerA);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -43,6 +35,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     m_drive.setDefaultCommand(new DriveWithGamepadCommand(m_drive,m_controller));
+    m_intake.setDefaultCommand(new RetractIntakeCommand(m_intake));
   }
 
   /**
@@ -61,6 +54,9 @@ public class RobotContainer {
 
     JoystickButton rpmButton3 = new JoystickButton(m_controller, XboxController.Button.kB.value);
     rpmButton3.whileHeld(new RunShooterCommand(m_shooter, 5000));
+
+    JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
+    deployIntakeButton.whileHeld(new DeployIntakeCommand(m_intake));
 
     /*JoystickButton ForwardClimbClockwiseButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
     ForwardClimbClockwiseButton.whileHeld(new ForwardClimbClockwise(m_frontClimber));
