@@ -7,16 +7,19 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Conveyor extends SubsystemBase {
   /** Creates a new Conveyer. */
-  private WPI_TalonFX m_conveyorMotor;
+  private WPI_TalonSRX m_conveyorMotor;
 
   public Conveyor() {
-    m_conveyorMotor = new WPI_TalonFX(Constants.kConveyorMotorID);
+    m_conveyorMotor = new WPI_TalonSRX(Constants.kConveyorMotorID);
   }
+
+  public WPI_TalonSRX getMotor() { return this.m_conveyorMotor; }
 
   public void move(int direction, double speed) {
     m_conveyorMotor.set(ControlMode.PercentOutput, direction*speed);

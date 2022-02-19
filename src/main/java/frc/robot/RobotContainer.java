@@ -26,8 +26,8 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
   // Subsystems
-  private final Drive m_drive = new Drive();
   private final Conveyor m_conveyor = new Conveyor();
+  private final Drive m_drive = new Drive(m_conveyor.getMotor());
   private final Shooter m_shooter = new Shooter();
   private final Intake m_intake = new Intake();
   private final FrontClimber m_frontClimber = new FrontClimber();
@@ -73,7 +73,6 @@ public class RobotContainer {
 
     DPadTrigger ForwardClimbCounterClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kRight);
     ForwardClimbCounterClockwiseButton.whileActiveContinuous(new ForwardClimbCounterClockwise(m_frontClimber));
-
 
     DPadTrigger BackwardClimbClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.KLeft);
     BackwardClimbClockwiseButton.whileActiveContinuous(new BackwardClimbClockwise(m_backClimber));

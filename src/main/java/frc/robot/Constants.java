@@ -42,8 +42,6 @@ public final class Constants {
     public static final int kBackClimberTalonId = 8;
     public static final int kBackCanCoderId = 7;
     public static final String kCanivoreName = "Canivore0";
-    public static final int kGyroTalon = 15;
-    public static final int kGyroId = 6;
     public static final int kIntakeMotorId = 16;
 
     public static final int kConveyorMotorID = 18;

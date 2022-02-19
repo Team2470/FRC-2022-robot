@@ -6,9 +6,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
-import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -55,7 +55,6 @@ public class Drive extends SubsystemBase {
   private WPI_TalonFX m_leftFollower;
   private WPI_TalonFX m_rightLeader;
   private WPI_TalonFX m_rightFollower;
-  private WPI_TalonFX m_gyroTalon;
 
   private DifferentialDrive m_drive;
 
@@ -66,7 +65,7 @@ public class Drive extends SubsystemBase {
   private final DifferentialDriveOdometry m_odometry;
 
   /** Creates a new Drive. */
-  public Drive() {
+  public Drive(WPI_TalonSRX gyroTalon) {
     m_leftLeader = new WPI_TalonFX(Constants.kDriveTalonLeftAId, Constants.kCanivoreName);
     m_leftFollower = new WPI_TalonFX(Constants.kDriveTalonLeftBId, Constants.kCanivoreName);
     m_leftFollower.follow(m_leftLeader);
@@ -81,7 +80,6 @@ public class Drive extends SubsystemBase {
     m_leftFollower.setInverted(false);
     m_rightLeader.setInverted(true);
     m_rightFollower.setInverted(true);
-    m_gyroTalon = new WPI_TalonFX(Constants.kGyroTalon);
 
     // Use brake mode to stop our robot coasting.
     m_leftLeader.setNeutralMode(NeutralMode.Brake);
@@ -90,7 +88,7 @@ public class Drive extends SubsystemBase {
     m_rightFollower.setNeutralMode(NeutralMode.Brake);
     
     m_drive = new DifferentialDrive(m_leftLeader, m_rightLeader);
-    m_gyro = new WPI_PigeonIMU(Constants.kGyroTalon);
+    m_gyro = new PigeonIMU(gyroTalon);
 
     resetEncoders();
     m_odometry = new DifferentialDriveOdometry(getHeading());
