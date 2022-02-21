@@ -22,8 +22,8 @@ public class DeployIntakeCommand extends CommandBase {
 
     @Override
     public void execute() {
-        this.m_intake.lowerIntake();
-        this.m_intake.startIntakeMotor(Constants.kClockwise, Constants.kIntakeSpeed);
+        this.m_intake.lower();
+        this.m_intake.spin();
     }
 
     @Override

@@ -31,7 +31,7 @@ public class ClimbAngleCommand extends CommandBase {
     public void execute() {
         if (getError().getDegrees() > 0) {
             this.m_climber.startClimbMotor(Constants.kClockwise, Constants.kClimberSpeed);
-        } else if (getError().getDegrees() < 0) {
+        } else {
             this.m_climber.startClimbMotor(Constants.kCounterClockwise, Constants.kClimberSpeed);
         }
     }

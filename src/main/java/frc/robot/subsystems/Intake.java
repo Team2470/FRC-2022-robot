@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,22 +13,23 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         m_intakeMotor = new CANSparkMax(Constants.kIntakeMotorId, MotorType.kBrushless);
-        m_deploy = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.kIntakeSolenoid);
+        m_deploy = new Solenoid(PneumaticsModuleType.REVPH, Constants.kIntakeSolenoid);
 
         m_intakeMotor.setSmartCurrentLimit(40);
         m_intakeMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        m_intakeMotor.setInverted(false);
     }
 
-    public void lowerIntake() {
+    public void lower() {
         m_deploy.set(true);
     }
 
-    public void raiseIntake() {
+    public void raise() {
         m_deploy.set(false);
     }
 
-    public void startIntakeMotor(int direction, double speed) {
-        m_intakeMotor.set(direction * speed);
+    public void spin() {
+        m_intakeMotor.set(Constants.kIntakeSpeed);
     }
 
     public void stopIntakeMotor() {

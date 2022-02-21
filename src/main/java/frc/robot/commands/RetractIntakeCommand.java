@@ -22,7 +22,7 @@ public class RetractIntakeCommand extends CommandBase {
     @Override
     public void execute() {
         this.m_intake.stopIntakeMotor();
-        this.m_intake.raiseIntake();
+        this.m_intake.raise();
     }
 
     @Override
