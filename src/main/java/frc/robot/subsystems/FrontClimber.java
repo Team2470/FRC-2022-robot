@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -21,14 +22,19 @@ import frc.robot.Constants;
 public class FrontClimber extends SubsystemBase implements Climber {
 
   private WPI_TalonFX m_frontClimber;
+  private WPI_TalonFX m_frontClimberFollower;
   private CANCoder m_frontCanCoder;
   private Solenoid m_ratchetSolenoid;
 
   /** Creates a new Climber. */
   public FrontClimber() {
+    m_frontClimberFollower = new WPI_TalonFX(Constants.kFrontClimberFollowerTalonId, Constants.kCanivoreName);
     m_frontClimber = new WPI_TalonFX(Constants.kFrontClimberTalonId, Constants.kCanivoreName);
+    m_frontClimberFollower.follow(m_frontClimber);
+    m_frontClimberFollower.setInverted(TalonFXInvertType.OpposeMaster);
+
     m_frontCanCoder = new CANCoder(Constants.kFrontCanCoderId, Constants.kCanivoreName);
-    m_ratchetSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.kRatchetSolenoid);
+    m_ratchetSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.kRatchetSolenoid);
 
     m_frontCanCoder.configFactoryDefault();
     m_frontCanCoder.configMagnetOffset(Constants.kFrontClimberCanCoderOffset);

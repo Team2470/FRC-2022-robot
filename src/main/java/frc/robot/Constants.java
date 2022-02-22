@@ -33,18 +33,25 @@ public final class Constants {
 
     // CAN IDs
 
+    // CANivore bus
+    public static final String kCanivoreName = "Canivore0";
     public static final int kDriveTalonRightAId = 13;
     public static final int kDriveTalonRightBId = 14;
     public static final int kDriveTalonLeftAId  = 11;
     public static final int kDriveTalonLeftBId  = 12;
     public static final int kFrontClimberTalonId  = 10;
-    public static final int kFrontCanCoderId = 9;
+    public static final int kFrontClimberFollowerTalonId = 9;
     public static final int kBackClimberTalonId = 8;
+
+    public static final int kFrontCanCoderId = 9;
     public static final int kBackCanCoderId = 7;
-    public static final String kCanivoreName = "Canivore0";
-    public static final int kIntakeMotorId = 16;
+
+    // rio bus
 
     public static final int kConveyorMotorID = 18;
+    public static final int kIntakeMotorId = 5;
+    public static final int kConveyorCanCoder = 6;
+
 
     // Conveyor constants
 
@@ -112,7 +119,7 @@ public final class Constants {
     public static final double kClimberErrorBound = 1; // Degrees
 
     // Intake
-    public static final double kIntakeSpeed = 0.2;
+    public static final double kIntakeSpeed = 1.0;
 
 
 }
