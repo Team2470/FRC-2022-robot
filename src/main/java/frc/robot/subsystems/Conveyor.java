@@ -5,9 +5,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -34,8 +34,46 @@ public class Conveyor extends SubsystemBase {
     m_conveyorMotor.stopMotor();
   }
 
+
+  /**
+   * Detects when the second cargo is in the desired position.
+   *
+   * We need to sill detect the cargo when the conveyor moves it down 1 inch (or so) when it prepares to shooter
+   *
+   * @return
+   */
+  public boolean isFirstCargoDetected() {
+    return false; // TODO
+  }
+
+  /**
+   * Detects when the second cargo is in the desired position.
+   * @return
+   */
+  public boolean isSecondCargoDetected() {
+    return false; // TODO
+  }
+
+  public boolean isFull() {
+    return isFirstCargoDetected() && isSecondCargoDetected();
+  }
+
+  public int capturedBallCount() {
+    if (isFirstCargoDetected() && !isSecondCargoDetected()) {
+      return 1;
+    } else if (isFirstCargoDetected() && isSecondCargoDetected()) {
+      return 2;
+    } else {
+      return 0;
+    }
+  }
+
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Conveyor First Cargo Detected", isFirstCargoDetected());
+    SmartDashboard.putBoolean("Conveyor Second Cargo Detected", isSecondCargoDetected());
+    SmartDashboard.putNumber("Conveyor Captured Cargo Count", capturedBallCount());
+    SmartDashboard.putBoolean("Conveyor Full", isFull());
   }
 }
