@@ -20,10 +20,6 @@ public class ClimbClockwise extends CommandBase {
     addRequirements(m_climber);
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -35,11 +31,5 @@ public class ClimbClockwise extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_climber.stopClimbMotor();
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }

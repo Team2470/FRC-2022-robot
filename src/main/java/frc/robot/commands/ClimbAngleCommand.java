@@ -18,11 +18,6 @@ public class ClimbAngleCommand extends CommandBase {
         addRequirements(m_climber);
     }
 
-    @Override
-    public void initialize() {
-
-    }
-
     public Rotation2d getError() {
         return m_climber.getAngle().minus(m_setpoint);
     }

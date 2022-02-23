@@ -31,10 +31,6 @@ public class RunConveyorCommand extends CommandBase {
     addRequirements(m_conveyor);    
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -52,9 +48,4 @@ public class RunConveyorCommand extends CommandBase {
     m_conveyor.stop();
   }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
 }
