@@ -5,14 +5,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.Climber;
 
-public class ClimbOutwards extends CommandBase {
+public class MoveClimberInwards extends CommandBase {
 
   private Climber m_climber;
   /** Creates a new ForwardClimbClockwise. */
-  public ClimbOutwards(Climber climber) {
+  public MoveClimberInwards(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climber = climber;
 
@@ -22,7 +21,7 @@ public class ClimbOutwards extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climber.startOutwardClimb();
+    m_climber.startInwardClimb();
   }
 
   // Called once the command ends or is interrupted.
@@ -30,4 +29,5 @@ public class ClimbOutwards extends CommandBase {
   public void end(boolean interrupted) {
     m_climber.stop();
   }
+
 }

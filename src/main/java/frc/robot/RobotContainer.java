@@ -67,16 +67,16 @@ public class RobotContainer {
     rpmButton3.whileHeld(new RunShooterCommand(m_shooter, 2500));
     //: Climber control
     DPadTrigger ForwardClimbOutwardsButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kUp);
-    ForwardClimbOutwardsButton.whileActiveContinuous(new ClimbOutwards(m_frontClimber));
+    ForwardClimbOutwardsButton.whileActiveContinuous(new MoveClimberOutwards(m_frontClimber));
 
     DPadTrigger ForwardClimbInwardsButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kRight);
-    ForwardClimbInwardsButton.whileActiveContinuous(new ClimbInwards(m_frontClimber));
+    ForwardClimbInwardsButton.whileActiveContinuous(new MoveClimberInwards(m_frontClimber));
 
     DPadTrigger BackwardClimbOutwardsButtons = new DPadTrigger(m_controller, DPadTrigger.DPad.KLeft);
-    BackwardClimbOutwardsButtons.whileActiveContinuous(new ClimbOutwards(m_backClimber));
+    BackwardClimbOutwardsButtons.whileActiveContinuous(new MoveClimberOutwards(m_backClimber));
 
     DPadTrigger BackwardClimbInwardButton = new DPadTrigger(m_controller, DPadTrigger.DPad.KDown);
-    BackwardClimbInwardButton.whileActiveContinuous(new ClimbInwards(m_backClimber));
+    BackwardClimbInwardButton.whileActiveContinuous(new MoveClimberInwards(m_backClimber));
     //: Intake control
     JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
     deployIntakeButton.whileHeld(new DeployIntakeCommand(m_intake));
