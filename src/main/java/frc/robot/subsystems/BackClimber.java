@@ -32,7 +32,7 @@ public class BackClimber extends SubsystemBase implements Climber {
     m_backCanCoder.configMagnetOffset(Constants.kBackClimberCanCoderOffset);
     m_backCanCoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
     m_backCanCoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
-
+    m_backCanCoder.configSensorDirection(true);
 
     m_backClimber.configFactoryDefault();
     m_backClimber.configForwardSoftLimitEnable(true);
@@ -42,6 +42,9 @@ public class BackClimber extends SubsystemBase implements Climber {
 
     m_backClimber.configRemoteFeedbackFilter(m_backCanCoder, 0);
     m_backClimber.configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0);
+    m_backClimber.setSensorPhase(true);
+
+    m_backClimber.setInverted(true);
 
   }
 
