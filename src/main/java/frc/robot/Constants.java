@@ -115,11 +115,4 @@ public final class Constants {
     public static final double kIntakeSpeed = 1.0;
 
 
-
-    //Vision constants
-    public static final double kTargetHeightM = 2.52;
-    public static final double kCameraHeightM = 1;
-    public static final double kCameraAngleD = 1; 
-
 }
-
