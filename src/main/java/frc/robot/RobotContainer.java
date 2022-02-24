@@ -6,20 +6,27 @@ package frc.robot;
 
 import java.util.Map;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kennedyrobotics.triggers.DPadTrigger;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import frc.robot.commands.*;
 import frc.robot.commands.RunConveyorCommand.Direction;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,6 +44,8 @@ public class RobotContainer {
   private final BackClimber m_backClimber = new BackClimber();
   private final Vision m_vision = new Vision();
 
+
+
   // Controller
   private final XboxController m_controller = new XboxController(Constants.kControllerA);
 
@@ -44,10 +53,25 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    configureTestingCommands();
 
     m_drive.setDefaultCommand(new DriveWithGamepadCommand(m_drive,m_controller));
     m_intake.setDefaultCommand(new RetractIntakeCommand(m_intake));
   }
+
+  private void configureTestingCommands() {
+    ShuffleboardLayout visionCommands = Shuffleboard.getTab("Commands")
+    .getLayout("Vision", BuiltInLayouts.kList)
+    .withSize(2,2)
+    .withPosition(8,0)
+    .withProperties(Map.of("Label position", "HIDDEN"));
+    // visionCommands.add(new NamedInstantCommand("Driver Mode", () -> m_vision.setDriverMode(true), m_vision));
+    // visionCommands.add(new NamedInstantCommand("Vision Mode", () -> m_vision.setDriverMode(false), m_vision));
+    // visionCommands.add(new NamedInstantCommand("Conveyor View", () -> m_vision.viewConveyor(true), m_vision));
+    // visionCommands.add(new NamedInstantCommand("Target View", () -> m_vision.viewConveyor(false), m_vision));
+    visionCommands.add(new AutoAlign(m_vision, m_shooter, m_drive));
+  }
+
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -58,10 +82,10 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //: Conveyor Control
     JoystickButton conveyorUp = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
-    conveyorUp.whileHeld(new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp));
+    conveyorUp.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kUp));
 
     JoystickButton conveyorDown = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
-    conveyorDown.whileHeld(new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kDown));
+    conveyorDown.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kDown));
     //: Shooter control
     JoystickButton rpmButton1 = new JoystickButton(m_controller, XboxController.Button.kA.value);
     rpmButton1.whileHeld(new RunShooterCommand(m_shooter, () -> 1500));
@@ -111,12 +135,22 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // Return null for no autonomous command
-    return new ParallelCommandGroup(
-            new RunShooterCommand(m_shooter, () -> 2500),
-            new SequentialCommandGroup(
-                    new WaitCommand(2),
-                    new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
-            )
+    return new SequentialCommandGroup(
+      new AutoDrive(m_drive).withTimeout(1.5),
+      new ParallelRaceGroup(
+           new RunShooterCommand(m_shooter, 2500),
+           new SequentialCommandGroup(
+
+               new WaitCommand(2),
+               new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
+       ))
+
+      
+            // new RunShooterCommand(m_shooter, 2500),
+            // new SequentialCommandGroup(
+            //         new WaitCommand(2),
+            //         new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
+            // )
     );
 
 //    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(

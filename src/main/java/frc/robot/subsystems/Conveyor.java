@@ -20,11 +20,11 @@ public class Conveyor extends SubsystemBase {
   public WPI_TalonSRX getMotor() { return this.m_conveyorMotor; }
 
   public void up(){
-    m_conveyorMotor.set(ControlMode.PercentOutput, Constants.kConveyorSpeed);
+    m_conveyorMotor.set(ControlMode.PercentOutput, -0.5);
   }
 
   public void down(){
-    m_conveyorMotor.set(ControlMode.PercentOutput, -Constants.kConveyorSpeed);
+    m_conveyorMotor.set(ControlMode.PercentOutput, 0.5);
   }
 
   public void stop() {

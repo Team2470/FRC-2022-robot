@@ -33,6 +33,8 @@ public class RunConveyorCommand extends CommandBase {
         m_conveyor.up();
       case kDown:
         m_conveyor.down();
+      default:
+        m_conveyor.up();
     }
   }
 

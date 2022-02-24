@@ -51,6 +51,7 @@ public final class Constants {
     public static final int kConveyorUp = -1;
     public static final int kConveyorDown = 1;
     public static final double kConveyorSpeed = 0.5;
+    public static final double kConveyorSpeedDown = -0.75;
 
     // Pneumatics
 
@@ -63,6 +64,11 @@ public final class Constants {
 
     public static final int kControllerA = 0;
 
+    //Vision constants
+    public static final double kTargetHeightM = 2.52;
+    public static final double kCameraHeightM = 1.143;
+    public static final double kCameraAngleD = 10; 
+    
 
     //Characterization Constraints
     public static final double ksVolts = 0.5805;
