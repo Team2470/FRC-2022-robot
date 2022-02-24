@@ -18,8 +18,8 @@ import frc.robot.Constants;
 
 public class BackClimber extends SubsystemBase implements Climber {
 
-  private WPI_TalonFX m_backClimber;
-  private CANCoder m_backCanCoder; 
+  private final WPI_TalonFX m_backClimber;
+  private final CANCoder m_backCanCoder;
 
   /** Creates a new Climber. */
   public BackClimber() {

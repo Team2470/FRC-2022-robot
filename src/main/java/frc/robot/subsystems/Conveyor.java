@@ -11,7 +11,7 @@ import frc.robot.Constants;
 
 public class Conveyor extends SubsystemBase {
   /** Creates a new Conveyer. */
-  private WPI_TalonSRX m_conveyorMotor;
+  private final WPI_TalonSRX m_conveyorMotor;
 
   public Conveyor() {
     m_conveyorMotor = new WPI_TalonSRX(Constants.kConveyorMotorID);

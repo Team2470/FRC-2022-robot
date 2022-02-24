@@ -8,8 +8,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-    private CANSparkMax m_intakeMotor;
-    private Solenoid m_deploy;
+    private final CANSparkMax m_intakeMotor;
+    private final Solenoid m_deploy;
 
     public Intake() {
         m_intakeMotor = new CANSparkMax(Constants.kIntakeMotorId, MotorType.kBrushless);

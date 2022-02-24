@@ -22,10 +22,10 @@ import frc.robot.Constants;
 
 public class FrontClimber extends SubsystemBase implements Climber {
 
-  private WPI_TalonFX m_frontClimber;
-  private WPI_TalonFX m_frontClimberFollower;
-  private CANCoder m_frontCanCoder;
-  private Solenoid m_ratchetSolenoid;
+  private final WPI_TalonFX m_frontClimber;
+  private final WPI_TalonFX m_frontClimberFollower;
+  private final CANCoder m_frontCanCoder;
+  private final Solenoid m_ratchetSolenoid;
 
   /** Creates a new Climber. */
   public FrontClimber() {

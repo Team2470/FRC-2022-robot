@@ -52,12 +52,12 @@ public class Drive extends SubsystemBase {
   public static final double kRamseteB = 2;
   public static final double kRamseteZeta = 0.7;
 
-  private WPI_TalonFX m_leftLeader;
-  private WPI_TalonFX m_leftFollower;
-  private WPI_TalonFX m_rightLeader;
-  private WPI_TalonFX m_rightFollower;
+  private final WPI_TalonFX m_leftLeader;
+  private final WPI_TalonFX m_leftFollower;
+  private final WPI_TalonFX m_rightLeader;
+  private final WPI_TalonFX m_rightFollower;
 
-  private DifferentialDrive m_drive;
+  private final DifferentialDrive m_drive;
 
   // The gyro sensor
   private final PigeonIMU m_gyro;

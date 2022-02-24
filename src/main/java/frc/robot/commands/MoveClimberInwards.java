@@ -9,7 +9,7 @@ import frc.robot.subsystems.Climber;
 
 public class MoveClimberInwards extends CommandBase {
 
-  private Climber m_climber;
+  private final Climber m_climber;
   /** Creates a new ForwardClimbClockwise. */
   public MoveClimberInwards(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.

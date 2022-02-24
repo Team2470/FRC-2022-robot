@@ -21,7 +21,7 @@ public class Vision extends SubsystemBase {
     private final NetworkTableEntry m_tv = m_limelightTable.getEntry("tv");
     private final NetworkTableEntry m_usbCam = m_limelightTable.getEntry("stream");
 
-   
+
     /**
      * Creates a new Vision.
      */
@@ -44,41 +44,41 @@ public class Vision extends SubsystemBase {
     }
 
     /**
-   * Finds the distance from the base of the robot to the base of the target
-   * @return Distance in degrees from the base of the camera to the base of the target
-   */
-  public double geTargetDistanceM() {
-    if(m_tv.getDouble(0.0) == 1.0)  {
-      return (Constants.kTargetHeightM - Constants.kCameraHeightM) / getVerticalAngle().getTan();
-    } else {
-      return 0;
+     * Finds the distance from the base of the robot to the base of the target
+     *
+     * @return Distance in degrees from the base of the camera to the base of the target
+     */
+    public double geTargetDistanceM() {
+        if (m_tv.getDouble(0.0) == 1.0) {
+            return (Constants.kTargetHeightM - Constants.kCameraHeightM) / getVerticalAngle().getTan();
+        } else {
+            return 0;
+        }
+
     }
 
-  }
-  /**
-   * Returns if target is found
-   * @return true if found 
-   */
-  public boolean getTargetFound() {
-    if(m_tv.getDouble(0.0) == 1.0) {
-      return true;
-    } else {
-      return false;
+    /**
+     * Returns if target is found
+     *
+     * @return true if found
+     */
+    public boolean getTargetFound() {
+        return m_tv.getDouble(0.0) == 1.0;
     }
-  }
-  public Rotation2d getHorizontalAngle() {
-    if(m_tv.getDouble(0.0) == 1.0)  {
-      return Rotation2d.fromDegrees(m_tx.getDouble(0.0));
-    } else {
-      return Rotation2d.fromDegrees(0);
-    }
-  }
 
-  public Rotation2d getVerticalAngle() {
-      if (m_tv.getDouble(0.0) == 1.0) {
-          return Rotation2d.fromDegrees(m_ty.getDouble(0.0)).plus(Constants.kCameraAngle);
-      } else {
-          return Rotation2d.fromDegrees(0.0);
-      }
-  }
+    public Rotation2d getHorizontalAngle() {
+        if (m_tv.getDouble(0.0) == 1.0) {
+            return Rotation2d.fromDegrees(m_tx.getDouble(0.0));
+        } else {
+            return Rotation2d.fromDegrees(0);
+        }
+    }
+
+    public Rotation2d getVerticalAngle() {
+        if (m_tv.getDouble(0.0) == 1.0) {
+            return Rotation2d.fromDegrees(m_ty.getDouble(0.0)).plus(Constants.kCameraAngle);
+        } else {
+            return Rotation2d.fromDegrees(0.0);
+        }
+    }
 }
