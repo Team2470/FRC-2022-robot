@@ -28,10 +28,6 @@ public class DriveWithGamepadCommand extends CommandBase {
     addRequirements(m_drive);
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -57,11 +53,5 @@ public class DriveWithGamepadCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_drive.stop();
-  }
-    
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }

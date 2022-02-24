@@ -66,17 +66,17 @@ public class RobotContainer {
     JoystickButton rpmButton3 = new JoystickButton(m_controller, XboxController.Button.kB.value);
     rpmButton3.whileHeld(new RunShooterCommand(m_shooter, 2500));
     //: Climber control
-    DPadTrigger ForwardClimbClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kUp);
-    ForwardClimbClockwiseButton.whileActiveContinuous(new ClimbClockwise(m_frontClimber));
+    DPadTrigger ForwardClimbOutwardsButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kUp);
+    ForwardClimbOutwardsButton.whileActiveContinuous(new MoveClimberOutwards(m_frontClimber));
 
-    DPadTrigger ForwardClimbCounterClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kRight);
-    ForwardClimbCounterClockwiseButton.whileActiveContinuous(new ClimbCounterClockwise(m_frontClimber));
+    DPadTrigger ForwardClimbInwardsButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kRight);
+    ForwardClimbInwardsButton.whileActiveContinuous(new MoveClimberInwards(m_frontClimber));
 
-    DPadTrigger BackwardClimbClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.KLeft);
-    BackwardClimbClockwiseButton.whileActiveContinuous(new ClimbClockwise(m_backClimber));
+    DPadTrigger BackwardClimbOutwardsButtons = new DPadTrigger(m_controller, DPadTrigger.DPad.KLeft);
+    BackwardClimbOutwardsButtons.whileActiveContinuous(new MoveClimberOutwards(m_backClimber));
 
-    DPadTrigger BackwardClimbCounterClockwiseButton = new DPadTrigger(m_controller, DPadTrigger.DPad.KDown);
-    BackwardClimbCounterClockwiseButton.whileActiveContinuous(new ClimbCounterClockwise(m_backClimber));
+    DPadTrigger BackwardClimbInwardButton = new DPadTrigger(m_controller, DPadTrigger.DPad.KDown);
+    BackwardClimbInwardButton.whileActiveContinuous(new MoveClimberInwards(m_backClimber));
     //: Intake control
     JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
     deployIntakeButton.whileHeld(new DeployIntakeCommand(m_intake));

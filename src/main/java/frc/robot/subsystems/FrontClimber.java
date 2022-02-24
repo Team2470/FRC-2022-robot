@@ -66,12 +66,17 @@ public class FrontClimber extends SubsystemBase implements Climber {
 
   public Rotation2d getAngle() { return Rotation2d.fromDegrees(this.m_frontCanCoder.getAbsolutePosition()); }
 
-  public void startClimbMotor(int direction, double speed) {
-    m_ratchetSolenoid.set(direction > 0);
-    m_frontClimber.set(ControlMode.PercentOutput, direction*speed);
+
+  // TODO: Needs to be adjusted to match hardware
+  public void startOutwardClimb() {
+    m_frontClimber.set(ControlMode.PercentOutput, Constants.kClimberSpeed);
   }
 
-  public void stopClimbMotor() {
+  public void startInwardClimb() {
+    m_frontClimber.set(ControlMode.PercentOutput, -Constants.kClimberSpeed);
+  }
+
+  public void stop() {
     m_frontClimber.neutralOutput();
   }
 }

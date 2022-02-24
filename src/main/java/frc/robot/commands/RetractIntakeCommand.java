@@ -15,24 +15,8 @@ public class RetractIntakeCommand extends CommandBase {
     }
 
     @Override
-    public void initialize() {
-
-    }
-
-    @Override
     public void execute() {
         this.m_intake.stopIntakeMotor();
         this.m_intake.raise();
-    }
-
-    @Override
-    public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-
     }
 }

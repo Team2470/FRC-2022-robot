@@ -5,8 +5,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -21,21 +19,16 @@ public class Conveyor extends SubsystemBase {
 
   public WPI_TalonSRX getMotor() { return this.m_conveyorMotor; }
 
-  public void move(int direction, double speed) {
-    m_conveyorMotor.set(ControlMode.PercentOutput, direction*speed);
+  public void up(){
+    m_conveyorMotor.set(ControlMode.PercentOutput, Constants.kConveyorSpeed);
   }
 
-  public void moveAtSpeed (double speed) {
-    m_conveyorMotor.set(ControlMode.PercentOutput, speed);
-
+  public void down(){
+    m_conveyorMotor.set(ControlMode.PercentOutput, -Constants.kConveyorSpeed);
   }
 
   public void stop() {
     m_conveyorMotor.stopMotor();
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
 }
