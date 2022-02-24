@@ -15,27 +15,48 @@ import frc.robot.subsystems.Shooter;
 
 public class AutoAlign extends CommandBase {
   private final Vision m_vision;
-  private final Conveyor m_conveyor;
+  private final Shooter m_shooter;
+  private final Drive m_drive;
+  private final double m_kp = 0.01;
+  private final double m_minimum = 0.29;
   /** Creates a new DriveWithGamepadCommand. */
-  public AutoAlign(Vision vision, Conveyor conveyor) {
+  public AutoAlign(Vision vision, Shooter shooter, Drive drive) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     m_vision = vision;
-    m_conveyor = conveyor;
+    m_shooter = shooter;
+    m_drive = drive;
 
 
     addRequirements(vision);
-    addRequirements(conveyor);
+    addRequirements(shooter);
+    addRequirements(drive);
+  }
+
+  private double getAngleAdjust(double angle){
+    double turnAngle = 0;
+    if(angle > 0) {
+      turnAngle = m_kp * angle + m_minimum;
+    }
+    else if (angle < 0) {
+      turnAngle = m_kp * angle - m_minimum;
+
+    }
+    return turnAngle;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    if(m_vision.getTargetFound()) {
-      m_conveyor.up();
-    }
-    
+    if(m_vision.getTargetFound())  {
+      double angle = m_vision.getHorizontalAngleD();
+      double angleOutput = getAngleAdjust(angle);
+
+      double distance = m_vision.geTargetDistanceM();
+      
+
+     m_drive.arcadeDrive(0, angleOutput);}
 
   }
   
@@ -44,4 +65,14 @@ public class AutoAlign extends CommandBase {
   public void end(boolean interrupted) {
     
   }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+
+    boolean targetAligned = Math.abs(m_vision.getHorizontalAngleD()) < 0.2;
+    return targetAligned;
+
+  }
+
 }

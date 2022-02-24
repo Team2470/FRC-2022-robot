@@ -68,8 +68,7 @@ public final class Constants {
     public static final double kTargetHeightM = 2.52;
     public static final double kCameraHeightM = 1.143;
     public static final double kCameraAngleD = 10; 
-
-
+    
 
     //Characterization Constraints
     public static final double ksVolts = 0.5805;
