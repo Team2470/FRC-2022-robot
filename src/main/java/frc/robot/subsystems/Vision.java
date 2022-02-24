@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
@@ -35,32 +36,11 @@ public class Vision extends SubsystemBase {
         double y = m_ty.getDouble(0.0);
         double area = m_ta.getDouble(0.0);
 
-        // //Vision Values
-        // double targetOffsetAngle_Vertical = m_ty.getDouble(0.0);
-        // // how many degrees back is your limelight rotated from perfectly vertical?
-        // double limelightMountAngleDegrees = 10;
-
-        // // distance from the center of the Limelight lens to the floor
-        // double limelightLensHeightInches = 44.5;
-
-        // // distance from the target to the floor
-        // double goalHeightInches = 102.0;
-
-        // double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
-        // double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-
-        // //calculate distance
-        // double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches)/Math.tan(angleToGoalRadians);
-
-
         //post to smart dashboard periodically
         SmartDashboard.putNumber("LimelightX", x);
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightArea", area);
         SmartDashboard.putNumber("Distance to Target", geTargetDistanceM());
-       // SmartDashboard.putNumber("Offset", targetOffsetAngle_Vertical);
-       // SmartDashboard.putBoolean("Target Found", );
-        // This method will be called once per scheduler run
     }
 
     /**
@@ -69,8 +49,7 @@ public class Vision extends SubsystemBase {
    */
   public double geTargetDistanceM() {
     if(m_tv.getDouble(0.0) == 1.0)  {
-      double yDegree = m_ty.getDouble(0.0);
-      return (Constants.kTargetHeightM - Constants.kCameraHeightM) / Math.tan( (Constants.kCameraAngleD + yDegree) * (Math.PI / 180) );    
+      return (Constants.kTargetHeightM - Constants.kCameraHeightM) / getVerticalAngle().getTan();
     } else {
       return 0;
     }
@@ -81,19 +60,25 @@ public class Vision extends SubsystemBase {
    * @return true if found 
    */
   public boolean getTargetFound() {
-
     if(m_tv.getDouble(0.0) == 1.0) {
-
       return true;
     } else {
       return false;
     }
   }
-  public double getHorizontalAngleD() {
+  public Rotation2d getHorizontalAngle() {
     if(m_tv.getDouble(0.0) == 1.0)  {
-      return m_tx.getDouble(0.0);  
+      return Rotation2d.fromDegrees(m_tx.getDouble(0.0));
     } else {
-      return 0;
+      return Rotation2d.fromDegrees(0);
     }
-}
+  }
+
+  public Rotation2d getVerticalAngle() {
+      if (m_tv.getDouble(0.0) == 1.0) {
+          return Rotation2d.fromDegrees(m_ty.getDouble(0.0)).plus(Constants.kCameraAngle);
+      } else {
+          return Rotation2d.fromDegrees(0.0);
+      }
+  }
 }

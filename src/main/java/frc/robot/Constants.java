@@ -5,9 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -18,6 +20,10 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+    // Physical
+    public static final double kHubHeightM = 1.6;
+    public static final double kWheelRadiusM = Units.inchesToMeters(3);
 
     // General
 
@@ -67,8 +73,8 @@ public final class Constants {
     //Vision constants
     public static final double kTargetHeightM = 2.52;
     public static final double kCameraHeightM = 1.143;
-    public static final double kCameraAngleD = 10; 
-    
+    public static final Rotation2d kCameraAngle = Rotation2d.fromDegrees(10);
+
 
     //Characterization Constraints
     public static final double ksVolts = 0.5805;
@@ -105,7 +111,6 @@ public final class Constants {
                     .addConstraint(kAutoVoltageConstraint);
 
     // Climber
-
     public static final int kFrontClimberReverseLimit  = -1024;
     public static final int kFrontClimberForwardLimit = 1024;
     public static final double kFrontClimberCanCoderOffset = 172;
@@ -119,13 +124,5 @@ public final class Constants {
 
     // Intake
     public static final double kIntakeSpeed = 1.0;
-
-
-
-    //Vision constants
-    public static final double kTargetHeightM = 2.52;
-    public static final double kCameraHeightM = 1;
-    public static final double kCameraAngleD = 1; 
-
 }
 

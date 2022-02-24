@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,7 +19,7 @@ public class AutoAlign extends CommandBase {
   private final Shooter m_shooter;
   private final Drive m_drive;
   private final double m_kp = 0.01;
-  private final double m_minimum = 0.29;
+  private final Rotation2d m_minimum = Rotation2d.fromDegrees(0.29);
   /** Creates a new DriveWithGamepadCommand. */
   public AutoAlign(Vision vision, Shooter shooter, Drive drive) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -33,13 +34,13 @@ public class AutoAlign extends CommandBase {
     addRequirements(drive);
   }
 
-  private double getAngleAdjust(double angle){
-    double turnAngle = 0;
-    if(angle > 0) {
-      turnAngle = m_kp * angle + m_minimum;
+  private Rotation2d getAngleAdjust(Rotation2d angle){
+    Rotation2d turnAngle = Rotation2d.fromDegrees(0);
+    if(angle.getDegrees() > 0) {
+      turnAngle = angle.times(m_kp).plus(m_minimum);
     }
-    else if (angle < 0) {
-      turnAngle = m_kp * angle - m_minimum;
+    else if (angle.getDegrees() < 0) {
+      turnAngle = angle.times(m_kp).minus(m_minimum);
 
     }
     return turnAngle;
@@ -50,13 +51,13 @@ public class AutoAlign extends CommandBase {
   public void execute() {
 
     if(m_vision.getTargetFound())  {
-      double angle = m_vision.getHorizontalAngleD();
-      double angleOutput = getAngleAdjust(angle);
+      Rotation2d angle = m_vision.getHorizontalAngle();
+      Rotation2d angleOutput = getAngleAdjust(angle);
 
       double distance = m_vision.geTargetDistanceM();
       
 
-     m_drive.arcadeDrive(0, angleOutput);}
+     m_drive.arcadeDrive(0, angleOutput.getDegrees());}
 
   }
   
@@ -70,7 +71,7 @@ public class AutoAlign extends CommandBase {
   @Override
   public boolean isFinished() {
 
-    boolean targetAligned = Math.abs(m_vision.getHorizontalAngleD()) < 0.2;
+    boolean targetAligned = Math.abs(m_vision.getHorizontalAngle().getDegrees()) < 0.2;
     return targetAligned;
 
   }
