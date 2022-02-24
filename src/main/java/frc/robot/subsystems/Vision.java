@@ -39,6 +39,7 @@ public class Vision extends SubsystemBase {
         SmartDashboard.putNumber("LimelightX", x);
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightArea", area);
+        SmartDashboard.putNumber("Distance to Target", getTargetDistanceM());
         // This method will be called once per scheduler run
     }
 
@@ -47,7 +48,7 @@ public class Vision extends SubsystemBase {
      *
      * @return Distance in degrees from the base of the camera to the base of the target
      */
-    public double geTargetDistanceM() {
+    public double getTargetDistanceM() {
         if (m_tv.getDouble(0.0) == 1.0) {
             double yDegree = m_ty.getDouble(0.0);
             return (Constants.kTargetHeightM - Constants.kCameraHeightM) / Math.tan((Constants.kCameraAngleD + yDegree) * (Math.PI / 180));
