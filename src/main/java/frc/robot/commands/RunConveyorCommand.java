@@ -6,13 +6,12 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Conveyor;
-import frc.robot.Constants;
+
 
 public class RunConveyorCommand extends CommandBase {
   /** Creates a new RunConveyorCommand. */
   private final Conveyor m_conveyor;
   private final Direction m_direction;
-  private final double m_speed;
 
   public enum Direction {
     kUp,
@@ -20,13 +19,8 @@ public class RunConveyorCommand extends CommandBase {
   }
 
   public RunConveyorCommand(Conveyor conveyor, Direction direction) {
-    this(conveyor, direction, Constants.kConveyorSpeed);
-  }
-
-  public RunConveyorCommand(Conveyor conveyor, Direction direction, double speed) {
     m_conveyor = conveyor;
     m_direction = direction;
-    m_speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_conveyor);    
   }
@@ -36,9 +30,9 @@ public class RunConveyorCommand extends CommandBase {
   public void execute() {
     switch (m_direction) {
       case kUp:
-        m_conveyor.moveAtSpeed(Math.abs(m_speed));
+        m_conveyor.up();
       case kDown:
-        m_conveyor.moveAtSpeed(-Math.abs(m_speed));
+        m_conveyor.down();
     }
   }
 
