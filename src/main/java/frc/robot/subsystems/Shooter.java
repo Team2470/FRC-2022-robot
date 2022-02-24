@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,6 +34,9 @@ public class Shooter extends SubsystemBase {
     m_shooterLeader = new CANSparkMax(Constants.kShooterNeoLeaderId, MotorType.kBrushless);
     m_shooterFollower = new CANSparkMax(Constants.kShooterNeoFollowerId, MotorType.kBrushless);
     m_shooterFollower.follow(m_shooterLeader,true);
+    m_shooterFollower.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 100);
+    m_shooterFollower.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 500);
+    m_shooterFollower.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 500);
 
     m_shooterLeader.setInverted(true);
     m_shooterFollower.setInverted(true);

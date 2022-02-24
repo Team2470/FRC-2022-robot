@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
@@ -32,6 +33,8 @@ public class FrontClimber extends SubsystemBase implements Climber {
     m_frontClimber = new WPI_TalonFX(Constants.kFrontClimberTalonId, Constants.kCanivoreName);
     m_frontClimberFollower.follow(m_frontClimber);
     m_frontClimberFollower.setInverted(TalonFXInvertType.OpposeMaster);
+    m_frontClimberFollower.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 1000);
+    m_frontClimberFollower.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1000);
 
     m_frontCanCoder = new CANCoder(Constants.kFrontCanCoderId, Constants.kCanivoreName);
     m_ratchetSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.kRatchetSolenoid);

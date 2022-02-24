@@ -34,7 +34,7 @@ public final class Constants {
     // CAN IDs
 
     // CANivore bus
-    public static final String kCanivoreName = "Canivore0";
+    public static final String kCanivoreName = "";
     public static final int kDriveTalonRightAId = 13;
     public static final int kDriveTalonRightBId = 14;
     public static final int kDriveTalonLeftAId  = 11;
