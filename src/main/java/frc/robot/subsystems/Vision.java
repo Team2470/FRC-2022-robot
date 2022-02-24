@@ -73,4 +73,8 @@ public class Vision extends SubsystemBase {
             return 0;
         }
     }
+
+    public int getRPM() {
+        return 1500;
+    }
 }

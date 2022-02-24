@@ -30,5 +30,13 @@ public class Conveyor extends SubsystemBase {
   public void stop() {
     m_conveyorMotor.stopMotor();
   }
+// TODO
+  public boolean isFull() {
+    return false;
+  }
+// TODO
+  public int cargoCount() {
+    return 0;
+  }
 
 }

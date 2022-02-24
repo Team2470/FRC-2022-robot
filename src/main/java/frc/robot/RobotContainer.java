@@ -4,14 +4,19 @@
 
 package frc.robot;
 
+import java.util.Map;
+
 import com.kennedyrobotics.triggers.DPadTrigger;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.*;
+import frc.robot.commands.RunConveyorCommand.Direction;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -30,6 +35,7 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final FrontClimber m_frontClimber = new FrontClimber();
   private final BackClimber m_backClimber = new BackClimber();
+  private final Vision m_vision = new Vision();
 
   // Controller
   private final XboxController m_controller = new XboxController(Constants.kControllerA);
@@ -58,13 +64,13 @@ public class RobotContainer {
     conveyorDown.whileHeld(new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kDown));
     //: Shooter control
     JoystickButton rpmButton1 = new JoystickButton(m_controller, XboxController.Button.kA.value);
-    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, 1500));
+    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, () -> 1500));
 
     JoystickButton rpmButton2 = new JoystickButton(m_controller, XboxController.Button.kX.value);
-    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, 2000));
+    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, () -> 2000));
 
     JoystickButton rpmButton3 = new JoystickButton(m_controller, XboxController.Button.kB.value);
-    rpmButton3.whileHeld(new RunShooterCommand(m_shooter, 2500));
+    rpmButton3.whileHeld(new RunShooterCommand(m_shooter, () -> 2500));
     //: Climber control
     DPadTrigger ForwardClimbOutwardsButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kUp);
     ForwardClimbOutwardsButton.whileActiveContinuous(new MoveClimberOutwards(m_frontClimber));
@@ -79,7 +85,23 @@ public class RobotContainer {
     BackwardClimbInwardButton.whileActiveContinuous(new MoveClimberInwards(m_backClimber));
     //: Intake control
     JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
-    deployIntakeButton.whileHeld(new DeployIntakeCommand(m_intake));
+    // deployIntakeButton.whileHeld(new DeployIntakeCommand(m_intake));
+    deployIntakeButton.whenHeld(
+      new ParallelCommandGroup(
+        new DeployIntakeCommand(m_intake),
+        new RunConveyorCommand(m_conveyor, Direction.kUp)
+      ).withInterrupt(m_conveyor::isFull)
+    );
+    
+    JoystickButton shootButton = new JoystickButton(m_controller, XboxController.Button.kStart.value);
+    shootButton.whenPressed(
+      new SelectCommand(
+        Map.of(
+          0, new PrintCommand("No cargo. Refusing to shoot"),
+          1, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, 0),
+          2, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, 1)
+        ), m_conveyor::cargoCount)
+      );
   }
 
   /**
@@ -90,7 +112,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // Return null for no autonomous command
     return new ParallelCommandGroup(
-            new RunShooterCommand(m_shooter, 2500),
+            new RunShooterCommand(m_shooter, () -> 2500),
             new SequentialCommandGroup(
                     new WaitCommand(2),
                     new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
