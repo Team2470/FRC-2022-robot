@@ -22,6 +22,10 @@ public class RunShooterCommand extends CommandBase {
     addRequirements(m_shooter);
   }
 
+  public RunShooterCommand(Shooter shooter, int setpoint) {
+    this(shooter, () -> setpoint);
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void execute() {
