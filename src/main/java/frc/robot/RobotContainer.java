@@ -20,6 +20,7 @@ import frc.robot.subsystems.*;
 import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -116,12 +117,22 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // Return null for no autonomous command
-    return new ParallelCommandGroup(
-            new RunShooterCommand(m_shooter, 2500),
-            new SequentialCommandGroup(
-                    new WaitCommand(2),
-                    new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
-            )
+    return new SequentialCommandGroup(
+      new AutoDrive(m_drive).withTimeout(1.5),
+      new ParallelRaceGroup(
+           new RunShooterCommand(m_shooter, 2500),
+           new SequentialCommandGroup(
+
+               new WaitCommand(2),
+               new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
+       ))
+
+      
+            // new RunShooterCommand(m_shooter, 2500),
+            // new SequentialCommandGroup(
+            //         new WaitCommand(2),
+            //         new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
+            // )
     );
 
 //    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
