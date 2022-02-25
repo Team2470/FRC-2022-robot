@@ -13,4 +13,20 @@ public class MoveConveyorDistanceCommand extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(conveyor);
   }
+
+  @Override
+  public void execute() {
+    // TODO: Write out stub
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    // TODO: Write out stub
+  }
+
+  @Override
+  public boolean isFinished() {
+    // TODO: Write out stub
+    return true;
+  }
 }

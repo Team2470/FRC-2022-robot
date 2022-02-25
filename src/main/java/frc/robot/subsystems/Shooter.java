@@ -66,6 +66,9 @@ public class Shooter extends SubsystemBase {
     
     SmartDashboard.putNumber("Shooter setpoint rpm", setPoint);
   }
+  public double getRPM() {
+    return m_encoder.getVelocity();
+  }
   public void setPercent(double percent) {
     m_shooterLeader.set(percent);
   }

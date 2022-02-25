@@ -10,9 +10,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
 public class WaitForShooterRPMCommand extends CommandBase {
+  private final Shooter m_shooter;
+  private final IntSupplier m_rpmSupplier;
+  private final double m_tolerance;
+
   /** Creates a new WaitForShooterRPMCommand. */
   public WaitForShooterRPMCommand(Shooter shooter, IntSupplier rpmSupplier, double tolerance) {
-    // Use addRequirements() here to declare subsystem dependencies.
+    m_shooter = shooter;
+    m_rpmSupplier = rpmSupplier;
+    m_tolerance = tolerance;
   }
 
   // Convenience constructors
@@ -24,5 +30,12 @@ public class WaitForShooterRPMCommand extends CommandBase {
   }
   public WaitForShooterRPMCommand (Shooter shooter, int rpm) {
     this(shooter, () -> rpm, 100);
+  }
+
+  @Override
+  public boolean isFinished() {
+    double rpm = m_shooter.getRPM();
+    double error = Math.abs(rpm - m_rpmSupplier.getAsInt());
+    return error < m_tolerance;
   }
 }
