@@ -12,7 +12,6 @@ import frc.robot.subsystems.Vision;
 
 public class AutoAlign extends CommandBase {
     private final Vision m_vision;
-    private final Shooter m_shooter;
     private final Drive m_drive;
     private final double m_kp = 0.01;
     private final Rotation2d m_minimum = Rotation2d.fromDegrees(0.29);
@@ -20,50 +19,33 @@ public class AutoAlign extends CommandBase {
     /**
      * Creates a new DriveWithGamepadCommand.
      */
-    public AutoAlign(Vision vision, Shooter shooter, Drive drive) {
+    public AutoAlign(Vision vision, Drive drive) {
         // Use addRequirements() here to declare subsystem dependencies.
-
         m_vision = vision;
-        m_shooter = shooter;
         m_drive = drive;
 
-
-        addRequirements(vision);
-        addRequirements(shooter);
         addRequirements(drive);
     }
 
     private Rotation2d getAngleAdjust(Rotation2d angle) {
-        Rotation2d turnAngle = Rotation2d.fromDegrees(0);
         if (angle.getDegrees() > 0) {
-            turnAngle = angle.times(m_kp).plus(m_minimum);
+            return angle.times(m_kp).plus(m_minimum);
         } else if (angle.getDegrees() < 0) {
-            turnAngle = angle.times(m_kp).minus(m_minimum);
+            return angle.times(m_kp).minus(m_minimum);
 
         }
-        return turnAngle;
+        return Rotation2d.fromDegrees(0);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-
         if (m_vision.getTargetFound()) {
             Rotation2d angle = m_vision.getHorizontalAngle();
             Rotation2d angleOutput = getAngleAdjust(angle);
 
-            double distance = m_vision.geTargetDistanceM();
-
-
             m_drive.arcadeDrive(0, angleOutput.getDegrees());
         }
-
-    }
-
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {
-
     }
 
     // Returns true when the command should end.

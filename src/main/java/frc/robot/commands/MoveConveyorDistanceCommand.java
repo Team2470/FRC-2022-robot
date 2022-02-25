@@ -12,7 +12,5 @@ public class MoveConveyorDistanceCommand extends CommandBase {
   public MoveConveyorDistanceCommand(Conveyor conveyor, double inches) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(conveyor);
-
   }
-
 }

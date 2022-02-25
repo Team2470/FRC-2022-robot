@@ -18,7 +18,6 @@ public class RunShooterCommand extends CommandBase {
     m_shooter = shooter;
     m_setPointSupplier = setPointSupplier;
 
-
     addRequirements(m_shooter);
   }
 

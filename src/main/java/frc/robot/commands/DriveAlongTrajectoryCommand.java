@@ -16,25 +16,25 @@ public class DriveAlongTrajectoryCommand extends RamseteCommand {
     public DriveAlongTrajectoryCommand(Drive drive, Trajectory trajectory) {
         super(
                 trajectory,
-            drive::getPose,
-            new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
-            new SimpleMotorFeedforward(
-                    Constants.ksVolts,
-                    Constants.kvVoltSecondsPerMeter,
-                    Constants.kaVoltSecondsSquaredPerMeter),
-            Constants.kDriveKinematics,
-            drive::getWheelSpeeds,
-            new PIDController(Constants.kPDriveVel, 0, 0),
-            new PIDController(Constants.kPDriveVel, 0, 0),
-            // RamseteCommand passes volts to the callback
-            drive::tankDriveVolts,
-            drive
+                drive::getPose,
+                new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
+                new SimpleMotorFeedforward(
+                        Constants.ksVolts,
+                        Constants.kvVoltSecondsPerMeter,
+                        Constants.kaVoltSecondsSquaredPerMeter),
+                Constants.kDriveKinematics,
+                drive::getWheelSpeeds,
+                new PIDController(Constants.kPDriveVel, 0, 0),
+                new PIDController(Constants.kPDriveVel, 0, 0),
+                // RamseteCommand passes volts to the callback
+                drive::tankDriveVolts,
+                drive
         );
-        this.m_drive = drive;
+        m_drive = drive;
         // Stop when done
         //this.andThen(() -> m_drive.tankDriveVolts(0, 0));
 
-        this.m_trajectory = trajectory;
+        m_trajectory = trajectory;
         addRequirements(this.m_drive);
     }
 
@@ -43,6 +43,6 @@ public class DriveAlongTrajectoryCommand extends RamseteCommand {
         // Ramsete init
         super.initialize();
         // Reset our odometry before start
-        m_drive.resetOdometry(this.m_trajectory.getInitialPose());
+        m_drive.resetOdometry(m_trajectory.getInitialPose());
     }
 }

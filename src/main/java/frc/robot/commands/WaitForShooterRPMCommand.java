@@ -13,7 +13,6 @@ public class WaitForShooterRPMCommand extends CommandBase {
   /** Creates a new WaitForShooterRPMCommand. */
   public WaitForShooterRPMCommand(Shooter shooter, IntSupplier rpmSupplier, double tolerance) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
   }
 
   // Convenience constructors
@@ -26,5 +25,4 @@ public class WaitForShooterRPMCommand extends CommandBase {
   public WaitForShooterRPMCommand (Shooter shooter, int rpm) {
     this(shooter, () -> rpm, 100);
   }
-
 }

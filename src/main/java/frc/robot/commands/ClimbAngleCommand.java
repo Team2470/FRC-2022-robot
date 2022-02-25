@@ -26,9 +26,9 @@ public class ClimbAngleCommand extends CommandBase {
     public void execute() {
         // TODO: This needs to be adjusted
         if (getError().getDegrees() > 0) {
-            this.m_climber.startOutwardClimb();
+            m_climber.startOutwardClimb();
         } else {
-            this.m_climber.startInwardClimb();
+            m_climber.startInwardClimb();
         }
     }
 
@@ -39,6 +39,6 @@ public class ClimbAngleCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        this.m_climber.stop();
+        m_climber.stop();
     }
 }
