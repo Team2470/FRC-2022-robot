@@ -124,7 +124,7 @@ public class RobotContainer {
           0, new PrintCommand("No cargo. Refusing to shoot"),
           1, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, 0),
           2, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, 1)
-        ), m_conveyor::cargoCount)
+        ), m_conveyor::capturedCargoCount)
       );
   }
 

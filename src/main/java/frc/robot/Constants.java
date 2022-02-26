@@ -59,6 +59,10 @@ public final class Constants {
     public static final double kConveyorSpeed = 0.5;
     public static final double kConveyorSpeedDown = -0.75;
 
+    //DIO
+    public static final int kConveyorFirstCargoChannel = 8;
+    public static final int kConveyorSecondCargoChannel = 9;
+
     // Pneumatics
 
     public static final int kRatchetSolenoid = 0;
