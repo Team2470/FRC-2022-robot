@@ -24,6 +24,7 @@ public final class Constants {
     // Physical
     public static final double kHubHeightM = 1.6;
     public static final double kWheelRadiusM = Units.inchesToMeters(3);
+    public static final double kConveyorWheelRadiusM = Units.inchesToMeters(1.416);
 
     // General
 
@@ -59,6 +60,7 @@ public final class Constants {
     public static final int kConveyorDown = 1;
     public static final double kConveyorSpeed = 0.5;
     public static final double kConveyorSpeedDown = -0.75;
+    public static final double kConveyorErrorBoundM = Units.inchesToMeters(0.05);
 
     //DIO
     public static final int kConveyorFirstCargoChannel = 8;

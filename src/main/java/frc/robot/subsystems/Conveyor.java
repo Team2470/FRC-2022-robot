@@ -8,7 +8,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.CANCoder;
-
+import com.ctre.phoenix.sensors.SensorTimeBase;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -29,6 +30,10 @@ public class Conveyor extends SubsystemBase {
 
     m_encoder.configFactoryDefault();
     m_encoder.configSensorDirection(false);
+    double countToDegree = 360.0 / 4096.0;
+    double radianToMeters = 2 * Math.PI * Constants.kConveyorWheelRadiusM;
+    double sensorCoefficient = countToDegree * (Math.PI / 180.0) * radianToMeters;
+    m_encoder.configFeedbackCoefficient(sensorCoefficient, "m", SensorTimeBase.PerSecond);
 
     m_conveyorMotor.configRemoteFeedbackFilter(m_encoder, 0);
     m_conveyorMotor.configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0);
@@ -64,24 +69,30 @@ public class Conveyor extends SubsystemBase {
     return 0;
   }
 
-  public boolean isFirstCargoDetected(){
+  public boolean isFirstCargoDetected() {
 
     return !m_firstCargoSensor.get();
   }
 
-  public boolean isSecondCargoDetected(){
+  public boolean isSecondCargoDetected() {
     return !m_secondCargoSensor.get();
+  }
+
+  public double getDistance() {
+    return m_encoder.getPosition();
+  }
+
+  public void zeroDistance() {
+    m_encoder.setPosition(0);
   }
 
   @Override
   public void periodic() {
-      SmartDashboard.putBoolean("Conveyor First Cargo Detected", isFirstCargoDetected());
-      SmartDashboard.putBoolean("Conveyor Second Cargo Detected", isSecondCargoDetected());
-      SmartDashboard.putBoolean("Conveyor Full", isFull());
-      SmartDashboard.putNumber("Conveyor Cargo Count", capturedCargoCount());
-      SmartDashboard.putNumber("Conveyor Selected Sensor position", m_conveyorMotor.getSelectedSensorPosition());
-      SmartDashboard.putNumber("Conveyor Distance", m_encoder.getPosition());
-
-
+    SmartDashboard.putBoolean("Conveyor First Cargo Detected", isFirstCargoDetected());
+    SmartDashboard.putBoolean("Conveyor Second Cargo Detected", isSecondCargoDetected());
+    SmartDashboard.putBoolean("Conveyor Full", isFull());
+    SmartDashboard.putNumber("Conveyor Cargo Count", capturedCargoCount());
+    SmartDashboard.putNumber("Conveyor Selected Sensor position", m_conveyorMotor.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Conveyor Distance (in.)", Units.metersToInches(m_encoder.getPosition()));
   }
 }
