@@ -45,18 +45,18 @@ public class FrontClimber extends SubsystemBase implements Climber {
     m_frontCanCoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 
 
-    m_frontClimber.configFactoryDefault();
+    // m_frontClimber.configFactoryDefault();
     m_frontClimber.configForwardSoftLimitEnable(true);
     m_frontClimber.configReverseSoftLimitEnable(true);
     m_frontClimber.configReverseSoftLimitThreshold(Constants.kFrontClimberReverseLimit);
     m_frontClimber.configForwardSoftLimitThreshold(Constants.kFrontClimberForwardLimit);
 
-        try {
-        Thread.sleep(1000);
-    } catch (InterruptedException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-    }
+    //     try {
+    //     Thread.sleep(1000);
+    // } catch (InterruptedException e) {
+    //     // TODO Auto-generated catch block
+    //     e.printStackTrace();
+    //}
     m_frontCanCoder.setPosition(m_frontCanCoder.getAbsolutePosition(), 20);
     m_frontClimber.configRemoteFeedbackFilter(m_frontCanCoder, 0);
     m_frontClimber.configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0);
