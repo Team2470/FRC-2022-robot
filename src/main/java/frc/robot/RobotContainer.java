@@ -96,11 +96,11 @@ public class RobotContainer {
     JoystickButton rpmButton3 = new JoystickButton(m_controller, XboxController.Button.kB.value);
     rpmButton3.whileHeld(new RunShooterCommand(m_shooter, () -> 2500));
     //: Climber control
-    //DPadTrigger ForwardClimbOutwardsButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kUp);
-    //ForwardClimbOutwardsButton.whileActiveContinuous(new MoveClimberOutwards(m_frontClimber));
+    DPadTrigger ForwardClimbOutwardsButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kUp);
+    ForwardClimbOutwardsButton.whileActiveContinuous(new MoveClimberOutwards(m_frontClimber));
 
-    //DPadTrigger ForwardClimbInwardsButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kRight);
-    //ForwardClimbInwardsButton.whileActiveContinuous(new MoveClimberInwards(m_frontClimber));
+    DPadTrigger ForwardClimbInwardsButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kRight);
+    ForwardClimbInwardsButton.whileActiveContinuous(new MoveClimberInwards(m_frontClimber));
 
     DPadTrigger BackwardClimbOutwardsButtons = new DPadTrigger(m_controller, DPadTrigger.DPad.KLeft);
     BackwardClimbOutwardsButtons.whileActiveContinuous(new MoveClimberOutwards(m_backClimber));

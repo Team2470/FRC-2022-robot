@@ -32,9 +32,11 @@ public class FrontClimber extends SubsystemBase implements Climber {
     m_frontClimberFollower = new WPI_TalonFX(Constants.kFrontClimberFollowerTalonId, Constants.kCanivoreName);
     m_frontClimber = new WPI_TalonFX(Constants.kFrontClimberTalonId, Constants.kCanivoreName);
     m_frontClimberFollower.follow(m_frontClimber);
+    m_frontClimber.setInverted(true);
     m_frontClimberFollower.setInverted(TalonFXInvertType.OpposeMaster);
     m_frontClimberFollower.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 1000);
     m_frontClimberFollower.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1000);
+    
 
     m_frontCanCoder = new CANCoder(Constants.kFrontCanCoderId, Constants.kCanivoreName);
     m_ratchetSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.kRatchetSolenoid);
@@ -45,11 +47,11 @@ public class FrontClimber extends SubsystemBase implements Climber {
     m_frontCanCoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 
 
-    // m_frontClimber.configFactoryDefault();
     m_frontClimber.configForwardSoftLimitEnable(true);
     m_frontClimber.configReverseSoftLimitEnable(true);
     m_frontClimber.configReverseSoftLimitThreshold(Constants.kFrontClimberReverseLimit);
     m_frontClimber.configForwardSoftLimitThreshold(Constants.kFrontClimberForwardLimit);
+    m_frontClimber.setSensorPhase(true);
 
     //     try {
     //     Thread.sleep(1000);
@@ -76,14 +78,17 @@ public class FrontClimber extends SubsystemBase implements Climber {
 
   // TODO: Needs to be adjusted to match hardware
   public void startOutwardClimb() {
-    m_frontClimber.set(ControlMode.PercentOutput, Constants.kClimberSpeed);
+    m_ratchetSolenoid.set(m_frontClimber.getSelectedSensorPosition() <= Constants.kFrontClimberForwardLimit);
+    m_frontClimber.set(ControlMode.PercentOutput, Constants.kFrontClimberSpeed);
   }
 
   public void startInwardClimb() {
-    m_frontClimber.set(ControlMode.PercentOutput, -Constants.kClimberSpeed);
+    m_ratchetSolenoid.set(false);
+    m_frontClimber.set(ControlMode.PercentOutput, -Constants.kFrontClimberSpeed);
   }
 
   public void stop() {
+    m_ratchetSolenoid.set(false);
     m_frontClimber.neutralOutput();
   }
 }

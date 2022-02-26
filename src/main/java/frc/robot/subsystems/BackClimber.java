@@ -62,11 +62,11 @@ public class BackClimber extends SubsystemBase implements Climber {
 
   // TODO: Adjust to match hardware
   public void startOutwardClimb() {
-    m_backClimber.set(ControlMode.PercentOutput, Constants.kClimberSpeed);
+    m_backClimber.set(ControlMode.PercentOutput, Constants.kBackClimberSpeed);
   }
 
   public void startInwardClimb() {
-    m_backClimber.set(ControlMode.PercentOutput, -Constants.kClimberSpeed);
+    m_backClimber.set(ControlMode.PercentOutput, -Constants.kBackClimberSpeed);
   }
 
   public Rotation2d getAngle() { return Rotation2d.fromDegrees(this.m_backCanCoder.getAbsolutePosition()); }
