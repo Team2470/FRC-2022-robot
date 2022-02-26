@@ -127,7 +127,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // Return null for no autonomous command
     return new SequentialCommandGroup(
-        new AutoDrive(m_drive).withTimeout(1.5),
+        new DriveDistanceCommand(m_drive, 1),
         new ParallelRaceGroup(
             new RunShooterCommand(m_shooter, 2500),
             new SequentialCommandGroup(
