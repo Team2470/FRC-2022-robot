@@ -9,6 +9,8 @@ import java.util.Map;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kennedyrobotics.triggers.DPadTrigger;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -82,33 +84,37 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //: Conveyor Control
-    //JoystickButton conveyorUp = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
-    //conveyorUp.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kUp));
+    //Conveyor Control
+    JoystickButton conveyorUp = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
+    conveyorUp.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kUp));
 
     JoystickButton conveyorDown = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
     conveyorDown.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kDown));
     //: Shooter control
-    JoystickButton rpmButton1 = new JoystickButton(m_controller, XboxController.Button.kA.value);
-    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, () -> 1500));
+    JoystickButton rpmButton1 = new JoystickButton(m_buttopad, 8);
+    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, () -> 2800));
 
-    JoystickButton rpmButton2 = new JoystickButton(m_controller, XboxController.Button.kX.value);
-    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, () -> 2000));
+    JoystickButton rpmButton2 = new JoystickButton(m_buttopad, 7);
+    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, () -> 2600));
 
-    JoystickButton rpmButton3 = new JoystickButton(m_controller, XboxController.Button.kB.value);
+    JoystickButton rpmButton3 = new JoystickButton(m_buttopad, 6);
     rpmButton3.whileHeld(new RunShooterCommand(m_shooter, () -> 2500));
     //: Climber control
     JoystickButton ForwardClimbOutwardsButton = new JoystickButton(m_buttopad, 2);
-    ForwardClimbOutwardsButton.whileActiveContinuous(new MoveClimberOutwards(m_frontClimber));
+    ForwardClimbOutwardsButton.whileActiveContinuous(new MoveFrontClimberOutwards(m_frontClimber));
 
     JoystickButton ForwardClimbInwardsButton = new JoystickButton(m_buttopad, 1);
-    ForwardClimbInwardsButton.whileActiveContinuous(new MoveClimberInwards(m_frontClimber));
+    ForwardClimbInwardsButton.whileActiveContinuous(new MoveFrontClimberInwards(m_frontClimber));
 
     JoystickButton BackwardClimbOutwardsButtons = new JoystickButton(m_buttopad, 4);
-    BackwardClimbOutwardsButtons.whileActiveContinuous(new MoveClimberOutwards(m_backClimber));
+    BackwardClimbOutwardsButtons.whileActiveContinuous(new MoveBackClimberOutwards(m_backClimber));
 
     JoystickButton BackwardClimbInwardButton = new JoystickButton(m_buttopad, 3);
-    BackwardClimbInwardButton.whileActiveContinuous(new MoveClimberInwards(m_backClimber));
+    BackwardClimbInwardButton.whileActiveContinuous(new MoveBackClimberInwards(m_backClimber));
+
+    //JoystickButton MoveClimbToAngle = new JoystickButton(m_buttopad, 5);
+    //MoveClimbToAngle.whenHeld(new ClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(10)));
+
     //: Intake control
     JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
     // deployIntakeButton.whileHeld(new DeployIntakeCommand(m_intake));
@@ -128,6 +134,9 @@ public class RobotContainer {
           2, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, 1)
         ), m_conveyor::capturedCargoCount)
       );
+
+      JoystickButton conveyorDownButton = new JoystickButton(m_buttopad, 5);
+      conveyorDownButton.whenHeld(new RunConveyorCommand(m_conveyor,Direction.kDown));
   }
 
   /**

@@ -5,13 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.BackClimber;
 import frc.robot.subsystems.Climber;
 
-public class MoveClimberInwards extends CommandBase {
+public class MoveBackClimberInwards extends CommandBase {
 
-  private final Climber m_climber;
+  private final BackClimber m_climber;
   /** Creates a new ForwardClimbClockwise. */
-  public MoveClimberInwards(Climber climber) {
+  public MoveBackClimberInwards(BackClimber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climber = climber;
 

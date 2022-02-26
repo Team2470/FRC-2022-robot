@@ -5,24 +5,33 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class BackClimber extends SubsystemBase implements Climber {
+public class BackClimber extends PIDSubsystem implements Climber {
 
   private final WPI_TalonFX m_backClimber;
   private final CANCoder m_backCanCoder;
+  private static final double kP = 0.0;
+  private static final double kI = 0.0;
+  private static final double kD = 0.0;
 
   /** Creates a new Climber. */
   public BackClimber() {
+    super(new PIDController(kP, kI, kD));
+
+
     m_backClimber = new WPI_TalonFX(Constants.kBackClimberTalonId, Constants.kCanivoreName);
     m_backCanCoder = new CANCoder(Constants.kBackCanCoderId, Constants.kCanivoreName);
 
@@ -39,6 +48,7 @@ public class BackClimber extends SubsystemBase implements Climber {
     m_backClimber.configReverseSoftLimitEnable(true);
     m_backClimber.configReverseSoftLimitThreshold(Constants.kBackClimberReverseLimit);
     m_backClimber.configForwardSoftLimitThreshold(Constants.kBackClimberForwardLimit);
+    m_backClimber.setNeutralMode(NeutralMode.Brake);
 
     m_backClimber.configRemoteFeedbackFilter(m_backCanCoder, 0);
     m_backClimber.configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0);
@@ -54,6 +64,8 @@ public class BackClimber extends SubsystemBase implements Climber {
     SmartDashboard.putNumber("Climber Back Angle", m_backCanCoder.getPosition());
     SmartDashboard.putNumber("Climber Back Absolute Angle", m_backCanCoder.getAbsolutePosition());
     SmartDashboard.putNumber("Climber Back Selected Sensor position", m_backClimber.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Back Climber Stator Current", m_backClimber.getStatorCurrent());
+    SmartDashboard.putNumber("Back Climber Supply Currnet", m_backClimber.getSupplyCurrent());
   }
 
   public void startClimbMotor(int direction, double speed) {
@@ -73,5 +85,17 @@ public class BackClimber extends SubsystemBase implements Climber {
 
   public void stop() {
     m_backClimber.neutralOutput();
+  }
+
+  @Override
+  protected void useOutput(double output, double setpoint) {
+    // TODO Auto-generated method stub
+    m_backClimber.set(ControlMode.PercentOutput, output);
+  }
+
+  @Override
+  protected double getMeasurement() {
+    // TODO Auto-generated method stub
+    return getAngle().getDegrees();
   }
 }
