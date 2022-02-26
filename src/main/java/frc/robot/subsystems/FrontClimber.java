@@ -12,7 +12,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -27,7 +26,9 @@ public class FrontClimber extends SubsystemBase implements Climber {
   private final CANCoder m_frontCanCoder;
   private final Solenoid m_ratchetSolenoid;
 
-  /** Creates a new Climber. */
+  /**
+   * Creates a new Climber.
+   */
   public FrontClimber() {
     m_frontClimberFollower = new WPI_TalonFX(Constants.kFrontClimberFollowerTalonId, Constants.kCanivoreName);
     m_frontClimber = new WPI_TalonFX(Constants.kFrontClimberTalonId, Constants.kCanivoreName);
@@ -36,7 +37,7 @@ public class FrontClimber extends SubsystemBase implements Climber {
     m_frontClimberFollower.setInverted(TalonFXInvertType.OpposeMaster);
     m_frontClimberFollower.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 1000);
     m_frontClimberFollower.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1000);
-    
+
 
     m_frontCanCoder = new CANCoder(Constants.kFrontCanCoderId, Constants.kCanivoreName);
     m_ratchetSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.kRatchetSolenoid);
@@ -73,7 +74,9 @@ public class FrontClimber extends SubsystemBase implements Climber {
     SmartDashboard.putNumber("Climber Front Selected Sensor position", m_frontClimber.getSelectedSensorPosition());
   }
 
-  public Rotation2d getAngle() { return Rotation2d.fromDegrees(this.m_frontCanCoder.getAbsolutePosition()); }
+  public Rotation2d getAngle() {
+    return Rotation2d.fromDegrees(this.m_frontCanCoder.getAbsolutePosition());
+  }
 
 
   // TODO: Needs to be adjusted to match hardware

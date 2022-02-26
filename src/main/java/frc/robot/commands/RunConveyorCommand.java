@@ -9,7 +9,9 @@ import frc.robot.subsystems.Conveyor;
 
 
 public class RunConveyorCommand extends CommandBase {
-  /** Creates a new RunConveyorCommand. */
+  /**
+   * Creates a new RunConveyorCommand.
+   */
   private final Conveyor m_conveyor;
   private final Direction m_direction;
 
@@ -22,7 +24,7 @@ public class RunConveyorCommand extends CommandBase {
     m_conveyor = conveyor;
     m_direction = direction;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_conveyor);    
+    addRequirements(m_conveyor);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -10,7 +10,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,12 +20,13 @@ public class BackClimber extends SubsystemBase implements Climber {
   private final WPI_TalonFX m_backClimber;
   private final CANCoder m_backCanCoder;
 
-  /** Creates a new Climber. */
+  /**
+   * Creates a new Climber.
+   */
   public BackClimber() {
     m_backClimber = new WPI_TalonFX(Constants.kBackClimberTalonId, Constants.kCanivoreName);
     m_backCanCoder = new CANCoder(Constants.kBackCanCoderId, Constants.kCanivoreName);
 
-  
 
     m_backCanCoder.configFactoryDefault();
     m_backCanCoder.configMagnetOffset(Constants.kBackClimberCanCoderOffset);
@@ -57,7 +57,7 @@ public class BackClimber extends SubsystemBase implements Climber {
   }
 
   public void startClimbMotor(int direction, double speed) {
-    m_backClimber.set(ControlMode.PercentOutput, direction*speed);
+    m_backClimber.set(ControlMode.PercentOutput, direction * speed);
   }
 
   // TODO: Adjust to match hardware
@@ -69,7 +69,9 @@ public class BackClimber extends SubsystemBase implements Climber {
     m_backClimber.set(ControlMode.PercentOutput, -Constants.kBackClimberSpeed);
   }
 
-  public Rotation2d getAngle() { return Rotation2d.fromDegrees(this.m_backCanCoder.getAbsolutePosition()); }
+  public Rotation2d getAngle() {
+    return Rotation2d.fromDegrees(this.m_backCanCoder.getAbsolutePosition());
+  }
 
   public void stop() {
     m_backClimber.neutralOutput();

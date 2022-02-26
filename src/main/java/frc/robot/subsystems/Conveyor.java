@@ -16,7 +16,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Conveyor extends SubsystemBase {
-  /** Creates a new Conveyer. */
+  /**
+   * Creates a new Conveyer.
+   */
   private final WPI_TalonSRX m_conveyorMotor;
   private final DigitalInput m_firstCargoSensor;
   private final DigitalInput m_secondCargoSensor;
@@ -41,13 +43,15 @@ public class Conveyor extends SubsystemBase {
 
   }
 
-  public WPI_TalonSRX getMotor() { return this.m_conveyorMotor; }
+  public WPI_TalonSRX getMotor() {
+    return this.m_conveyorMotor;
+  }
 
-  public void up(){
+  public void up() {
     m_conveyorMotor.set(ControlMode.PercentOutput, -0.5);
   }
 
-  public void down(){
+  public void down() {
     m_conveyorMotor.set(ControlMode.PercentOutput, 0.5);
   }
 
@@ -56,14 +60,13 @@ public class Conveyor extends SubsystemBase {
   }
 
   public boolean isFull() {
-      return (isFirstCargoDetected() && isSecondCargoDetected());
+    return (isFirstCargoDetected() && isSecondCargoDetected());
   }
 
   public int capturedCargoCount() {
-    if(isFirstCargoDetected() && !isSecondCargoDetected()){
+    if (isFirstCargoDetected() && !isSecondCargoDetected()) {
       return 1;
-    }
-    else if(isFirstCargoDetected() && isSecondCargoDetected()){
+    } else if (isFirstCargoDetected() && isSecondCargoDetected()) {
       return 2;
     }
     return 0;

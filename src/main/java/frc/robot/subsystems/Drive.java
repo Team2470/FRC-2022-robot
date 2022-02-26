@@ -9,7 +9,6 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -40,10 +39,9 @@ public class Drive extends SubsystemBase {
   public static final double kPDriveVel = 7.524;
   public static final double kTrackwidthMeters = Units.inchesToMeters(24);
 
-  
 
   public static final DifferentialDriveKinematics kDriveKinematics =
-    new DifferentialDriveKinematics(kTrackwidthMeters);
+      new DifferentialDriveKinematics(kTrackwidthMeters);
 
   public static final double kMaxSpeedMetersPerSecond = 1.09; //3 feet per second
   public static final double kMaxAccelerationMetersPerSecondSquared = 3;
@@ -65,7 +63,9 @@ public class Drive extends SubsystemBase {
   // Odometry class for tracking robot pose
   private final DifferentialDriveOdometry m_odometry;
 
-  /** Creates a new Drive. */
+  /**
+   * Creates a new Drive.
+   */
   public Drive(WPI_TalonSRX gyroTalon) {
     m_leftLeader = new WPI_TalonFX(Constants.kDriveTalonLeftAId, Constants.kCanivoreName);
     m_leftFollower = new WPI_TalonFX(Constants.kDriveTalonLeftBId, Constants.kCanivoreName);
@@ -91,7 +91,7 @@ public class Drive extends SubsystemBase {
     m_leftFollower.setNeutralMode(NeutralMode.Brake);
     m_rightLeader.setNeutralMode(NeutralMode.Brake);
     m_rightFollower.setNeutralMode(NeutralMode.Brake);
-    
+
     m_drive = new DifferentialDrive(m_leftLeader, m_rightLeader);
     m_gyro = new PigeonIMU(gyroTalon);
 
@@ -100,20 +100,21 @@ public class Drive extends SubsystemBase {
   }
 
 
-  public void arcadeDrive(double forward, double rotate){
+  public void arcadeDrive(double forward, double rotate) {
     m_drive.arcadeDrive(forward, rotate);
   }
 
-  public void curvatureDrive(double xSpeed, double zRotation, boolean allowTurnInPlace){
-    xSpeed = Math.copySign(xSpeed*xSpeed, xSpeed)*0.5;
-    zRotation = Math.copySign(zRotation*zRotation, zRotation);
+  public void curvatureDrive(double xSpeed, double zRotation, boolean allowTurnInPlace) {
+    xSpeed = Math.copySign(xSpeed * xSpeed, xSpeed) * 0.5;
+    zRotation = Math.copySign(zRotation * zRotation, zRotation);
     m_drive.curvatureDrive(xSpeed, zRotation, allowTurnInPlace);
   }
 
 
-  public void stop(){
+  public void stop() {
     m_drive.stopMotor();
   }
+
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
@@ -152,7 +153,7 @@ public class Drive extends SubsystemBase {
   /**
    * Controls the left and right sides of the drive directly with voltages.
    *
-   * @param leftVolts the commanded left output
+   * @param leftVolts  the commanded left output
    * @param rightVolts the commanded right output
    */
   public void tankDriveVolts(double leftVolts, double rightVolts) {
@@ -161,7 +162,9 @@ public class Drive extends SubsystemBase {
     m_drive.feed();
   }
 
-  /** Resets the drive encoders to currently read a position of 0. */
+  /**
+   * Resets the drive encoders to currently read a position of 0.
+   */
   public void resetEncoders() {
     m_leftLeader.setSelectedSensorPosition(0, 0, 0);
     m_rightLeader.setSelectedSensorPosition(0, 0, 0);
@@ -221,12 +224,14 @@ public class Drive extends SubsystemBase {
     m_drive.setMaxOutput(maxOutput);
   }
 
-  /** Zeroes the heading of the robot. */
+  /**
+   * Zeroes the heading of the robot.
+   */
   public void zeroHeading() {
     m_gyro.setFusedHeading(0);
   }
 
-   /**
+  /**
    * Returns the heading of the robot.
    *
    * @return the robot's heading in degrees, from -180 to 180

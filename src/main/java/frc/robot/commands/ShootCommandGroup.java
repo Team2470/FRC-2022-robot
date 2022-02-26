@@ -18,22 +18,24 @@ import frc.robot.subsystems.Vision;
 public class ShootCommandGroup extends SequentialCommandGroup {
   private final Vision m_vision;
 
-  /** Creates a new ShootCommandGroup. */
+  /**
+   * Creates a new ShootCommandGroup.
+   */
   public ShootCommandGroup(Conveyor conveyor, Shooter shooter, Vision vision, int endingCargoCount) {
     m_vision = vision;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new MoveConveyorDistanceCommand(conveyor, -1),
-      new ParallelDeadlineGroup(
-        new SequentialCommandGroup(
-          new WaitForShooterRPMCommand(shooter, this::getRPM),
-          new MoveConveyorDistanceCommand(conveyor, 2),
-          new RunConveyorCommand(conveyor, RunConveyorCommand.Direction.kUp)
-            .withInterrupt(() -> conveyor.capturedCargoCount()==endingCargoCount)
-        ),
-        new RunShooterCommand(shooter, this::getRPM)
-      )
+        new MoveConveyorDistanceCommand(conveyor, -1),
+        new ParallelDeadlineGroup(
+            new SequentialCommandGroup(
+                new WaitForShooterRPMCommand(shooter, this::getRPM),
+                new MoveConveyorDistanceCommand(conveyor, 2),
+                new RunConveyorCommand(conveyor, RunConveyorCommand.Direction.kUp)
+                    .withInterrupt(() -> conveyor.capturedCargoCount() == endingCargoCount)
+            ),
+            new RunShooterCommand(shooter, this::getRPM)
+        )
     );
   }
 

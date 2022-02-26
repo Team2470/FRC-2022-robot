@@ -4,15 +4,18 @@
 
 package frc.robot.commands;
 
-import java.util.function.IntSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
+
+import java.util.function.IntSupplier;
 
 public class RunShooterCommand extends CommandBase {
   private final Shooter m_shooter;
   private final IntSupplier m_setPointSupplier;
-  /** Creates a new RunShooterCommand. */
+
+  /**
+   * Creates a new RunShooterCommand.
+   */
   public RunShooterCommand(Shooter shooter, IntSupplier setPointSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
