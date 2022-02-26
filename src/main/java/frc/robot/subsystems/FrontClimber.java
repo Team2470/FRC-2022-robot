@@ -53,12 +53,12 @@ public class FrontClimber extends SubsystemBase implements Climber {
     m_frontClimber.configForwardSoftLimitThreshold(Constants.kFrontClimberForwardLimit);
     m_frontClimber.setSensorPhase(true);
 
-    //     try {
-    //     Thread.sleep(1000);
-    // } catch (InterruptedException e) {
-    //     // TODO Auto-generated catch block
-    //     e.printStackTrace();
-    //}
+      try {
+        Thread.sleep(1000);
+    } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
     m_frontCanCoder.setPosition(m_frontCanCoder.getAbsolutePosition(), 20);
     m_frontClimber.configRemoteFeedbackFilter(m_frontCanCoder, 0);
     m_frontClimber.configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0);
@@ -78,17 +78,26 @@ public class FrontClimber extends SubsystemBase implements Climber {
 
   // TODO: Needs to be adjusted to match hardware
   public void startOutwardClimb() {
-    m_ratchetSolenoid.set(m_frontClimber.getSelectedSensorPosition() <= Constants.kFrontClimberForwardLimit);
+    //m_ratchetSolenoid.set(m_frontClimber.getSelectedSensorPosition() <= Constants.kFrontClimberForwardLimit);
+    //m_ratchetSolenoid.set(true);
     m_frontClimber.set(ControlMode.PercentOutput, Constants.kFrontClimberSpeed);
   }
 
   public void startInwardClimb() {
-    m_ratchetSolenoid.set(false);
+    //m_ratchetSolenoid.set(false);
     m_frontClimber.set(ControlMode.PercentOutput, -Constants.kFrontClimberSpeed);
   }
 
-  public void stop() {
+  public void engageRatchet() {
+    m_ratchetSolenoid.set(true);
+  }
+
+  public void releaseRatchet() {
     m_ratchetSolenoid.set(false);
+  }
+
+  public void stop() {
+    //m_ratchetSolenoid.set(false);
     m_frontClimber.neutralOutput();
   }
 }

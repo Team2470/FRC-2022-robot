@@ -119,12 +119,12 @@ public final class Constants {
     public static final int kFrontClimberReverseLimit  = 100;
     public static final int kFrontClimberForwardLimit = 1120;
     public static final double kFrontClimberCanCoderOffset = 172;
-    public static final double kFrontClimberSpeed = 0.1;
+    public static final double kFrontClimberSpeed = 0.4;
     
     public static final int kBackClimberReverseLimit  = 100;
-    public static final int kBackClimberForwardLimit = 1800;
+    public static final int kBackClimberForwardLimit = 1390;
     public static final double kBackClimberCanCoderOffset = -104.35546875-91;
-    public static final double kBackClimberSpeed = 0.4;
+    public static final double kBackClimberSpeed = 0.2;
 
 
     public static final double kClimberErrorBound = 1; // Degrees

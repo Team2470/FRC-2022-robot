@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kennedyrobotics.triggers.DPadTrigger;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -48,7 +49,8 @@ public class RobotContainer {
 
   // Controller
   private final XboxController m_controller = new XboxController(Constants.kControllerA);
-
+  private final Joystick m_buttopad= new Joystick(1);
+ 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -81,8 +83,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //: Conveyor Control
-    JoystickButton conveyorUp = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
-    conveyorUp.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kUp));
+    //JoystickButton conveyorUp = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
+    //conveyorUp.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kUp));
 
     JoystickButton conveyorDown = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
     conveyorDown.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kDown));
@@ -96,16 +98,16 @@ public class RobotContainer {
     JoystickButton rpmButton3 = new JoystickButton(m_controller, XboxController.Button.kB.value);
     rpmButton3.whileHeld(new RunShooterCommand(m_shooter, () -> 2500));
     //: Climber control
-    DPadTrigger ForwardClimbOutwardsButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kUp);
+    JoystickButton ForwardClimbOutwardsButton = new JoystickButton(m_buttopad, 2);
     ForwardClimbOutwardsButton.whileActiveContinuous(new MoveClimberOutwards(m_frontClimber));
 
-    DPadTrigger ForwardClimbInwardsButton = new DPadTrigger(m_controller, DPadTrigger.DPad.kRight);
+    JoystickButton ForwardClimbInwardsButton = new JoystickButton(m_buttopad, 1);
     ForwardClimbInwardsButton.whileActiveContinuous(new MoveClimberInwards(m_frontClimber));
 
-    DPadTrigger BackwardClimbOutwardsButtons = new DPadTrigger(m_controller, DPadTrigger.DPad.KLeft);
+    JoystickButton BackwardClimbOutwardsButtons = new JoystickButton(m_buttopad, 4);
     BackwardClimbOutwardsButtons.whileActiveContinuous(new MoveClimberOutwards(m_backClimber));
 
-    DPadTrigger BackwardClimbInwardButton = new DPadTrigger(m_controller, DPadTrigger.DPad.KDown);
+    JoystickButton BackwardClimbInwardButton = new JoystickButton(m_buttopad, 3);
     BackwardClimbInwardButton.whileActiveContinuous(new MoveClimberInwards(m_backClimber));
     //: Intake control
     JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
