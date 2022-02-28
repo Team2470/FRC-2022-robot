@@ -23,29 +23,46 @@ public class DriveWithGamepadCommand extends CommandBase {
     m_drive = drive;
     m_controller = controller;
 
-    m_joystickLayoutChooser = new SendableChooser<>();
-    m_joystickLayoutChooser.setDefaultOption("Curvature", "Curvature");
-    m_joystickLayoutChooser.addOption("Arcade", "Arcade");
-    SmartDashboard.putData("Drive Joystick layout", m_joystickLayoutChooser);
+        m_joystickLayoutChooser = new SendableChooser<>();
+        m_joystickLayoutChooser.setDefaultOption("Arcade", "Arcade");
+        m_joystickLayoutChooser.addOption("Curvature", "Curvature");
+        SmartDashboard.putData("Drive Joystick layout", m_joystickLayoutChooser);
 
     addRequirements(m_drive);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    switch (m_joystickLayoutChooser.getSelected()) {
-      case "Curvature":
-        double xSpeed = -m_controller.getLeftY();
-        double zRotation = m_controller.getRightX();
-        boolean quickTurn = m_controller.getLeftBumper();
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        // switch (m_joystickLayoutChooser.getSelected()) {
+        //     case "Curvature":
+        //         double xSpeed = -m_controller.getLeftY();
+        //         double zRotation = m_controller.getRightX();
+        //         boolean quickTurn = m_controller.getLeftBumper();
 
-        m_drive.curvatureDrive(xSpeed, zRotation, quickTurn);
-        break;
-      case "Arcade":
-        m_drive.arcadeDrive(-m_controller.getLeftY(), m_controller.getRightX());
-        break;
-      default:
+        //         m_drive.curvatureDrive(xSpeed, zRotation, quickTurn);
+        //         break;
+          //  case "Arcade":
+                double move = -m_controller.getLeftY()*0.6;
+                double rotate =  m_controller.getRightX()*0.6;
+                // move = Math.copySign(move*move, move);
+                // rotate = Math.copySign(rotate*rotate, rotate);
+
+                m_drive.arcadeDrive(move, rotate);
+                SmartDashboard.putNumber("Drive Move", move);
+                SmartDashboard.putNumber("Drive Rotate", rotate);
+          
+        //         break;
+          
+        //         default:
+        //         m_drive.stop();
+        // }
+
+    }
+
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
         m_drive.stop();
     }
 

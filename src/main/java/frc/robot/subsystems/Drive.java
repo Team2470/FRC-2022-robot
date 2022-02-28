@@ -87,11 +87,11 @@ public class Drive extends SubsystemBase {
     m_rightFollower.setInverted(true);
 
     // Use brake mode to stop our robot coasting.
-    m_leftLeader.setNeutralMode(NeutralMode.Brake);
-    m_leftFollower.setNeutralMode(NeutralMode.Brake);
-    m_rightLeader.setNeutralMode(NeutralMode.Brake);
-    m_rightFollower.setNeutralMode(NeutralMode.Brake);
-
+    m_leftLeader.setNeutralMode(NeutralMode.Coast);
+    m_leftFollower.setNeutralMode(NeutralMode.Coast);
+    m_rightLeader.setNeutralMode(NeutralMode.Coast);
+    m_rightFollower.setNeutralMode(NeutralMode.Coast);
+    
     m_drive = new DifferentialDrive(m_leftLeader, m_rightLeader);
     m_gyro = new PigeonIMU(gyroTalon);
 
