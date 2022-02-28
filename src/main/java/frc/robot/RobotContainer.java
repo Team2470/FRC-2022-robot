@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.kennedyrobotics.triggers.DPadTrigger;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -54,13 +55,22 @@ public class RobotContainer {
     ShuffleboardLayout visionCommands = Shuffleboard.getTab("Commands")
         .getLayout("Vision", BuiltInLayouts.kList)
         .withSize(2, 2)
-        .withPosition(8, 0)
+        .withPosition(0, 0)
         .withProperties(Map.of("Label position", "HIDDEN"));
     // visionCommands.add(new NamedInstantCommand("Driver Mode", () -> m_vision.setDriverMode(true), m_vision));
     // visionCommands.add(new NamedInstantCommand("Vision Mode", () -> m_vision.setDriverMode(false), m_vision));
     // visionCommands.add(new NamedInstantCommand("Conveyor View", () -> m_vision.viewConveyor(true), m_vision));
     // visionCommands.add(new NamedInstantCommand("Target View", () -> m_vision.viewConveyor(false), m_vision));
     visionCommands.add(new AutoAlign(m_vision, m_drive));
+    ShuffleboardLayout conveyorCommands = Shuffleboard.getTab("Commands")
+        .getLayout("Conveyor", BuiltInLayouts.kList)
+        .withSize(2, 2)
+        .withPosition(2, 0)
+        .withProperties(Map.of("Label position", "HIDDEN"));
+    conveyorCommands.add("Move 1 in. up", new MoveConveyorDistanceCommand(m_conveyor, Units.inchesToMeters(1)));
+    conveyorCommands.add("Move 1 in. down", new MoveConveyorDistanceCommand(m_conveyor, Units.inchesToMeters(-1)));
+    conveyorCommands.add("Move up", new RunConveyorCommand(m_conveyor, Direction.kUp));
+    conveyorCommands.add("Move down", new RunConveyorCommand(m_conveyor, Direction.kDown));
   }
 
 
