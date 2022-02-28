@@ -69,8 +69,8 @@ public class RobotContainer {
         .withSize(2, 2)
         .withPosition(2, 0)
         .withProperties(Map.of("Label position", "HIDDEN"));
-    conveyorCommands.add("Move 1 in. up", new MoveConveyorDistanceCommand(m_conveyor, Units.inchesToMeters(1)));
-    conveyorCommands.add("Move 1 in. down", new MoveConveyorDistanceCommand(m_conveyor, Units.inchesToMeters(-1)));
+    conveyorCommands.add("Move 1 in. up", new MoveConveyorDistanceCommand(m_conveyor, Units.inchesToMeters(5)));
+    conveyorCommands.add("Move 1 in. down", new MoveConveyorDistanceCommand(m_conveyor, Units.inchesToMeters(-5)));
     conveyorCommands.add("Move up", new RunConveyorCommand(m_conveyor, Direction.kUp));
     conveyorCommands.add("Move down", new RunConveyorCommand(m_conveyor, Direction.kDown));
   }

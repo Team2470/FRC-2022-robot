@@ -60,7 +60,7 @@ public final class Constants {
   public static final int kConveyorDown = 1;
   public static final double kConveyorSpeed = 0.5;
   public static final double kConveyorSpeedDown = -0.75;
-  public static final double kConveyorErrorBoundM = Units.inchesToMeters(0.05);
+  public static final double kConveyorErrorBoundM = Units.inchesToMeters(0.1);
 
   //DIO
   public static final int kConveyorFirstCargoChannel = 8;

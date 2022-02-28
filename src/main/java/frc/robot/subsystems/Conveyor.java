@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorTimeBase;
+import com.ctre.phoenix.sensors.WPI_CANCoder;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,13 +23,20 @@ public class Conveyor extends SubsystemBase {
   private final WPI_TalonSRX m_conveyorMotor;
   private final DigitalInput m_firstCargoSensor;
   private final DigitalInput m_secondCargoSensor;
-  private final CANCoder m_encoder;
+  private final WPI_CANCoder m_encoder;
 
   public Conveyor() {
+    setName("Conveyor");
+
     m_conveyorMotor = new WPI_TalonSRX(Constants.kConveyorMotorID);
     m_firstCargoSensor = new DigitalInput(Constants.kConveyorFirstCargoChannel);
     m_secondCargoSensor = new DigitalInput(Constants.kConveyorSecondCargoChannel);
-    m_encoder = new CANCoder(Constants.kConveyorCanCoder);
+    m_encoder = new WPI_CANCoder(Constants.kConveyorCanCoder);
+
+    addChild("Motor", m_conveyorMotor);
+    addChild("First Cargo Sensor", m_firstCargoSensor);
+    addChild("Second Cargo Sensor", m_secondCargoSensor);
+    addChild("Encoder", m_encoder);
 
     m_encoder.configFactoryDefault();
     m_encoder.configSensorDirection(false);
