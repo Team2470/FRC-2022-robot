@@ -23,8 +23,8 @@ public class BackClimber extends PIDSubsystem implements Climber {
 
   private final WPI_TalonFX m_backClimber;
   private final CANCoder m_backCanCoder;
-  private static final double kP = 0.0;
-  private static final double kI = 0.0;
+  private static final double kP = 0.060;
+  private static final double kI = 0.01;
   private static final double kD = 0.0;
 
   /**
@@ -32,7 +32,7 @@ public class BackClimber extends PIDSubsystem implements Climber {
    */
   public BackClimber() {
     super(new PIDController(kP, kI, kD));
-
+    getController().setIntegratorRange(0, 0.2);
 
     m_backClimber = new WPI_TalonFX(Constants.kBackClimberTalonId, Constants.kCanivoreName);
     m_backCanCoder = new CANCoder(Constants.kBackCanCoderId, Constants.kCanivoreName);
@@ -62,11 +62,13 @@ public class BackClimber extends PIDSubsystem implements Climber {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    super.periodic();
     SmartDashboard.putNumber("Climber Back Angle", m_backCanCoder.getPosition());
     SmartDashboard.putNumber("Climber Back Absolute Angle", m_backCanCoder.getAbsolutePosition());
     SmartDashboard.putNumber("Climber Back Selected Sensor position", m_backClimber.getSelectedSensorPosition());
     SmartDashboard.putNumber("Back Climber Stator Current", m_backClimber.getStatorCurrent());
     SmartDashboard.putNumber("Back Climber Supply Currnet", m_backClimber.getSupplyCurrent());
+    SmartDashboard.putNumber("Climber Back Error", getController().getPositionError());
   }
 
   public void startClimbMotor(int direction, double speed) {
@@ -93,7 +95,14 @@ public class BackClimber extends PIDSubsystem implements Climber {
   @Override
   protected void useOutput(double output, double setpoint) {
     // TODO Auto-generated method stub
+
+    if(output>0.1){
+      output = 0.1;
+    }
+
     m_backClimber.set(ControlMode.PercentOutput, output);
+    SmartDashboard.putNumber("Climber Back Output Power", output);
+    SmartDashboard.putNumber("Climber Back Setpoint", setpoint);
   }
 
   @Override

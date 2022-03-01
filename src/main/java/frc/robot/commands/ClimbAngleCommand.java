@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.BackClimber;
@@ -24,13 +25,16 @@ public class ClimbAngleCommand extends CommandBase {
 
   @Override
   public void initialize() {
+    SmartDashboard.putString("Climber Angle Commant", "init");
     m_climber.enable();
     m_climber.setSetpoint(m_setpoint.getDegrees());
   }
 
   @Override
   public void execute() {
-
+    SmartDashboard.putString("Climber Angle Commant", "execute");
+    SmartDashboard.putNumber("Climber Angle Command Setpoint", m_setpoint.getDegrees());
+    m_climber.setSetpoint(m_setpoint.getDegrees());
   }
 
   @Override
@@ -40,6 +44,7 @@ public class ClimbAngleCommand extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
+    SmartDashboard.putString("Climber Angle Commant", "end");
     m_climber.disable();
     m_climber.stop();
   }

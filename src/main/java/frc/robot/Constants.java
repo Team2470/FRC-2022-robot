@@ -117,7 +117,7 @@ public final class Constants {
           // Apply the voltage constraint
           .addConstraint(kAutoVoltageConstraint);
     // Climber
-    public static final int kFrontClimberReverseLimit  = 100;
+    public static final int kFrontClimberReverseLimit  = 170;
     public static final int kFrontClimberForwardLimit = 1120;
     public static final double kFrontClimberCanCoderOffset = 172;
     public static final double kFrontClimberSpeed = 0.4;
