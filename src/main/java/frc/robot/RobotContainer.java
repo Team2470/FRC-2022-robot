@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
@@ -42,7 +44,7 @@ public class RobotContainer {
   // Controller
   private final XboxController m_controller = new XboxController(Constants.kControllerA);
   private final Joystick m_buttopad= new Joystick(1);
- 
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -65,7 +67,7 @@ public class RobotContainer {
     // visionCommands.add(new NamedInstantCommand("Target View", () -> m_vision.viewConveyor(false), m_vision));
     visionCommands.add(new AutoAlign(m_vision, m_drive));
     ShuffleboardLayout conveyorCommands = Shuffleboard.getTab("Commands")
-        .getLayout("Conveyor", BuiltInLayouts.kList)
+        .getLayout("Conveyor", BuiltInLayouts.kGrid)
         .withSize(2, 2)
         .withPosition(2, 0)
         .withProperties(Map.of("Label position", "HIDDEN"));
@@ -73,6 +75,19 @@ public class RobotContainer {
     conveyorCommands.add("Move 1 in. down", new MoveConveyorDistanceCommand(m_conveyor, Units.inchesToMeters(-5)));
     conveyorCommands.add("Move up", new RunConveyorCommand(m_conveyor, Direction.kUp));
     conveyorCommands.add("Move down", new RunConveyorCommand(m_conveyor, Direction.kDown));
+    ShuffleboardLayout shooterCommands = Shuffleboard.getTab("Commands")
+        .getLayout("Shooter", BuiltInLayouts.kGrid)
+        .withSize(2, 2)
+        .withPosition(0, 2);
+    SendableChooser<Integer> rpmChooser = new SendableChooser<>();
+    // Add options 2500 to 5000 with steps of 100
+    rpmChooser.addOption("0", 0);
+    for (int i = 2500; i <= 5000; i += 100) {
+      rpmChooser.addOption(String.format("%s", i), i);
+    }
+    rpmChooser.setDefaultOption("0", 0);
+    shooterCommands.add(rpmChooser);
+    shooterCommands.add("Set RPM", new RunShooterCommand(m_shooter, rpmChooser::getSelected));
   }
 
 
