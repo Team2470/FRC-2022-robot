@@ -61,10 +61,6 @@ public class RobotContainer {
         .withSize(2, 2)
         .withPosition(0, 0)
         .withProperties(Map.of("Label position", "HIDDEN"));
-    // visionCommands.add(new NamedInstantCommand("Driver Mode", () -> m_vision.setDriverMode(true), m_vision));
-    // visionCommands.add(new NamedInstantCommand("Vision Mode", () -> m_vision.setDriverMode(false), m_vision));
-    // visionCommands.add(new NamedInstantCommand("Conveyor View", () -> m_vision.viewConveyor(true), m_vision));
-    // visionCommands.add(new NamedInstantCommand("Target View", () -> m_vision.viewConveyor(false), m_vision));
     visionCommands.add(new AutoAlign(m_vision, m_drive));
     ShuffleboardLayout conveyorCommands = Shuffleboard.getTab("Commands")
         .getLayout("Conveyor", BuiltInLayouts.kGrid)
@@ -137,7 +133,6 @@ public class RobotContainer {
 
     //: Intake control
     JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
-    // deployIntakeButton.whileHeld(new DeployIntakeCommand(m_intake));
     deployIntakeButton.whenHeld(
         new ParallelCommandGroup(
             new DeployIntakeCommand(m_intake),
@@ -155,8 +150,6 @@ public class RobotContainer {
         ), m_conveyor::capturedCargoCount)
       );
 
-      // JoystickButton conveyorDownButton = new JoystickButton(m_buttopad, 5);
-      // conveyorDownButton.whenHeld(new RunConveyorCommand(m_conveyor,Direction.kDown));
   }
 
   /**
@@ -167,31 +160,15 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // Return null for no autonomous command
     return new SequentialCommandGroup(
-        new DriveDistanceCommand(m_drive, 1),
-        new ParallelRaceGroup(
-            new RunShooterCommand(m_shooter, 2500),
-            new SequentialCommandGroup(
-
-                new WaitCommand(2),
-                new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
-            ))
-
-
-        // new RunShooterCommand(m_shooter, 2500),
-        // new SequentialCommandGroup(
-        //         new WaitCommand(2),
-        //         new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
-        // )
+      new ParallelRaceGroup(
+        new RunShooterCommand(m_shooter, 2500),
+        new SequentialCommandGroup(
+            new WaitCommand(2),
+            new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
+        ),
+        new DriveDistanceCommand(m_drive, 1)
+      )
+        
     );
-
-//    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-//            new Pose2d(0, 0, new Rotation2d(0)),
-//            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-//            new Pose2d(3, 0, new Rotation2d(0)),
-//            Constants.kTrajectoryConfig
-//    );
-//
-//    return new DriveAlongTrajectoryCommand(m_drive, trajectory)
-//            .andThen(() -> m_drive.tankDriveVolts(0, 0));
   }
 }
