@@ -15,7 +15,7 @@ import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
 
-  private final static double kP = 0.000245;
+  private final static double kP = 0.000240;
   private final static double kI = 0.0;
   private final static double kD = 0.0;
   private final static double kIz = 0.0;

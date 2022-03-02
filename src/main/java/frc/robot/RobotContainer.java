@@ -99,20 +99,20 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //Conveyor Control
-    JoystickButton conveyorUp = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
+    JoystickButton conveyorUp = new JoystickButton(m_buttopad, 8);
     conveyorUp.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kUp));
 
-    JoystickButton conveyorDown = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
+    JoystickButton conveyorDown = new JoystickButton(m_buttopad, 12);
     conveyorDown.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kDown));
     // //: Shooter control
-    // JoystickButton rpmButton1 = new JoystickButton(m_buttopad, 8);
-    // rpmButton1.whileHeld(new RunShooterCommand(m_shooter, () -> 2800));
+    JoystickButton rpmButton1 = new JoystickButton(m_buttopad, 9);
+    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, () -> 2800));
 
-    // JoystickButton rpmButton2 = new JoystickButton(m_buttopad, 7);
-    // rpmButton2.whileHeld(new RunShooterCommand(m_shooter, () -> 2600));
+    JoystickButton rpmButton2 = new JoystickButton(m_buttopad, 10);
+    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, () -> 2600));
 
-    // JoystickButton rpmButton3 = new JoystickButton(m_buttopad, 6);
-    // rpmButton3.whileHeld(new RunShooterCommand(m_shooter, () -> 2500));
+    JoystickButton rpmButton3 = new JoystickButton(m_buttopad, 11);
+    rpmButton3.whileHeld(new RunShooterCommand(m_shooter, () -> 2500));
     //: Climber control
     JoystickButton ForwardClimbOutwardsButton = new JoystickButton(m_buttopad, 2);
     ForwardClimbOutwardsButton.whileActiveContinuous(new MoveFrontClimberOutwards(m_frontClimber));
@@ -127,10 +127,13 @@ public class RobotContainer {
     BackwardClimbInwardButton.whileActiveContinuous(new MoveBackClimberInwards(m_backClimber));
 
     JoystickButton MoveClimbToAngle = new JoystickButton(m_buttopad, 5);
-    MoveClimbToAngle.whenPressed(new ClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(25)).perpetually());
+    MoveClimbToAngle.whenPressed(new ClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(30)).perpetually());
 
     JoystickButton MoveClimbToAngle2 = new JoystickButton(m_buttopad, 6);
     MoveClimbToAngle2.whenPressed(new ClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(90)).perpetually());
+
+    JoystickButton MoveClimbToAngle3 = new JoystickButton(m_buttopad, 7);
+    MoveClimbToAngle3.whenPressed(new ClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(125)).perpetually());
 
     //: Intake control
     JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
