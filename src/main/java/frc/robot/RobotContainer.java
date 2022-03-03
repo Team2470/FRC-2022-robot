@@ -157,7 +157,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    /*return new SequentialCommandGroup(
+    return new SequentialCommandGroup(
         new ParallelRaceGroup(
             new RunShooterCommand(m_shooter, 2500),
             new SequentialCommandGroup(
@@ -165,9 +165,9 @@ public class RobotContainer {
                 new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
             )
         ),
-        new DriveDistanceCommand(m_drive, 1)
-    );*/
-    return new SequentialCommandGroup(
+        new DriveDistanceCommand(m_drive, 2)
+    );
+    /*return new SequentialCommandGroup(
         // Shoot ball 1
         new ParallelRaceGroup(
             new RunShooterCommand(m_shooter, 2500),
@@ -200,6 +200,6 @@ public class RobotContainer {
                 new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
             )
         )
-    );
+    );*/
   }
 }

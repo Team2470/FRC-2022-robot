@@ -96,8 +96,8 @@ public class BackClimber extends PIDSubsystem implements Climber {
   protected void useOutput(double output, double setpoint) {
     // TODO Auto-generated method stub
 
-    if(output>0.1){
-      output = 0.1;
+    if(output>Constants.kMaxBackClimberSpeed){
+      output = Constants.kMaxBackClimberSpeed;
     }
 
     m_backClimber.set(ControlMode.PercentOutput, output);
