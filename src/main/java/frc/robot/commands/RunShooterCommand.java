@@ -7,28 +7,32 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
+import java.util.function.IntSupplier;
+
 public class RunShooterCommand extends CommandBase {
   private final Shooter m_shooter;
-  private final double m_setPoint;
-  /** Creates a new RunShooterCommand. */
-  public RunShooterCommand(Shooter shooter, double setPoint) {
+  private final IntSupplier m_setPointSupplier;
+
+  /**
+   * Creates a new RunShooterCommand.
+   */
+  public RunShooterCommand(Shooter shooter, IntSupplier setPointSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
-    m_setPoint = setPoint;
-
+    m_setPointSupplier = setPointSupplier;
 
     addRequirements(m_shooter);
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    m_shooter.setRPM(m_setPoint);
+  public RunShooterCommand(Shooter shooter, int setpoint) {
+    this(shooter, () -> setpoint);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  // Called when the command is initially scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_shooter.setRPM(m_setPointSupplier.getAsInt());
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -36,9 +40,4 @@ public class RunShooterCommand extends CommandBase {
     m_shooter.stop();
   }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
 }

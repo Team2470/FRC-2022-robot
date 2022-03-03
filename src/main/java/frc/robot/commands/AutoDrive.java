@@ -5,35 +5,37 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.FrontClimber;
+import frc.robot.subsystems.Drive;
 
-public class ForwardClimbClockwise extends CommandBase {
+public class AutoDrive extends CommandBase {
+  private final Drive m_drive;
 
-  private FrontClimber m_frontClimber; 
-  /** Creates a new ForwardClimbClockwise. */
-  public ForwardClimbClockwise(FrontClimber frontClimber) {
+  /**
+   * Creates a new DriveWithGamepadCommand.
+   */
+  public AutoDrive(Drive drive) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_frontClimber = frontClimber;
+    m_drive = drive;
 
-    addRequirements(m_frontClimber);
+
+    addRequirements(m_drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("Forward");
-    m_frontClimber.startClimbMotor(Constants.kClockwise, Constants.kClimberSpeed);
+    m_drive.arcadeDrive(0.5, 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_frontClimber.stopClimbMotor();
+    m_drive.stop();
   }
 
   // Returns true when the command should end.

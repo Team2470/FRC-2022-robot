@@ -5,21 +5,21 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
 
-  private final static double kP = 0.000255;
+  private final static double kP = 0.000240;
   private final static double kI = 0.0;
   private final static double kD = 0.0;
   private final static double kIz = 0.0;
-  private final static double kFF = 0.0002375;
+  private final static double kFF = 0.00021;
   private final static double kMinOutput = -1;
   private final static double kMaxOutput = 1;
 
@@ -28,11 +28,19 @@ public class Shooter extends SubsystemBase {
   private final SparkMaxPIDController m_pidController;
   private final RelativeEncoder m_encoder;
 
-  /** Creates a new Shooter. */
+  /**
+   * Creates a new Shooter.
+   */
   public Shooter() {
     m_shooterLeader = new CANSparkMax(Constants.kShooterNeoLeaderId, MotorType.kBrushless);
     m_shooterFollower = new CANSparkMax(Constants.kShooterNeoFollowerId, MotorType.kBrushless);
-    m_shooterFollower.follow(m_shooterLeader,true);
+    m_shooterFollower.follow(m_shooterLeader, true);
+    m_shooterFollower.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 100);
+    m_shooterFollower.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 500);
+    m_shooterFollower.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 500);
+
+    m_shooterLeader.setInverted(true);
+    m_shooterFollower.setInverted(true);
 
     m_shooterLeader.setSmartCurrentLimit(40);
     m_shooterFollower.setSmartCurrentLimit(40);
@@ -54,14 +62,21 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter velocity rpm", m_encoder.getVelocity());
   }
+
   public void setRPM(double setPoint) {
     m_pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
-    
+
     SmartDashboard.putNumber("Shooter setpoint rpm", setPoint);
   }
+
+  public double getRPM() {
+    return m_encoder.getVelocity();
+  }
+
   public void setPercent(double percent) {
     m_shooterLeader.set(percent);
   }
+
   public void stop() {
     m_shooterLeader.stopMotor();
   }
