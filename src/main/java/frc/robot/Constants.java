@@ -84,6 +84,7 @@ public final class Constants {
 
 
   //Characterization Constraints
+  public static final double kMaxDriveSpeed = 0.7;
   public static final double ksVolts = 0.5805;
   public static final double kvVoltSecondsPerMeter = 5.9;
   public static final double kaVoltSecondsSquaredPerMeter = 0.63211;
