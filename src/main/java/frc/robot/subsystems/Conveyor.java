@@ -56,11 +56,11 @@ public class Conveyor extends SubsystemBase {
   }
 
   public void up() {
-    m_conveyorMotor.set(ControlMode.PercentOutput, -0.5);
+    m_conveyorMotor.set(ControlMode.PercentOutput, -Constants.kConveyorSpeedUp);
   }
 
   public void down() {
-    m_conveyorMotor.set(ControlMode.PercentOutput, 0.5);
+    m_conveyorMotor.set(ControlMode.PercentOutput, Constants.kConveyorSpeedDown);
   }
 
   public void stop() {

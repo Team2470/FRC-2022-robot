@@ -55,11 +55,8 @@ public final class Constants {
 
 
   // Conveyor constants
-
-  public static final int kConveyorUp = -1;
-  public static final int kConveyorDown = 1;
-  public static final double kConveyorSpeed = 0.5;
-  public static final double kConveyorSpeedDown = -0.75;
+  public static final double kConveyorSpeedUp = 0.75;
+  public static final double kConveyorSpeedDown = 0.5;
   public static final double kConveyorErrorBoundM = Units.inchesToMeters(0.1);
 
   //DIO
