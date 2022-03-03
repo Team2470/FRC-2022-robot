@@ -121,14 +121,27 @@ public class RobotContainer {
     JoystickButton BackwardClimbInwardButton = new JoystickButton(m_buttopad, 3);
     BackwardClimbInwardButton.whileActiveContinuous(new MoveBackClimberInwards(m_backClimber));
 
-    JoystickButton MoveClimbToAngle = new JoystickButton(m_buttopad, 5);
-    MoveClimbToAngle.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(30)).perpetually());
+    // NEW COMMANDS
 
-    JoystickButton MoveClimbToAngle2 = new JoystickButton(m_buttopad, 6);
-    MoveClimbToAngle2.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(90)).perpetually());
+    /*JoystickButton MoveFrontClimbToAngle = new JoystickButton(m_buttopad, 1);
+    MoveFrontClimbToAngle.whenPressed(FrontClimbAngleCommandFactory.make(m_frontClimber, Rotation2d.fromDegrees(0)));
 
-    JoystickButton MoveClimbToAngle3 = new JoystickButton(m_buttopad, 7);
-    MoveClimbToAngle3.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(125)).perpetually());
+    JoystickButton MoveFrontClimbToAngle2 = new JoystickButton(m_buttopad, 2);
+    MoveFrontClimbToAngle2.whenPressed(FrontClimbAngleCommandFactory.make(m_frontClimber, Rotation2d.fromDegrees(0)));
+
+    JoystickButton MoveFrontClimbToAngle3 = new JoystickButton(m_buttopad, 3);
+    MoveFrontClimbToAngle3.whenPressed(FrontClimbAngleCommandFactory.make(m_frontClimber, Rotation2d.fromDegrees(0)));*/
+
+    // END NEW COMMANDS
+
+    JoystickButton MoveBackClimbToAngle = new JoystickButton(m_buttopad, 5);
+    MoveBackClimbToAngle.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(30)).perpetually());
+
+    JoystickButton MoveBackClimbToAngle2 = new JoystickButton(m_buttopad, 6);
+    MoveBackClimbToAngle2.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(90)).perpetually());
+
+    JoystickButton MoveBackClimbToAngle3 = new JoystickButton(m_buttopad, 7);
+    MoveBackClimbToAngle3.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(125)).perpetually());
 
     //: Intake control
     JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);

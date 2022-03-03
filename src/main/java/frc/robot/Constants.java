@@ -127,10 +127,11 @@ public final class Constants {
     public static final double kBackClimberCanCoderOffset = -104.35546875-91;
     public static final double kBackClimberSpeed = 0.2;
     public static final double kMaxBackClimberSpeed = 0.25;
+    public static final double kFrontClimberErrorBound = 2;
 
 
 
-  public static final double kClimberErrorBound = 1; // Degrees
+  public static final double kBackClimberErrorBound = 2; // Degrees
 
   // Intake
   public static final double kIntakeSpeed = 1.0;
