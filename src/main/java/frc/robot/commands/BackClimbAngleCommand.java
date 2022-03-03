@@ -7,11 +7,11 @@ import frc.robot.Constants;
 import frc.robot.subsystems.BackClimber;
 
 
-public class ClimbAngleCommand extends CommandBase {
+public class BackClimbAngleCommand extends CommandBase {
   private final BackClimber m_climber;
   private final Rotation2d m_setpoint;
 
-  public ClimbAngleCommand(BackClimber climber, Rotation2d setpoint) {
+  public BackClimbAngleCommand(BackClimber climber, Rotation2d setpoint) {
     m_climber = climber;
     m_setpoint = setpoint;
     // each subsystem used by the command must be passed into the

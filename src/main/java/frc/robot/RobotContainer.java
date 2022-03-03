@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import com.kennedyrobotics.triggers.DPadTrigger;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -15,7 +13,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
@@ -43,9 +40,11 @@ public class RobotContainer {
 
   // Controller
   private final XboxController m_controller = new XboxController(Constants.kControllerA);
-  private final Joystick m_buttopad= new Joystick(1);
+  private final Joystick m_buttopad = new Joystick(1);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
@@ -123,13 +122,13 @@ public class RobotContainer {
     BackwardClimbInwardButton.whileActiveContinuous(new MoveBackClimberInwards(m_backClimber));
 
     JoystickButton MoveClimbToAngle = new JoystickButton(m_buttopad, 5);
-    MoveClimbToAngle.whenPressed(new ClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(30)).perpetually());
+    MoveClimbToAngle.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(30)).perpetually());
 
     JoystickButton MoveClimbToAngle2 = new JoystickButton(m_buttopad, 6);
-    MoveClimbToAngle2.whenPressed(new ClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(90)).perpetually());
+    MoveClimbToAngle2.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(90)).perpetually());
 
     JoystickButton MoveClimbToAngle3 = new JoystickButton(m_buttopad, 7);
-    MoveClimbToAngle3.whenPressed(new ClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(125)).perpetually());
+    MoveClimbToAngle3.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(125)).perpetually());
 
     //: Intake control
     JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
@@ -142,13 +141,13 @@ public class RobotContainer {
 
     JoystickButton shootButton = new JoystickButton(m_controller, XboxController.Button.kStart.value);
     shootButton.whenPressed(
-      new SelectCommand(
-        Map.of(
-          0, new PrintCommand("No cargo. Refusing to shoot"),
-          1, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, 0),
-          2, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, 1)
-        ), m_conveyor::capturedCargoCount)
-      );
+        new SelectCommand(
+            Map.of(
+                0, new PrintCommand("No cargo. Refusing to shoot"),
+                1, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, 0),
+                2, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, 1)
+            ), m_conveyor::capturedCargoCount)
+    );
 
   }
 
@@ -158,17 +157,49 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Return null for no autonomous command
-    return new SequentialCommandGroup(
-      new ParallelRaceGroup(
-        new RunShooterCommand(m_shooter, 2500),
-        new SequentialCommandGroup(
-            new WaitCommand(2),
-            new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
+    /*return new SequentialCommandGroup(
+        new ParallelRaceGroup(
+            new RunShooterCommand(m_shooter, 2500),
+            new SequentialCommandGroup(
+                new WaitCommand(2),
+                new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
+            )
         ),
         new DriveDistanceCommand(m_drive, 1)
-      )
-        
+    );*/
+    return new SequentialCommandGroup(
+        // Shoot ball 1
+        new ParallelRaceGroup(
+            new RunShooterCommand(m_shooter, 2500),
+            new SequentialCommandGroup(
+                new WaitCommand(2),
+                new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
+            )
+        ),
+        // Intake ball 2
+        new ParallelDeadlineGroup(
+            new FunctionalCommand(
+                () -> {
+                },
+                () -> {
+                },
+                (onEnd) -> {
+                },
+                m_conveyor::isFirstCargoDetected
+                , m_conveyor
+            ),
+            new DeployIntakeCommand(m_intake),
+            new DriveDistanceCommand(m_drive, 1)
+        ),
+        // Shoot ball 2
+        new DriveDistanceCommand(m_drive, -1),
+        new ParallelRaceGroup(
+            new RunShooterCommand(m_shooter, 2500),
+            new SequentialCommandGroup(
+                new WaitCommand(2),
+                new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp).withTimeout(5)
+            )
+        )
     );
   }
 }
