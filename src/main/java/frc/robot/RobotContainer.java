@@ -109,41 +109,17 @@ public class RobotContainer {
     JoystickButton rpmButton3 = new JoystickButton(m_buttopad, 11);
     rpmButton3.whileHeld(new RunShooterCommand(m_shooter, Constants.kRPM3));
     //: Climber control
-    if (true) {
-      JoystickButton ForwardClimbOutwardsButton = new JoystickButton(m_buttopad, 2);
-      ForwardClimbOutwardsButton.whileActiveContinuous(new MoveFrontClimberOutwards(m_frontClimber));
+    JoystickButton ForwardClimbOutwardsButton = new JoystickButton(m_buttopad, 2);
+    ForwardClimbOutwardsButton.whileActiveContinuous(new MoveFrontClimberOutwards(m_frontClimber));
 
-      JoystickButton ForwardClimbInwardsButton = new JoystickButton(m_buttopad, 1);
-      ForwardClimbInwardsButton.whileActiveContinuous(new MoveFrontClimberInwards(m_frontClimber));
+    JoystickButton ForwardClimbInwardsButton = new JoystickButton(m_buttopad, 1);
+    ForwardClimbInwardsButton.whileActiveContinuous(new MoveFrontClimberInwards(m_frontClimber));
 
-      JoystickButton BackwardClimbOutwardsButtons = new JoystickButton(m_buttopad, 4);
-      BackwardClimbOutwardsButtons.whileActiveContinuous(new MoveBackClimberOutwards(m_backClimber));
+    JoystickButton BackwardClimbOutwardsButtons = new JoystickButton(m_buttopad, 4);
+    BackwardClimbOutwardsButtons.whileActiveContinuous(new MoveBackClimberOutwards(m_backClimber));
 
-      JoystickButton BackwardClimbInwardButton = new JoystickButton(m_buttopad, 3);
-      BackwardClimbInwardButton.whileActiveContinuous(new MoveBackClimberInwards(m_backClimber));
-    } else {
-      // NEW COMMANDS
-      JoystickButton MoveFrontClimbToAngle = new JoystickButton(m_buttopad, 1);
-      MoveFrontClimbToAngle.whenPressed(new MoveFrontClimberCommand(
-          m_frontClimber,
-          Rotation2d.fromDegrees(Constants.kFrontAngle1)
-      ));
-      JoystickButton MoveFrontClimbToAngle2 = new JoystickButton(m_buttopad, 2);
-      MoveFrontClimbToAngle2.whenPressed(new MoveFrontClimberCommand(
-          m_frontClimber,
-          Rotation2d.fromDegrees(Constants.kFrontAngle2)
-      ));
-      JoystickButton MoveFrontClimbToAngle3 = new JoystickButton(m_buttopad, 3);
-      MoveFrontClimbToAngle3.whenPressed(new MoveFrontClimberCommand(
-          m_frontClimber,
-          Rotation2d.fromDegrees(Constants.kFrontAngle3)
-      ));
-      JoystickButton MoveFrontClimbToAngle4 = new JoystickButton(m_buttopad, 4);
-      MoveFrontClimbToAngle4.whenPressed(new MoveFrontClimberCommand(
-          m_frontClimber,
-          Rotation2d.fromDegrees(Constants.kFrontAngle4)
-      ));
-    }
+    JoystickButton BackwardClimbInwardButton = new JoystickButton(m_buttopad, 3);
+    BackwardClimbInwardButton.whileActiveContinuous(new MoveBackClimberInwards(m_backClimber));
 
     JoystickButton MoveBackClimbToAngle = new JoystickButton(m_buttopad, 5);
     MoveBackClimbToAngle.whenPressed(new BackClimbAngleCommand(
