@@ -20,20 +20,30 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
   // Physical
   public static final double kHubHeightM = 1.6;
   public static final double kWheelRadiusM = Units.inchesToMeters(3);
   public static final double kConveyorWheelRadiusM = Units.inchesToMeters(1.416);
+  public static final double kTargetHeightM = 2.52;
+  public static final double kCameraHeightM = 1.143;
+  public static final Rotation2d kCameraAngle = Rotation2d.fromDegrees(10);
 
   // General
+  public static final int kRPM1 = 2800;
+  public static final int kRPM2 = 2600;
+  public static final int kRPM3 = 2500;
 
-  public static final int kClockwise = 1;
-  public static final int kCounterClockwise = -1;
+  public static final int kBackAngle1 = 30;
+  public static final int kBackAngle2 = 90;
+  public static final int kBackAngle3 = 125;
+
+  public static final int kFrontAngle1 = 0; // Soft limit
+  public static final int kFrontAngle2 = 65;
+  public static final int kFrontAngle3 = 100; // 90
+  public static final int kFrontAngle4 = 110; // Soft limit
 
   // CAN IDs
-
-  // CANivore bus
+  // CANivore
   public static final String kCanivoreName = "";
   public static final int kDriveTalonRightAId = 13;
   public static final int kDriveTalonRightBId = 14;
@@ -42,46 +52,34 @@ public final class Constants {
   public static final int kFrontClimberTalonId = 10;
   public static final int kFrontClimberFollowerTalonId = 9;
   public static final int kBackClimberTalonId = 8;
-
   public static final int kFrontCanCoderId = 9;
   public static final int kBackCanCoderId = 7;
-
-
-  // rio bus
-
+  // Rio
   public static final int kConveyorMotorID = 18;
   public static final int kIntakeMotorId = 5;
   public static final int kConveyorCanCoder = 6;
 
-
-  // Conveyor constants
+  // Conveyor
   public static final double kConveyorSpeedUp = 0.75;
   public static final double kConveyorSpeedDown = 0.5;
   public static final double kConveyorErrorBoundM = Units.inchesToMeters(0.1);
 
-  //DIO
+  // Digital IO
   public static final int kConveyorFirstCargoChannel = 8;
   public static final int kConveyorSecondCargoChannel = 9;
 
   // Pneumatics
-
   public static final int kRatchetSolenoid = 0;
   public static final int kIntakeSolenoid = 1;
 
   public static final int kShooterNeoLeaderId = 1;
   public static final int kShooterNeoFollowerId = 3;
-  // Controllers
 
+  // Controllers
   public static final int kControllerA = 0;
 
-  //Vision constants
-  public static final double kTargetHeightM = 2.52;
-  public static final double kCameraHeightM = 1.143;
-  public static final Rotation2d kCameraAngle = Rotation2d.fromDegrees(10);
-
-
-  //Characterization Constraints
-  public static final double kMaxDriveSpeed = 0.7;
+  // Drive
+  public static final double kMaxAutoDriveSpeed = 0.5;
   public static final double ksVolts = 0.5805;
   public static final double kvVoltSecondsPerMeter = 5.9;
   public static final double kaVoltSecondsSquaredPerMeter = 0.63211;
@@ -114,24 +112,22 @@ public final class Constants {
           .setKinematics(Constants.kDriveKinematics)
           // Apply the voltage constraint
           .addConstraint(kAutoVoltageConstraint);
-    // Climber
-    public static final int kFrontClimberReverseLimit  = 170;
-    public static final int kFrontClimberForwardLimit = 1120;
-    public static final double kFrontClimberCanCoderOffset = 172;
-    public static final double kFrontClimberSpeed = 0.4;
-    
-    public static final int kBackClimberReverseLimit  = 100;
-    public static final int kBackClimberForwardLimit = 1390;
-    public static final double kBackClimberCanCoderOffset = -104.35546875-91;
-    public static final double kBackClimberSpeed = 0.2;
-    public static final double kMaxBackClimberSpeed = 0.25;
-    public static final double kFrontClimberErrorBound = 2;
 
-
-
+  // Climber
+  // Front
+  public static final int kFrontClimberReverseLimit = 170;
+  public static final int kFrontClimberForwardLimit = 1120;
+  public static final double kFrontClimberCanCoderOffset = 172;
+  public static final double kFrontClimberSpeed = 0.4;
+  public static final double kFrontClimberErrorBound = 2;
+  // Back
+  public static final int kBackClimberReverseLimit = 100;
+  public static final int kBackClimberForwardLimit = 1390;
+  public static final double kBackClimberCanCoderOffset = -104.35546875 - 91;
+  public static final double kBackClimberSpeed = 0.2;
+  public static final double kMaxBackClimberSpeed = 0.25;
   public static final double kBackClimberErrorBound = 2; // Degrees
 
   // Intake
   public static final double kIntakeSpeed = 1.0;
 }
-

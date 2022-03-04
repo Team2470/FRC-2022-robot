@@ -28,7 +28,7 @@ public class DriveDistanceCommand extends PIDCommand {
         output -> {
           // Use the output here
           // drive.arcadeDrive(output, 0);
-          drive.arcadeDrive(Math.min(output, Constants.kMaxDriveSpeed), 0);
+          drive.arcadeDrive(Math.min(output, Constants.kMaxAutoDriveSpeed), 0);
         });
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);

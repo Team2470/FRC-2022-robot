@@ -63,7 +63,6 @@ public class FrontClimber extends SubsystemBase implements Climber {
     m_frontCanCoder.setPosition(m_frontCanCoder.getAbsolutePosition(), 20);
     m_frontClimber.configRemoteFeedbackFilter(m_frontCanCoder, 0);
     m_frontClimber.configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0);
-
   }
 
   @Override
@@ -72,6 +71,9 @@ public class FrontClimber extends SubsystemBase implements Climber {
     SmartDashboard.putNumber("Climber Front Angle", m_frontCanCoder.getPosition());
     SmartDashboard.putNumber("Climber Front Absolute Angle", m_frontCanCoder.getAbsolutePosition());
     SmartDashboard.putNumber("Climber Front Selected Sensor position", m_frontClimber.getSelectedSensorPosition());
+    SmartDashboard.putBoolean("Climber Front at forward softlimit", isAtForwardSoftLimit());
+    SmartDashboard.putBoolean("Climber Front at any softlimit", isAtSoftLimit());
+    SmartDashboard.putBoolean("Climber Front at reverse softlimit", isAtReverseSoftLimit());
   }
 
   public Rotation2d getAngle() {
@@ -97,6 +99,18 @@ public class FrontClimber extends SubsystemBase implements Climber {
 
   public void releaseRatchet() {
     m_ratchetSolenoid.set(false);
+  }
+
+  public boolean isAtForwardSoftLimit() {
+    return Constants.kFrontClimberForwardLimit <= m_frontClimber.getSelectedSensorPosition();
+  }
+
+  public boolean isAtReverseSoftLimit() {
+    return m_frontClimber.getSelectedSensorPosition() <= Constants.kFrontClimberReverseLimit;
+  }
+
+  public boolean isAtSoftLimit() {
+    return isAtForwardSoftLimit() || isAtReverseSoftLimit();
   }
 
   public void stop() {
