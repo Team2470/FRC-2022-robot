@@ -29,9 +29,9 @@ public final class Constants {
   public static final Rotation2d kCameraAngle = Rotation2d.fromDegrees(10);
 
   // General
-  public static final int kRPM1 = 2800;
-  public static final int kRPM2 = 2600;
-  public static final int kRPM3 = 2500;
+  public static final int kRPM1 = 3100;
+  public static final int kRPM2 = 2800;
+  public static final int kRPM3 = 2600;
 
   public static final int kBackAngle1 = 30;
   public static final int kBackAngle2 = 90;
