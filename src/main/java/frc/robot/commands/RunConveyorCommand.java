@@ -32,13 +32,13 @@ public class RunConveyorCommand extends CommandBase {
   public void execute() {
     switch (m_direction) {
       case kUp:
-        m_conveyor.up();
+        m_conveyor.up(1);
         break;
       case kDown:
         m_conveyor.down();
         break;
       default:
-        m_conveyor.up();
+        m_conveyor.up(1);
     }
   }
 

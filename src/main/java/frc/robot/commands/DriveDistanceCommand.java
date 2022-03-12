@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -26,7 +27,8 @@ public class DriveDistanceCommand extends PIDCommand {
         // This uses the output
         output -> {
           // Use the output here
-          drive.arcadeDrive(output, 0);
+          // drive.arcadeDrive(output, 0);
+          drive.arcadeDrive(Math.min(output, Constants.kMaxAutoDriveSpeed), 0);
         });
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);

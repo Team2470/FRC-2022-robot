@@ -39,7 +39,7 @@ public class BackClimbAngleCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(getError().getDegrees()) <= Constants.kClimberErrorBound;
+    return Math.abs(getError().getDegrees()) <= Constants.kBackClimberErrorBound;
   }
 
   @Override
