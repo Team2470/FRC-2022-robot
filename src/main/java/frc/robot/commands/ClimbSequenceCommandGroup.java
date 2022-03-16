@@ -2,7 +2,9 @@ package frc.robot.commands;
 
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.BackClimber;
@@ -47,10 +49,12 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
                 ClimbState.kGrabBar, new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(100)),
                 // Drop midbar
                 // Back out (125)
-                ClimbState.kDropBar, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(125))
+                ClimbState.kDropBar, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(125)),
                 // Pull up
                 // Front in (limit), back in (90)
-
+                ClimbState.kPullUp, new ParallelCommandGroup(
+                    new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(10)),
+                    new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90))),
                 // Handover
                 // Back in (30 -> limit)
 
@@ -65,6 +69,9 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
 
                 // Drop highbar
                 // Back out (125)
+
+                //Finish on traverse
+                ClimbState.kDone, new PrintCommand("Climb Done")
             ),
             () -> m_climbState
         )
@@ -76,23 +83,44 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
     switch (m_climbState) {
       case kStartingConfig:
         m_climbState = ClimbState.kPullUpFront;
+        m_barState = BarState.kMid;
         break;
       case kPullUpFront:
-
+        m_climbState = ClimbState.kHandover;
         break;
       case kHandover:
+        m_climbState = ClimbState.kSwingToClear;
         break;
       case kSwingToClear:
+        m_climbState = ClimbState.kReadyToCatch;
         break;
       case kReadyToCatch:
+        m_climbState = ClimbState.kPullUpBack;
         break;
       case kPullUpBack:
+        m_climbState = ClimbState.kGrabBar;
         break;
       case kGrabBar:
+        m_climbState = ClimbState. kDropBar;
         break;
       case kDropBar:
+        switch (m_barState) {
+          case kMid:
+            m_barState = BarState.kHigh;
+            m_climbState = ClimbState.kPullUp;
+            break;
+          case kHigh:
+            m_barState = BarState.kTraverse;
+            m_climbState = ClimbState.kDone;
+            break;
+        }
+        break;
+      case kPullUp:
+        m_climbState = ClimbState.kHandover;
         break;
     }
+    SmartDashboard.putString("Arm State", m_climbState.name());
+    SmartDashboard.putString("Bar", m_barState.name());
   }
 
   public ClimbState getClimbState() { return m_climbState; }
@@ -106,6 +134,8 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
     kPullUpBack, // B30->0
     kGrabBar, // F100
     kDropBar, // B125
+    kPullUp,   //F10 B90
+    kDone
   }
 
   private enum BarState {
