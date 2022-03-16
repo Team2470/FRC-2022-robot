@@ -61,6 +61,7 @@ public class RobotContainer {
         .withPosition(0, 0)
         .withProperties(Map.of("Label position", "HIDDEN"));
     visionCommands.add(new AutoAlign(m_vision, m_drive));
+    
     ShuffleboardLayout conveyorCommands = Shuffleboard.getTab("Commands")
         .getLayout("Conveyor", BuiltInLayouts.kGrid)
         .withSize(2, 2)
@@ -70,6 +71,16 @@ public class RobotContainer {
     conveyorCommands.add("Move 1 in. down", new MoveConveyorDistanceCommand(m_conveyor, Units.inchesToMeters(-5)));
     conveyorCommands.add("Move up", new RunConveyorCommand(m_conveyor, Direction.kUp));
     conveyorCommands.add("Move down", new RunConveyorCommand(m_conveyor, Direction.kDown));
+    conveyorCommands.add("Move Arm", new SequentialCommandGroup( 
+        new MoveFrontClimberCommand(m_frontClimber, Rotation2d.fromDegrees(50)),
+        new WaitCommand(3),
+        new MoveFrontClimberCommand(m_frontClimber, Rotation2d.fromDegrees(100))
+    ));
+    conveyorCommands.add("Intake", new SequentialCommandGroup(
+        new DeployIntakeCommand(m_intake),
+        new WaitCommand(3),
+        new RetractIntakeCommand(m_intake)
+        ));
     ShuffleboardLayout shooterCommands = Shuffleboard.getTab("Commands")
         .getLayout("Shooter", BuiltInLayouts.kGrid)
         .withSize(2, 2)
@@ -77,16 +88,20 @@ public class RobotContainer {
     SendableChooser<Integer> rpmChooser = new SendableChooser<>();
     // Add options 2500 to 5000 with steps of 100
     rpmChooser.addOption("0", 0);
-    for (int i = 2500; i <= 5000; i += 100) {
+    for (int i = 500; i <= 5000; i += 100) {
       rpmChooser.addOption(String.format("%s", i), i);
     }
     rpmChooser.setDefaultOption("0", 0);
     shooterCommands.add(rpmChooser);
-    shooterCommands.add("Set RPM", new RunShooterCommand(m_shooter, rpmChooser::getSelected));
+   shooterCommands.add("Set RPM", new RunShooterCommand(m_shooter, rpmChooser::getSelected));
   }
 
 
-  /**
+  private Command MoveFrontClimberCommand(FrontClimber m_frontClimber2, Rotation2d fromDegrees) {
+    return null;
+}
+
+/**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
