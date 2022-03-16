@@ -37,10 +37,11 @@ public class RobotContainer {
   private final BackClimber m_backClimber = new BackClimber();
   private final Vision m_vision = new Vision();
 
-
   // Controller
   private final XboxController m_controller = new XboxController(Constants.kControllerA);
   private final Joystick m_buttopad = new Joystick(1);
+
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -108,6 +109,7 @@ public class RobotContainer {
 
     JoystickButton rpmButton3 = new JoystickButton(m_buttopad, 11);
     rpmButton3.whileHeld(new RunShooterCommand(m_shooter, Constants.kRPM3));
+
     //: Climber control
     JoystickButton ForwardClimbOutwardsButton = new JoystickButton(m_buttopad, 2);
     ForwardClimbOutwardsButton.whileActiveContinuous(new MoveFrontClimberOutwards(m_frontClimber));
@@ -121,23 +123,11 @@ public class RobotContainer {
     JoystickButton BackwardClimbInwardButton = new JoystickButton(m_buttopad, 3);
     BackwardClimbInwardButton.whileActiveContinuous(new MoveBackClimberInwards(m_backClimber));
 
-    JoystickButton MoveBackClimbToAngle = new JoystickButton(m_buttopad, 5);
-    MoveBackClimbToAngle.whenPressed(new BackClimbAngleCommand(
-        m_backClimber,
-        Rotation2d.fromDegrees(Constants.kBackAngle1)
-    ).perpetually());
+    JoystickButton NextStepButton = new JoystickButton(m_buttopad, 5);
+    NextStepButton.whenPressed(new InstantCommand());
 
-    JoystickButton MoveBackClimbToAngle2 = new JoystickButton(m_buttopad, 6);
-    MoveBackClimbToAngle2.whenPressed(new BackClimbAngleCommand(
-        m_backClimber,
-        Rotation2d.fromDegrees(Constants.kBackAngle2)
-    ).perpetually());
-
-    JoystickButton MoveBackClimbToAngle3 = new JoystickButton(m_buttopad, 7);
-    MoveBackClimbToAngle3.whenPressed(new BackClimbAngleCommand(
-        m_backClimber,
-        Rotation2d.fromDegrees(Constants.kBackAngle3)
-    ).perpetually());
+    JoystickButton BailButton = new JoystickButton(m_buttopad, 6);
+    BailButton.whenPressed(new InstantCommand());
 
     //: Intake control
     JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
@@ -159,7 +149,6 @@ public class RobotContainer {
     );
 
   }
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
