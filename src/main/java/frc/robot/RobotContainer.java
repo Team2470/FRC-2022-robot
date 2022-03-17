@@ -124,10 +124,10 @@ public class RobotContainer {
     BackwardClimbInwardButton.whileActiveContinuous(new MoveBackClimberInwards(m_backClimber));
 
     JoystickButton NextStepButton = new JoystickButton(m_buttopad, 5);
-    NextStepButton.whenPressed(new InstantCommand());
+    NextStepButton.whenPressed(new ClimbSequenceCommandGroup(m_frontClimber, m_backClimber));
 
     JoystickButton BailButton = new JoystickButton(m_buttopad, 6);
-    BailButton.whenPressed(new InstantCommand());
+    BailButton.cancelWhenPressed(new ClimbSequenceCommandGroup(m_frontClimber, m_backClimber));
 
     //: Intake control
     JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);

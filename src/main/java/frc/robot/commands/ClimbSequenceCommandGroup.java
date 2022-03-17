@@ -3,6 +3,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
@@ -13,48 +14,51 @@ import frc.robot.subsystems.FrontClimber;
 import java.util.Map;
 
 public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
-  private ClimbState m_climbState = ClimbState.kStartingConfig;
-  private BarState m_barState = BarState.kNone;
+  private static ClimbState m_climbState = ClimbState.kStartingConfig;
+  private static BarState m_barState = BarState.kNone;
 
   public ClimbSequenceCommandGroup(FrontClimber frontClimber, BackClimber backClimber) {
     addCommands(
         new SelectCommand(
-            Map.of(
+            Map.ofEntries(
                 // Starting Config
                 // Front out (65), back out (90)
-                ClimbState.kStartingConfig, new ParallelCommandGroup(
+                Map.entry(ClimbState.kStartingConfig, new ParallelCommandGroup(
                     new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(65)),
                     new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90))
-                ),
+                )),
                 // Pull up
                 // Front in (limit)
-                ClimbState.kPullUpFront, new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(0)),
+                Map.entry(ClimbState.kPullUpFront, new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(0))),
                 // Handover
                 // Back in (30 -> limit)
-                ClimbState.kHandover, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(30)),
-                // Swing to clear high bar
+                Map.entry(ClimbState.kHandover, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(30))),
+                // Swing to clear bar
                 // Front out (65), back out (90)
-                ClimbState.kSwingToClear, new ParallelCommandGroup(
+                Map.entry(ClimbState.kSwingToClear, new ParallelCommandGroup(
                     new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(65)),
                     new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90))
-                ),
-                // Out to catch high bar
+                )),
+                // Out to catch bar
                 // Front out (110)
-                ClimbState.kReadyToCatch, new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(110)),
+                Map.entry(ClimbState.kReadyToCatch, new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(110))),
                 // Pull up
                 // Back in (30 -> limit)
-                ClimbState.kPullUpBack, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(30)),
-                // Grab high bar
+                Map.entry(ClimbState.kPullUpBack, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(30))),
+                // Grab bar
                 // Front in (100)
-                ClimbState.kGrabBar, new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(100)),
-                // Drop midbar
+                Map.entry(ClimbState.kGrabBar, new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(100))),
+                // Drop bar
                 // Back out (125)
-                ClimbState.kDropBar, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(125)),
+                Map.entry(ClimbState.kDropBar, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(125))),
+                //Move back out of the way
+                //Back in (limit)
+                Map.entry(ClimbState.kMoveBack, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(31))),
                 // Pull up
                 // Front in (limit), back in (90)
-                ClimbState.kPullUp, new ParallelCommandGroup(
+                Map.entry(ClimbState.kPullUp, new ParallelCommandGroup(
                     new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(10)),
-                    new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90))),
+                    new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90)))),
                 // Handover
                 // Back in (30 -> limit)
 
@@ -71,11 +75,11 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
                 // Back out (125)
 
                 //Finish on traverse
-                ClimbState.kDone, new PrintCommand("Climb Done")
+                Map.entry(ClimbState.kDone, new PrintCommand("Climb Done"))
             ),
             () -> m_climbState
-        )
-
+        ).andThen(() -> advanceState())
+      
     );
   }
 
@@ -107,13 +111,16 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
         switch (m_barState) {
           case kMid:
             m_barState = BarState.kHigh;
-            m_climbState = ClimbState.kPullUp;
+            m_climbState = ClimbState.kMoveBack;
             break;
           case kHigh:
             m_barState = BarState.kTraverse;
             m_climbState = ClimbState.kDone;
             break;
         }
+        break;
+      case kMoveBack:
+        m_climbState = ClimbState.kPullUp;
         break;
       case kPullUp:
         m_climbState = ClimbState.kHandover;
@@ -134,6 +141,7 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
     kPullUpBack, // B30->0
     kGrabBar, // F100
     kDropBar, // B125
+    kMoveBack,  //B30
     kPullUp,   //F10 B90
     kDone
   }
