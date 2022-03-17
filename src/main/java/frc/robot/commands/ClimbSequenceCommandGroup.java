@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.sendable.SendableBuilder.BackendKind;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -11,7 +12,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.BackClimber;
 import frc.robot.subsystems.FrontClimber;
 
+import java.time.chrono.MinguoEra;
 import java.util.Map;
+import java.util.zip.Deflater;
 
 public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
   private static ClimbState m_climbState = ClimbState.kStartingConfig;
@@ -25,11 +28,14 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
                 // Front out (65), back out (90)
                 Map.entry(ClimbState.kStartingConfig, new ParallelCommandGroup(
                     new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(65)),
-                    new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90))
+                    new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(30))
                 )),
                 // Pull up
                 // Front in (limit)
-                Map.entry(ClimbState.kPullUpFront, new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(0))),
+                Map.entry(ClimbState.kPullUpFront, new  ParallelCommandGroup(
+                   new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(0)),
+                   new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90))
+                 )),
                 // Handover
                 // Back in (30 -> limit)
                 Map.entry(ClimbState.kHandover, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(30))),
@@ -50,7 +56,7 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
                 Map.entry(ClimbState.kGrabBar, new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(100))),
                 // Drop bar
                 // Back out (125)
-                Map.entry(ClimbState.kDropBar, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(125))),
+                Map.entry(ClimbState.kDropBar, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(115))),
                 //Move back out of the way
                 //Back in (limit)
                 Map.entry(ClimbState.kMoveBack, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(31))),
@@ -83,7 +89,16 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
     );
   }
 
+  public static void reset() {
+    m_climbState = ClimbState.kStartingConfig;
+    m_barState = BarState.kNone;
+    SmartDashboard.putString("Arm State", m_climbState.name());
+    SmartDashboard.putString("Bar", m_barState.name());
+  }
+
   public void advanceState() {
+    SmartDashboard.putString("Arm State", m_climbState.name());
+    SmartDashboard.putString("Bar", m_barState.name());
     switch (m_climbState) {
       case kStartingConfig:
         m_climbState = ClimbState.kPullUpFront;
@@ -107,7 +122,7 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
       case kGrabBar:
         m_climbState = ClimbState. kDropBar;
         break;
-      case kDropBar:
+      case kDropBar:    
         switch (m_barState) {
           case kMid:
             m_barState = BarState.kHigh;
@@ -116,6 +131,9 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
           case kHigh:
             m_barState = BarState.kTraverse;
             m_climbState = ClimbState.kDone;
+            break;
+          default:
+            m_climbState = ClimbState.kStartingConfig;
             break;
         }
         break;
@@ -126,8 +144,6 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
         m_climbState = ClimbState.kHandover;
         break;
     }
-    SmartDashboard.putString("Arm State", m_climbState.name());
-    SmartDashboard.putString("Bar", m_barState.name());
   }
 
   public ClimbState getClimbState() { return m_climbState; }
