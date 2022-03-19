@@ -88,6 +88,10 @@ public class Shooter extends SubsystemBase {
     m_controller.latencyCompensate(m_flywheelPlant, 0.02, 0.025);
   }
 
+  public void init() {
+    m_loop.reset(VecBuilder.fill(Units.rotationsPerMinuteToRadiansPerSecond(m_encoder.getVelocity())));
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Shooter velocity rpm", m_encoder.getVelocity());
@@ -112,6 +116,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter next voltage", nextVoltage);
     SmartDashboard.putNumber("Shooter velocity", Units.radiansPerSecondToRotationsPerMinute(currentVelocity));
     SmartDashboard.putNumber("Shooter target", Units.radiansPerSecondToRotationsPerMinute(m_setpoint));
+    SmartDashboard.putNumber("Shooter % error", (error / currentVelocity) * 100);
   }
 
   public void setRPM(double setPoint) {

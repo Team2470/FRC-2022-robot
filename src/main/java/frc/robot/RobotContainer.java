@@ -54,6 +54,14 @@ public class RobotContainer {
     m_intake.setDefaultCommand(new RetractIntakeCommand(m_intake));
   }
 
+  public void teleopInit() {
+    m_shooter.init();
+  }
+
+  public void autoInit() {
+    m_shooter.init();
+  }
+
   private void configureTestingCommands() {
     ShuffleboardLayout visionCommands = Shuffleboard.getTab("Commands")
         .getLayout("Vision", BuiltInLayouts.kList)
