@@ -133,5 +133,6 @@ public class Shooter extends SubsystemBase {
 
   public void stop() {
     m_shooterLeader.stopMotor();
+    setRPM(0);
   }
 }
