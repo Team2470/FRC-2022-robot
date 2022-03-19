@@ -9,24 +9,60 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.LinearQuadraticRegulator;
+import edu.wpi.first.math.estimator.KalmanFilter;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.LinearSystemLoop;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
-
-  private final static double kP = 0.000240;
-  private final static double kI = 0.0;
-  private final static double kD = 0.0;
-  private final static double kIz = 0.0;
-  private final static double kFF = 0.00021;
-  private final static double kMinOutput = -1;
-  private final static double kMaxOutput = 1;
-
   private final CANSparkMax m_shooterLeader;
   private final CANSparkMax m_shooterFollower;
-  private final SparkMaxPIDController m_pidController;
   private final RelativeEncoder m_encoder;
+  private double m_setpoint = 0;
+
+  // State space stuff
+  private static final double kFlywheelKv = 0.020507;
+  private static final double kFlywheelKa = 0.00096431;
+  // The plant holds a state-space model of our flywheel. This system has the following properties:
+  //
+  // States: [velocity], in radians per second.
+  // Inputs (what we can "put in"): [voltage], in volts.
+  // Outputs (what we can measure): [velocity], in radians per second.
+  //
+  // The Kv and Ka constants are found using the FRC Characterization toolsuite.
+  private final LinearSystem<N1, N1, N1> m_flywheelPlant =
+      LinearSystemId.identifyVelocitySystem(kFlywheelKv, kFlywheelKa);
+
+  // The observer fuses our encoder data and voltage inputs to reject noise.
+  private final KalmanFilter<N1, N1, N1> m_observer =
+      new KalmanFilter<>(
+          Nat.N1(),
+          Nat.N1(),
+          m_flywheelPlant,
+          VecBuilder.fill(3.0), // How accurate we think our model is
+          VecBuilder.fill(0.01), // How accurate we think our encoder
+          // data is
+          0.020);
+
+  // A LQR uses feedback to create voltage commands.
+  private final LinearQuadraticRegulator<N1, N1, N1> m_controller =
+      new LinearQuadraticRegulator<>(
+          m_flywheelPlant,
+          VecBuilder.fill(8.0), // Velocity error tolerance
+          VecBuilder.fill(12.0), // Control effort (voltage) tolerance
+          0.020);
+
+  // The state-space loop combines a controller, observer, feedforward and plant for easy control.
+  private final LinearSystemLoop<N1, N1, N1> m_loop =
+      new LinearSystemLoop<>(m_flywheelPlant, m_controller, m_observer, 12.0, 0.020);
 
   /**
    * Creates a new Shooter.
@@ -47,26 +83,39 @@ public class Shooter extends SubsystemBase {
     //m_shooterLeader.enableVoltageCompensation(10);
     //m_shooterFollower.enableVoltageCompensation(10);
 
-    m_pidController = m_shooterLeader.getPIDController();
     m_encoder = m_shooterLeader.getEncoder();
 
-    m_pidController.setP(kP);
-    m_pidController.setI(kI);
-    m_pidController.setD(kD);
-    m_pidController.setIZone(kIz);
-    m_pidController.setFF(kFF);
-    m_pidController.setOutputRange(kMinOutput, kMaxOutput);
+    m_controller.latencyCompensate(m_flywheelPlant, 0.02, 0.025);
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Shooter velocity rpm", m_encoder.getVelocity());
+    m_loop.setNextR(VecBuilder.fill(m_setpoint));
+
+    // Correct our Kalman filter's state vector estimate with encoder data.
+    double currentVelocity = Units.rotationsPerMinuteToRadiansPerSecond(m_encoder.getVelocity());
+    m_loop.correct(VecBuilder.fill(currentVelocity));
+
+    // Update our LQR to generate new voltage commands and use the voltages to predict the next
+    // state with out Kalman filter.
+    m_loop.predict(0.020);
+
+    // Send the new calculated voltage to the motors.
+    // voltage = duty cycle * battery voltage, so
+    // duty cycle = voltage / battery voltage
+    double nextVoltage = m_loop.getU(0);
+    m_shooterLeader.setVoltage(nextVoltage);
+
+    double error = m_setpoint - currentVelocity;
+    SmartDashboard.putNumber("Shooter error", Units.radiansPerSecondToRotationsPerMinute(error));
+    SmartDashboard.putNumber("Shooter next voltage", nextVoltage);
+    SmartDashboard.putNumber("Shooter velocity", Units.radiansPerSecondToRotationsPerMinute(currentVelocity));
+    SmartDashboard.putNumber("Shooter target", Units.radiansPerSecondToRotationsPerMinute(m_setpoint));
   }
 
   public void setRPM(double setPoint) {
-    m_pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
-
-    SmartDashboard.putNumber("Shooter setpoint rpm", setPoint);
+    m_setpoint = Units.rotationsPerMinuteToRadiansPerSecond(setPoint);
   }
 
   public double getRPM() {
