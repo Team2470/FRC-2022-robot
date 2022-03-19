@@ -29,8 +29,8 @@ public class Shooter extends SubsystemBase {
   private double m_setpoint = 0;
 
   // State space stuff
-  private static final double kFlywheelKv = 0.019981;
-  private static final double kFlywheelKa = 0.00096431;
+  private static final double kFlywheelKv = 0.02083978;
+  private static final double kFlywheelKa = 0.0011182;
   // The plant holds a state-space model of our flywheel. This system has the following properties:
   //
   // States: [velocity], in radians per second.
