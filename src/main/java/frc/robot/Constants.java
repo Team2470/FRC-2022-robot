@@ -129,5 +129,5 @@ public final class Constants {
   public static final double kBackClimberErrorBound = 2; // Degrees
 
   // Intake
-  public static final double kIntakeSpeed = 1.0;
+  public static final double kIntakeSpeed = 0.5;
 }
