@@ -44,13 +44,14 @@ public class Vision extends SubsystemBase {
   }
 
   /**
-   * Finds the distance from the base of the robot to the base of the target
+   * Finds the distance in meters from the front of the robot (no bumper) to the base of the target
    *
-   * @return Distance in meters from the base of the camera to the base of the target
+   * @return Distance to target
    */
   public double getTargetDistance() {
     if (m_tv.getDouble(0.0) == 1.0) {
-      return (Constants.kTargetHeightM - Constants.kCameraHeightM) / getVerticalAngle().getTan() - Constants.kCameraOffsetM;
+      // 29 = distance from front of robot to camera
+      return (Constants.kTargetHeightM - Constants.kCameraHeightM) / getVerticalAngle().getTan() - 29;
     } else {
       return 0;
     }
