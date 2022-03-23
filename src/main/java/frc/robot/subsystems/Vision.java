@@ -40,21 +40,20 @@ public class Vision extends SubsystemBase {
     SmartDashboard.putNumber("LimelightX", x);
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
-    SmartDashboard.putNumber("Distance to Target", geTargetDistanceM());
+    SmartDashboard.putNumber("Distance to Target", getTargetDistance());
   }
 
   /**
    * Finds the distance from the base of the robot to the base of the target
    *
-   * @return Distance in degrees from the base of the camera to the base of the target
+   * @return Distance in meters from the base of the camera to the base of the target
    */
-  public double geTargetDistanceM() {
+  public double getTargetDistance() {
     if (m_tv.getDouble(0.0) == 1.0) {
-      return (Constants.kTargetHeightM - Constants.kCameraHeightM) / getVerticalAngle().getTan();
+      return (Constants.kTargetHeightM - Constants.kCameraHeightM) / getVerticalAngle().getTan() - Constants.kCameraOffsetM;
     } else {
       return 0;
     }
-
   }
 
   /**

@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
@@ -40,11 +41,10 @@ public class ShootCommandGroup extends SequentialCommandGroup {
   }
 
   private int getRPM() {
-    Rotation2d angle = m_vision.getVerticalAngle();
-    double distance = m_vision.geTargetDistanceM();
+    // Add offset from base of target to center of hoop
+    double distance = Units.metersToInches(m_vision.getTargetDistance()) + 34;
 
-    double v0 = (-9.81 * distance * distance) / (2 * distance * angle.getSin() - Constants.kHubHeightM);
-    double omega = (60 * v0) / (2 * Math.PI * Constants.kWheelRadiusM);
+    double omega = 10.485 * distance + 1694.7;
 
     return (int) Math.round(omega);
   }
