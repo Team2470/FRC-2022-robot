@@ -142,12 +142,13 @@ public class RobotContainer {
     deployIntakeButton.whenHeld(
         new ParallelCommandGroup(
             new DeployIntakeCommand(m_intake),
-            new RunConveyorCommand(m_conveyor, Direction.kUp)
+            new RunConveyorCommand(m_conveyor, Direction.kUp),
+            new RunShooterCommand(m_shooter, Constants.kFlywheelIdleSpeed)
         ).withInterrupt(m_conveyor::isFull)
     );
 
     JoystickButton shootButton = new JoystickButton(m_controller, XboxController.Button.kStart.value);
-    shootButton.whenPressed(
+    shootButton.whileHeld(
         new SelectCommand(
             Map.of(
                 0, new PrintCommand("No cargo. Refusing to shoot"),

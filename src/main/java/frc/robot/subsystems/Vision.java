@@ -4,7 +4,9 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -20,6 +22,8 @@ public class Vision extends SubsystemBase {
   private final NetworkTableEntry m_ta = m_limelightTable.getEntry("ta");
   private final NetworkTableEntry m_tv = m_limelightTable.getEntry("tv");
   private final NetworkTableEntry m_usbCam = m_limelightTable.getEntry("stream");
+  private final MedianFilter m_distanceFilter = new MedianFilter(5);
+  private double m_filteredDistance;
 
 
   /**
@@ -35,23 +39,41 @@ public class Vision extends SubsystemBase {
     double x = m_tx.getDouble(0.0);
     double y = m_ty.getDouble(0.0);
     double area = m_ta.getDouble(0.0);
+    m_filteredDistance = m_distanceFilter.calculate(getTargetDistance());
 
     //post to smart dashboard periodically
     SmartDashboard.putNumber("LimelightX", x);
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
     SmartDashboard.putNumber("Distance to Target", getTargetDistance());
+    SmartDashboard.putNumber("Filtered distnce", getFilteredDistance());
+    SmartDashboard.putNumber("Desired RPM", getRPM());
+  }
+
+  public int getRPM() {
+    // Add offset from base of target to center of hoop
+    double distance = getFilteredDistance() + 34;
+
+    double omega = 10.485 * distance + 1694.7;
+
+    return (int) Math.round(omega);
+  }
+
+  public double getFilteredDistance() {
+    return m_filteredDistance;
   }
 
   /**
-   * Finds the distance in meters from the front of the robot (no bumper) to the base of the target
+   * Finds the distance in inches from the front of the robot (no bumper) to the base of the target
    *
    * @return Distance to target
    */
   public double getTargetDistance() {
     if (m_tv.getDouble(0.0) == 1.0) {
+      // 104 = height of target
+      // 45 = height of camera
       // 29 = distance from front of robot to camera
-      return (Constants.kTargetHeightM - Constants.kCameraHeightM) / getVerticalAngle().getTan() - 29;
+      return (104 - 45) / getVerticalAngle().getTan() - 29;
     } else {
       return 0;
     }
@@ -76,7 +98,7 @@ public class Vision extends SubsystemBase {
 
   public Rotation2d getVerticalAngle() {
     if (m_tv.getDouble(0.0) == 1.0) {
-      return Rotation2d.fromDegrees(m_ty.getDouble(0.0)).plus(Constants.kCameraAngle);
+      return Rotation2d.fromDegrees(m_ty.getDouble(0.0)).plus(Rotation2d.fromDegrees(30));
     } else {
       return Rotation2d.fromDegrees(0.0);
     }

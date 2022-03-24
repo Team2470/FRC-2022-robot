@@ -131,4 +131,7 @@ public final class Constants {
 
   // Intake
   public static final double kIntakeSpeed = 0.5;
+
+  //Shooter
+  public static final int kFlywheelIdleSpeed = -60;
 }

@@ -120,11 +120,18 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setRPM(double setPoint) {
+    
     m_setpoint = Units.rotationsPerMinuteToRadiansPerSecond(setPoint);
   }
 
   public double getRPM() {
     return m_encoder.getVelocity();
+  }
+  
+  public double getError(){
+    double currentVelocity = Units.rotationsPerMinuteToRadiansPerSecond(m_encoder.getVelocity());
+    double error = m_setpoint - currentVelocity;
+    return (error / currentVelocity) * 100;
   }
 
   public void setPercent(double percent) {

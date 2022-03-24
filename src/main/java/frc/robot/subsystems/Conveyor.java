@@ -42,7 +42,7 @@ public class Conveyor extends SubsystemBase {
     m_encoder.configSensorDirection(false);
     double countToDegree = 360.0 / 4096.0;
     double radianToMeters = 2 * Math.PI * Constants.kConveyorWheelRadiusM;
-    double sensorCoefficient = countToDegree * (Math.PI / 180.0) * radianToMeters;
+    double sensorCoefficient = countToDegree * (1 / 360.0) * radianToMeters;
     m_encoder.configFeedbackCoefficient(sensorCoefficient, "m", SensorTimeBase.PerSecond);
 
     m_conveyorMotor.configRemoteFeedbackFilter(m_encoder, 0);
