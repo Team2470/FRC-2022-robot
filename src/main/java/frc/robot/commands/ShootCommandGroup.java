@@ -22,20 +22,18 @@ import frc.robot.subsystems.Vision;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootCommandGroup extends SequentialCommandGroup {
-  private final Vision m_vision;
-
   /**
    * Creates a new ShootCommandGroup.
    */
   public ShootCommandGroup(Conveyor conveyor, Shooter shooter, Vision vision, int endingCargoCount) {
-    m_vision = vision;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+        new InstantCommand(() -> vision.setCameraMode(Vision.CameraMode.kShooting), vision),
         new MoveConveyorDistanceCommand(conveyor, -Units.inchesToMeters(3)),
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
-                new WaitForShooterRPMCommand(shooter, m_vision::getRPM),
+                new WaitForShooterRPMCommand(shooter, vision::getRPM),
                 new RunConveyorCommand(conveyor, Direction.kUp)
                 .withInterrupt(()-> shooter.getError()<5)
                 //new MoveConveyorDistanceCommand(conveyor, Units.inchesToMeters(11)),
@@ -43,7 +41,7 @@ public class ShootCommandGroup extends SequentialCommandGroup {
                     //.withInterrupt(() -> conveyor.capturedCargoCount() == endingCargoCount)
                 
             ),
-            new RunShooterCommand(shooter, m_vision::getRPM)
+            new RunShooterCommand(shooter, vision::getRPM)
         ),
         new SelectCommand(
           Map.of(

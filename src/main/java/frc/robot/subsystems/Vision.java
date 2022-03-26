@@ -6,13 +6,11 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 
 public class Vision extends SubsystemBase {
@@ -24,6 +22,40 @@ public class Vision extends SubsystemBase {
   private final NetworkTableEntry m_usbCam = m_limelightTable.getEntry("stream");
   private final MedianFilter m_distanceFilter = new MedianFilter(5);
   private double m_filteredDistance;
+
+  public enum StreamMode {
+    kSideBySide(0),
+    kLimelightPrimary(1),
+    kWebcamPrimary(2);
+    public final int value;
+    StreamMode(int value) { this.value = value; }
+  }
+
+  public enum LEDMode {
+    kOff(1),
+    kOn(3);
+    public final int value;
+    LEDMode(int value) { this.value = value; }
+  }
+
+  public enum ProcessingMode {
+    kPipeline(0),
+    kDriver(1);
+    public final int value;
+    ProcessingMode(int value) { this.value = value; }
+  }
+
+  public enum CameraMode {
+    kDriving(StreamMode.kWebcamPrimary, ProcessingMode.kDriver),
+    kShooting(StreamMode.kLimelightPrimary, ProcessingMode.kPipeline),
+    kClimbing(StreamMode.kLimelightPrimary,  ProcessingMode.kDriver);
+    public final StreamMode streamMode;
+    public final ProcessingMode processingMode;
+    CameraMode(StreamMode streamMode, ProcessingMode processingMode) {
+      this.streamMode = streamMode;
+      this.processingMode = processingMode;
+    }
+  }
 
 
   /**
@@ -48,6 +80,20 @@ public class Vision extends SubsystemBase {
     SmartDashboard.putNumber("Distance to Target", getTargetDistance());
     SmartDashboard.putNumber("Filtered distnce", getFilteredDistance());
     SmartDashboard.putNumber("Desired RPM", getRPM());
+  }
+
+  public void setStreamMode(StreamMode mode) { m_limelightTable.getEntry("stream").setNumber(mode.value); }
+  public void setProcessingMode(ProcessingMode mode) { m_limelightTable.getEntry("camMode").setNumber(mode.value); }
+  public void setLEDMode(LEDMode mode) { m_limelightTable.getEntry("ledMode").setNumber(mode.value); }
+  public void setCameraMode(CameraMode mode) {
+    setStreamMode(mode.streamMode);
+    setProcessingMode(mode.processingMode);
+    switch(mode.processingMode) {
+      case kDriver:
+        setLEDMode(LEDMode.kOff);
+      case kPipeline:
+        setLEDMode(LEDMode.kOn);
+    }
   }
 
   public int getRPM() {
