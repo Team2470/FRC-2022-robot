@@ -105,6 +105,10 @@ public class Vision extends SubsystemBase {
     return (int) Math.round(omega);
   }
 
+  public boolean isShotPossible() {
+    return getRPM() < 4000 && getFilteredDistance() > 5 * 12;
+  }
+
   public double getFilteredDistance() {
     return m_filteredDistance;
   }

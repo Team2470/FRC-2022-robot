@@ -8,10 +8,7 @@ import java.util.Map;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.SelectCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.commands.RunConveyorCommand.Direction;
 import frc.robot.subsystems.Conveyor;
@@ -31,9 +28,11 @@ public class ShootCommandGroup extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(() -> vision.setCameraMode(Vision.CameraMode.kShooting), vision),
         new MoveConveyorDistanceCommand(conveyor, -Units.inchesToMeters(3)),
+        new WaitUntilCommand(vision::getTargetFound),
+        new WaitUntilCommand(vision::isShotPossible),
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
-                new WaitForShooterRPMCommand(shooter, vision::getRPM),
+                new WaitForShooterRPMCommand(shooter, vision::getRPM, 100),
                 new RunConveyorCommand(conveyor, Direction.kUp)
                 .withInterrupt(()-> shooter.getError()<5)
                 //new MoveConveyorDistanceCommand(conveyor, Units.inchesToMeters(11)),
@@ -45,7 +44,7 @@ public class ShootCommandGroup extends SequentialCommandGroup {
         ),
         new SelectCommand(
           Map.of(
-            0, new InstantCommand(()->shooter.stop()),
+            0, new InstantCommand(shooter::stop),
             1, new ParallelDeadlineGroup(
               new SequentialCommandGroup(
                 new WaitForShooterRPMCommand(shooter, Constants.kFlywheelIdleSpeed),
