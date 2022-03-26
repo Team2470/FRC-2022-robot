@@ -23,9 +23,9 @@ public class BackClimber extends PIDSubsystem implements Climber {
 
   private final WPI_TalonFX m_backClimber;
   private final CANCoder m_backCanCoder;
-  private static final double kP = 0.060;
+  private static final double kP = 0.053;
   private static final double kI = 0.01;
-  private static final double kD = 0.0;
+  private static final double kD = 0.00;
 
   /**
    * Creates a new Climber.
@@ -45,6 +45,7 @@ public class BackClimber extends PIDSubsystem implements Climber {
     m_backCanCoder.configSensorDirection(true);
 
     m_backClimber.configFactoryDefault();
+    m_backClimber.configOpenloopRamp(0.25);
     m_backClimber.configForwardSoftLimitEnable(true);
     m_backClimber.configReverseSoftLimitEnable(true);
     m_backClimber.configReverseSoftLimitThreshold(Constants.kBackClimberReverseLimit);
