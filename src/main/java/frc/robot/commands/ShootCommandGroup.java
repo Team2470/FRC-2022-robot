@@ -34,7 +34,7 @@ public class ShootCommandGroup extends SequentialCommandGroup {
             new SequentialCommandGroup(
                 new WaitForShooterRPMCommand(shooter, vision::getRPM, 100),
                 new RunConveyorCommand(conveyor, Direction.kUp)
-                .withInterrupt(()-> shooter.getError()<5)
+                .withInterrupt(()-> shooter.getError()>5)
                 //new MoveConveyorDistanceCommand(conveyor, Units.inchesToMeters(11)),
                 //new RunConveyorCommand(conveyor, RunConveyorCommand.Direction.kUp)
                     //.withInterrupt(() -> conveyor.capturedCargoCount() == endingCargoCount)
