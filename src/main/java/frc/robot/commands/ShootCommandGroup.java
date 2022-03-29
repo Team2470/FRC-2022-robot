@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.commands.RunConveyorCommand.Direction;
 import frc.robot.subsystems.Conveyor;
+import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
@@ -22,14 +23,16 @@ public class ShootCommandGroup extends SequentialCommandGroup {
   /**
    * Creates a new ShootCommandGroup.
    */
-  public ShootCommandGroup(Conveyor conveyor, Shooter shooter, Vision vision, int endingCargoCount) {
+  public ShootCommandGroup(Conveyor conveyor, Shooter shooter, Vision vision, Drive drive, int endingCargoCount) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new InstantCommand(() -> vision.setCameraMode(Vision.CameraMode.kShooting), vision),
-        new MoveConveyorDistanceCommand(conveyor, -Units.inchesToMeters(3)),
+        new InstantCommand(() -> shooter.setStateSpaceControlEnabled(true), shooter),
         new WaitUntilCommand(vision::getTargetFound),
         new WaitUntilCommand(vision::isShotPossible),
+        new AutoAlign(vision, drive),
+        new MoveConveyorDistanceCommand(conveyor, -Units.inchesToMeters(3)),
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
                 new WaitForShooterRPMCommand(shooter, vision::getRPM, 100),
@@ -44,17 +47,13 @@ public class ShootCommandGroup extends SequentialCommandGroup {
         ),
         new SelectCommand(
           Map.of(
-            0, new InstantCommand(shooter::stop),
-            1, new ParallelDeadlineGroup(
-              new SequentialCommandGroup(
-                new WaitForShooterRPMCommand(shooter, Constants.kFlywheelIdleSpeed),
-                new RunConveyorCommand(conveyor, Direction.kUp)
-                .withInterrupt(()-> conveyor.capturedCargoCount() == 1)
-              ),
-              new RunShooterCommand(shooter, Constants.kFlywheelIdleSpeed)
-            )
+            0, new InstantCommand(() -> {}),
+            1, new RunConveyorCommand(conveyor, Direction.kUp)
+                  .withInterrupt(()-> conveyor.capturedCargoCount() == 1)
           ), () -> endingCargoCount
-        )
+        ),
+        new InstantCommand(() -> vision.setCameraMode(Vision.CameraMode.kDriving), vision),
+        new InstantCommand(() -> shooter.setStateSpaceControlEnabled(false), shooter)
     );
   }
 }
