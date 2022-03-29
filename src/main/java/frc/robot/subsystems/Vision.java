@@ -91,8 +91,10 @@ public class Vision extends SubsystemBase {
     switch(mode.processingMode) {
       case kDriver:
         setLEDMode(LEDMode.kOff);
+        break;
       case kPipeline:
         setLEDMode(LEDMode.kOn);
+        break;
     }
   }
 

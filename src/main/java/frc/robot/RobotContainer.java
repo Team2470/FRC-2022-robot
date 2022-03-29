@@ -51,6 +51,11 @@ public class RobotContainer {
 
     m_drive.setDefaultCommand(new DriveWithGamepadCommand(m_drive, m_controller));
     m_intake.setDefaultCommand(new RetractIntakeCommand(m_intake));
+    m_vision.init();
+  }
+
+  public void disabledInit() {
+    m_vision.init();
   }
 
   public void teleopInit() {
