@@ -96,6 +96,10 @@ public class Vision extends SubsystemBase {
     }
   }
 
+  public void init() {
+    setCameraMode(CameraMode.kDriving);
+  }
+
   public int getRPM() {
     // Add offset from base of target to center of hoop
     double distance = getFilteredDistance() + 34;

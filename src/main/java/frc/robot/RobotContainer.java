@@ -51,15 +51,16 @@ public class RobotContainer {
 
     m_drive.setDefaultCommand(new DriveWithGamepadCommand(m_drive, m_controller));
     m_intake.setDefaultCommand(new RetractIntakeCommand(m_intake));
-    m_vision.setDefaultCommand(new InstantCommand(() -> m_vision.setCameraMode(Vision.CameraMode.kDriving),m_vision).perpetually());
   }
 
   public void teleopInit() {
     m_shooter.init();
+    m_vision.init();
   }
 
   public void autoInit() {
     m_shooter.init();
+    m_vision.init();
   }
 
   private void configureTestingCommands() {
