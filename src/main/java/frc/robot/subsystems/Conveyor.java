@@ -40,11 +40,6 @@ public class Conveyor extends SubsystemBase {
 
     m_encoder.configFactoryDefault();
     m_encoder.configSensorDirection(false);
-    double countToDegree = 360.0 / 4096.0;
-    double radianToMeters = 2 * Math.PI * Constants.kConveyorWheelRadiusM;
-    double sensorCoefficient = countToDegree * (1 / 360.0) * radianToMeters;
-    m_encoder.configFeedbackCoefficient(sensorCoefficient, "m", SensorTimeBase.PerSecond);
-
     m_conveyorMotor.configRemoteFeedbackFilter(m_encoder, 0);
     m_conveyorMotor.configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0);
     m_conveyorMotor.setSensorPhase(false);
@@ -93,16 +88,21 @@ public class Conveyor extends SubsystemBase {
     return !m_firstCargoSensor.get();
   }
 
-  public boolean isSecondCargoDetected() {
-    return !m_secondCargoSensor.get();
-  }
-
   public double getDistance() {
-    return m_encoder.getPosition();
+    double scalingFactor = (Math.PI * Constants.kConveyorWheelRadiusM * 2) / 360;
+    return m_encoder.getPosition() * scalingFactor;
   }
 
   public void zeroDistance() {
     m_encoder.setPosition(0);
+  }
+
+  public boolean isSecondCargoDetected() {
+    return !m_secondCargoSensor.get();
+  }
+
+  public double getSpeed() {
+    return Units.degreesToRotations(m_encoder.getVelocity()) * 60; // rps -> rpm
   }
 
   @Override
@@ -112,6 +112,6 @@ public class Conveyor extends SubsystemBase {
     SmartDashboard.putBoolean("Conveyor Full", isFull());
     SmartDashboard.putNumber("Conveyor Cargo Count", capturedCargoCount());
     SmartDashboard.putNumber("Conveyor Selected Sensor position", m_conveyorMotor.getSelectedSensorPosition());
-    SmartDashboard.putNumber("Conveyor Distance (in.)", Units.metersToInches(m_encoder.getPosition()));
+    SmartDashboard.putNumber("Conveyor speed (rpm)", getSpeed());
   }
 }
