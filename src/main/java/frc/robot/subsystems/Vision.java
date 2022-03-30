@@ -108,7 +108,9 @@ public class Vision extends SubsystemBase {
 
     double omega = 10.485 * distance + 1694.7;
 
-    return (int) Math.round(omega);
+    int rpm = (int) Math.round(omega);
+
+    return Math.min(Math.max(rpm, 1000), 3500);
   }
 
   public boolean isShotPossible() {
