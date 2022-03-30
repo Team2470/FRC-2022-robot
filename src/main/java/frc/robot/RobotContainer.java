@@ -172,6 +172,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    
+    //One Ball Auto 80 degree
     return new SequentialCommandGroup(
         new ParallelRaceGroup(
             new RunShooterCommand(m_shooter, 2500),
@@ -182,6 +184,29 @@ public class RobotContainer {
         ),
         new DriveDistanceCommand(m_drive, 3)
     );
+
+    /*
+    //Two Ball Auto 60 degree
+    return new SequentialCommandGroup(
+        new ParallelDeadlineGroup(
+            new FunctionalCommand(
+                () -> {
+                },
+                () -> {
+                },
+                (onEnd) -> {
+                },
+                m_conveyor::isSecondCargoDetected
+                , m_conveyor
+            ),
+            new DeployIntakeCommand(m_intake),
+            new DriveDistanceCommand(m_drive, 1)
+        ),
+        new AutoAlign(m_vision, m_drive),
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, 0)
+    );*/
+    
+    //Two Ball Auto 80 degree
     /*return new SequentialCommandGroup(
         // Shoot ball 1
         new ParallelRaceGroup(
