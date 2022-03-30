@@ -27,7 +27,7 @@ public class Shooter extends SubsystemBase {
   private final CANSparkMax m_shooterFollower;
   private final RelativeEncoder m_encoder;
   private double m_setpoint = 0;
-  //private boolean m_stateSpaceControlEnabled = true;
+  private boolean m_stateSpaceControlEnabled = false;
 
   // State space stuff
   private static final double kFlywheelKv = 0.02083978;
@@ -110,7 +110,9 @@ public class Shooter extends SubsystemBase {
     // voltage = duty cycle * battery voltage, so
     // duty cycle = voltage / battery voltage
     double nextVoltage = m_loop.getU(0);
-    m_shooterLeader.setVoltage(nextVoltage);
+    if (m_stateSpaceControlEnabled) {
+      m_shooterLeader.setVoltage(nextVoltage);
+    }
 
 
     double error = m_setpoint - currentVelocity;
@@ -125,7 +127,7 @@ public class Shooter extends SubsystemBase {
     m_setpoint = Units.rotationsPerMinuteToRadiansPerSecond(setPoint);
   }
 
-  // public void setStateSpaceControlEnabled(boolean val) { m_stateSpaceControlEnabled = val; }
+  public void setStateSpaceControlEnabled(boolean val) { m_stateSpaceControlEnabled = val; }
 
   public double getRPM() {
     return m_encoder.getVelocity();

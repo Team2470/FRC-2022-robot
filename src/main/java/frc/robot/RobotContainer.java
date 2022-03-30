@@ -149,8 +149,7 @@ public class RobotContainer {
     deployIntakeButton.whenHeld(
         new ParallelCommandGroup(
             new DeployIntakeCommand(m_intake),
-            new RunConveyorCommand(m_conveyor, Direction.kUp),
-            new RunShooterCommand(m_shooter, () -> (int) Math.floor(-m_conveyor.getSpeed()))
+            new RunConveyorCommand(m_conveyor, Direction.kUp)
         ).withInterrupt(m_conveyor::isFull)
     );
 

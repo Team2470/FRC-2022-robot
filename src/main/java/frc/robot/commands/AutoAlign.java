@@ -40,7 +40,7 @@ public class AutoAlign extends CommandBase {
   @Override
   public void execute() {
     if (m_vision.getTargetFound()) {
-      Rotation2d angle = m_vision.getHorizontalAngle();
+      Rotation2d angle = m_vision.getHorizontalAngle().plus(Rotation2d.fromDegrees(5));
       Rotation2d angleOutput = getAngleAdjust(angle);
 
       m_drive.arcadeDrive(0, angleOutput.getDegrees());

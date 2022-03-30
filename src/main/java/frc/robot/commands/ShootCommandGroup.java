@@ -28,7 +28,7 @@ public class ShootCommandGroup extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new InstantCommand(() -> vision.setCameraMode(Vision.CameraMode.kShooting), vision),
-        //new InstantCommand(() -> shooter.setStateSpaceControlEnabled(true), shooter),
+        new InstantCommand(() -> shooter.setStateSpaceControlEnabled(true), shooter),
         new WaitUntilCommand(vision::getTargetFound),
         new WaitUntilCommand(vision::isShotPossible),
         new AutoAlign(vision, drive),
@@ -52,8 +52,8 @@ public class ShootCommandGroup extends SequentialCommandGroup {
                   .withInterrupt(()-> conveyor.capturedCargoCount() == 1)
           ), () -> endingCargoCount
         ),
-        new InstantCommand(() -> vision.setCameraMode(Vision.CameraMode.kDriving), vision)
-        //new InstantCommand(() -> shooter.setStateSpaceControlEnabled(false), shooter)
+        new InstantCommand(() -> vision.setCameraMode(Vision.CameraMode.kDriving), vision),
+        new InstantCommand(() -> shooter.setStateSpaceControlEnabled(false), shooter)
     );
   }
 }
