@@ -26,7 +26,7 @@ public final class Constants {
   public static final double kConveyorWheelRadiusM = Units.inchesToMeters(1.416);
   public static final double kTargetHeightM = 2.52;
   public static final double kCameraHeightM = 1.143;
-  public static final Rotation2d kCameraAngle = Rotation2d.fromDegrees(10);
+  public static final Rotation2d kCameraAngle = Rotation2d.fromDegrees(24);
   //public static final double kCameraOffsetM = 1;
 
   // General
