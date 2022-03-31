@@ -46,6 +46,7 @@ public class Vision extends SubsystemBase {
   }
 
   public enum CameraMode {
+    kCalibration(StreamMode.kLimelightPrimary, ProcessingMode.kPipeline),
     kDriving(StreamMode.kWebcamPrimary, ProcessingMode.kDriver),
     kShooting(StreamMode.kLimelightPrimary, ProcessingMode.kPipeline),
     kClimbing(StreamMode.kLimelightPrimary,  ProcessingMode.kDriver);
@@ -108,11 +109,13 @@ public class Vision extends SubsystemBase {
 
     double omega = 10.485 * distance + 1694.7;
 
-    return (int) Math.round(omega);
+    int rpm = (int) Math.round(omega);
+
+    return Math.min(Math.max(rpm, 1000), 3500);
   }
 
   public boolean isShotPossible() {
-    return getRPM() < 4000 && getFilteredDistance() > 5 * 12;
+    return getRPM() < 3500 && getFilteredDistance() > 5 * 12;
   }
 
   public double getFilteredDistance() {
