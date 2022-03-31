@@ -46,6 +46,7 @@ public class Vision extends SubsystemBase {
   }
 
   public enum CameraMode {
+    kCalibration(StreamMode.kLimelightPrimary, ProcessingMode.kPipeline),
     kDriving(StreamMode.kWebcamPrimary, ProcessingMode.kDriver),
     kShooting(StreamMode.kLimelightPrimary, ProcessingMode.kPipeline),
     kClimbing(StreamMode.kLimelightPrimary,  ProcessingMode.kDriver);
