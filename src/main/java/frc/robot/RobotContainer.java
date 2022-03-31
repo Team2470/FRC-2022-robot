@@ -76,7 +76,7 @@ public class RobotContainer {
         .withProperties(Map.of("Label position", "HIDDEN"));
     visionCommands.add(new AutoAlign(m_vision, m_drive));
     visionCommands.add(new InstantCommand(() -> m_vision.setCameraMode(Vision.CameraMode.kCalibration), m_vision));
-    visionCommands.add(new InstantCommand(() -> m_vision.setCameraMode(Vision.CameraMode.kDriving), m_vision));
+    //visionCommands.add(new InstantCommand(() -> m_vision.setCameraMode(Vision.CameraMode.kDriving), m_vision));
 
     ShuffleboardLayout conveyorCommands = Shuffleboard.getTab("Commands")
         .getLayout("Conveyor", BuiltInLayouts.kGrid)
@@ -106,10 +106,10 @@ public class RobotContainer {
     conveyorDown.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kDown));
     // //: Shooter control
     JoystickButton rpmButton1 = new JoystickButton(m_buttopad, 9);
-    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, Constants.kRPM1));
+    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, -800));
 
     JoystickButton rpmButton2 = new JoystickButton(m_buttopad, 10);
-    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, Constants.kRPM2));
+    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, 800));
 
     JoystickButton rpmButton3 = new JoystickButton(m_buttopad, 11);
     rpmButton3.whileHeld(new RunShooterCommand(m_shooter, Constants.kRPM3));
@@ -152,8 +152,14 @@ public class RobotContainer {
     deployIntakeButton.whenHeld(
         new ParallelCommandGroup(
             new DeployIntakeCommand(m_intake),
-            new RunConveyorCommand(m_conveyor, Direction.kUp)
-        ).withInterrupt(m_conveyor::isFull)
+            new SelectCommand(
+                Map.of(
+                    false, new RunConveyorCommand(m_conveyor, Direction.kUp),
+                    true, new InstantCommand()
+                ),
+                m_conveyor::isSecondCargoDetected
+            )
+        )
     );
 
     JoystickButton shootButton = new JoystickButton(m_controller, XboxController.Button.kStart.value);
