@@ -185,6 +185,15 @@ public class RobotContainer {
     );
 
     /*
+    //One Ball Auto 60 degree
+    return new SequentialCommandGroup(
+        new DriveDistanceCommand(m_drive, 3),
+        new AutoAlign(m_vision, m_drive),
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0)
+    );
+    */
+
+    /*
     //Two Ball Auto 60 degree
     return new SequentialCommandGroup(
         new ParallelDeadlineGroup(
