@@ -87,7 +87,6 @@ public class RobotContainer {
     conveyorCommands.add("Move 1 in. down", new MoveConveyorDistanceCommand(m_conveyor, Units.inchesToMeters(-5)));
     conveyorCommands.add("Move up", new RunConveyorCommand(m_conveyor, Direction.kUp));
     conveyorCommands.add("Move down", new RunConveyorCommand(m_conveyor, Direction.kDown));
-
   }
 
 
@@ -181,6 +180,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     
+    /*
     //One Ball Auto 80 degree
     return new SequentialCommandGroup(
         new ParallelRaceGroup(
@@ -192,15 +192,16 @@ public class RobotContainer {
         ),
         new DriveDistanceCommand(m_drive, 3)
     );
+    */
 
-    /*
+    
     //One Ball Auto 60 degree
     return new SequentialCommandGroup(
         new DriveDistanceCommand(m_drive, 3),
         new AutoAlign(m_vision, m_drive),
         new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0)
     );
-    */
+    
 
     /*
     //Two Ball Auto 60 degree
