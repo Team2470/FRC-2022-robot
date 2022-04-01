@@ -19,6 +19,11 @@ public class MoveBackClimberInwards extends CommandBase {
     addRequirements(m_climber);
   }
 
+  @Override
+  public void initialize() {
+    m_climber.disable();
+  }
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {

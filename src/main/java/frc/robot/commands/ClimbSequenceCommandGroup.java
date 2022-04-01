@@ -26,45 +26,40 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
             Map.ofEntries(
                 // Starting Config
                 // Front out (65), back out (90)
-                Map.entry(ClimbState.kStartingConfig, new ParallelCommandGroup(
-                    new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(65)),
-                    new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(30))
-                )),
+                Map.entry(ClimbState.kStartingConfig, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90))),
                 // Pull up
                 // Front in (limit)
-                Map.entry(ClimbState.kPullUpFront, new  ParallelCommandGroup(
-                   new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(0)),
-                   new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90))
-                 )),
+                Map.entry(ClimbState.kPullUpFront, new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(15))),
                 // Handover
                 // Back in (30 -> limit)
                 Map.entry(ClimbState.kHandover, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(30))),
                 // Swing to clear bar
                 // Front out (65), back out (90)
-                Map.entry(ClimbState.kSwingToClear, new ParallelCommandGroup(
-                    new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(65)),
-                    new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90))
-                )),
+                Map.entry(ClimbState.kSwingToClear, new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(40))),
                 // Out to catch bar
                 // Front out (110)
-                Map.entry(ClimbState.kReadyToCatch, new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(110))),
+                Map.entry(ClimbState.kReadyToCatch, new SequentialCommandGroup(
+                  new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90)),
+                  new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(110)))
+                ),
                 // Pull up
                 // Back in (30 -> limit)
                 Map.entry(ClimbState.kPullUpBack, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(30))),
                 // Grab bar
                 // Front in (100)
-                Map.entry(ClimbState.kGrabBar, new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(100))),
+                Map.entry(ClimbState.kGrabBar, new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(95))),
                 // Drop bar
                 // Back out (125)
-                Map.entry(ClimbState.kDropBar, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(115))),
+                Map.entry(ClimbState.kDropBar, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(125))),
                 //Move back out of the way
                 //Back in (limit)
-                Map.entry(ClimbState.kMoveBack, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(31))),
+                Map.entry(ClimbState.kMoveBack, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(30))),
                 // Pull up
                 // Front in (limit), back in (90)
                 Map.entry(ClimbState.kPullUp, new ParallelCommandGroup(
                     new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(10)),
-                    new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90)))),
+                    new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90)))
+                    ),
                 // Handover
                 // Back in (30 -> limit)
 
@@ -85,7 +80,6 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
             ),
             () -> m_climbState
         ).andThen(() -> advanceState())
-      
     );
   }
 
@@ -97,8 +91,6 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
   }
 
   public void advanceState() {
-    SmartDashboard.putString("Arm State", m_climbState.name());
-    SmartDashboard.putString("Bar", m_barState.name());
     switch (m_climbState) {
       case kStartingConfig:
         m_climbState = ClimbState.kPullUpFront;
@@ -144,6 +136,8 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
         m_climbState = ClimbState.kHandover;
         break;
     }
+    SmartDashboard.putString("Arm State", m_climbState.name());
+    SmartDashboard.putString("Bar", m_barState.name());
   }
 
   public ClimbState getClimbState() { return m_climbState; }

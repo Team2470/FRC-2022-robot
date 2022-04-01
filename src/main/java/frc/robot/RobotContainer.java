@@ -38,7 +38,8 @@ public class RobotContainer {
 
   // Controller
   private final XboxController m_controller = new XboxController(Constants.kControllerA);
-  private final Joystick m_buttopad = new Joystick(1);
+  private final Joystick m_testpad = new Joystick(1);
+  private final Joystick m_buttopad = new Joystick(2);
 
 
 
@@ -99,8 +100,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //Conveyor Control
-    JoystickButton conveyorUp = new JoystickButton(m_buttopad, 8);
-    conveyorUp.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kUp));
+    //JoystickButton conveyorUp = new JoystickButton(m_buttopad, 8);
+    //conveyorUp.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kUp));
 
     JoystickButton conveyorDown = new JoystickButton(m_buttopad, 12);
     conveyorDown.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kDown));
@@ -137,8 +138,38 @@ public class RobotContainer {
     JoystickButton BailButton = new JoystickButton(m_buttopad, 6);
     BailButton.cancelWhenPressed(climbCommand);
 
+    JoystickButton ForceAdvanceButton = new JoystickButton(m_buttopad, 8);
+    ForceAdvanceButton.cancelWhenPressed(climbCommand);
+    ForceAdvanceButton.whenPressed(new InstantCommand(() -> climbCommand.advanceState()).andThen(()->climbCommand.schedule()));
+
     JoystickButton Reset = new JoystickButton(m_buttopad, 7);
     Reset.whenPressed(new PrintCommand("Resetting").andThen(() -> ClimbSequenceCommandGroup.reset()));
+
+    JoystickButton Move30 = new JoystickButton(m_testpad, 5);
+    Move30.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(30)).perpetually());
+
+    JoystickButton Move90 = new JoystickButton(m_testpad, 6);
+    Move90.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(90)).perpetually());
+
+    JoystickButton Move125 = new JoystickButton(m_testpad, 7);
+    Move125.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(125)).perpetually());
+
+    JoystickButton ForwardClimbOutwardsButton2 = new JoystickButton(m_testpad, 2);
+    ForwardClimbOutwardsButton2.whileActiveContinuous(new MoveFrontClimberOutwards(m_frontClimber));
+
+    JoystickButton ForwardClimbInwardsButton2 = new JoystickButton(m_testpad, 1);
+    ForwardClimbInwardsButton2.whileActiveContinuous(new MoveFrontClimberInwards(m_frontClimber));
+
+    JoystickButton BackwardClimbOutwardsButtons2 = new JoystickButton(m_testpad, 4);
+    BackwardClimbOutwardsButtons2.whileActiveContinuous(new MoveBackClimberOutwards(m_backClimber));
+
+    JoystickButton BackwardClimbInwardButton2 = new JoystickButton(m_testpad, 3);
+    BackwardClimbInwardButton2.whileActiveContinuous(new MoveBackClimberInwards(m_backClimber));
+
+
+
+
+
 
     //: Intake control
     JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);

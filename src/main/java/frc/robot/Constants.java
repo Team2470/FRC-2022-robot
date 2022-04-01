@@ -123,7 +123,7 @@ public final class Constants {
   public static final double kFrontClimberErrorBound = 2;
   // Back
   public static final int kBackClimberReverseLimit = 100;
-  public static final int kBackClimberForwardLimit = 1390;
+  public static final int kBackClimberForwardLimit = 1800;
   public static final double kBackClimberCanCoderOffset = -104.35546875 - 91;
   public static final double kBackClimberSpeed = 0.2;
   public static final double kMaxBackClimberSpeedIn = -0.25;

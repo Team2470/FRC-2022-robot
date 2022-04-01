@@ -23,7 +23,7 @@ public class BackClimber extends PIDSubsystem implements Climber {
 
   private final WPI_TalonFX m_backClimber;
   private final CANCoder m_backCanCoder;
-  private static final double kP = 0.053;
+  private static final double kP = 0.06;
   private static final double kI = 0.01;
   private static final double kD = 0.0;
 
@@ -57,6 +57,12 @@ public class BackClimber extends PIDSubsystem implements Climber {
 
     m_backClimber.setInverted(true);
 
+    m_backClimber.configVoltageCompSaturation(10);
+    m_backClimber.enableVoltageCompensation(true);
+    
+
+    // PID is by default disabled
+    disable();
   }
 
   @Override
@@ -71,11 +77,6 @@ public class BackClimber extends PIDSubsystem implements Climber {
     SmartDashboard.putNumber("Climber Back Error", getController().getPositionError());
   }
 
-  public void startClimbMotor(int direction, double speed) {
-    m_backClimber.set(ControlMode.PercentOutput, direction * speed);
-  }
-
-  // TODO: Adjust to match hardware
   public void startOutwardClimb() {
     m_backClimber.set(ControlMode.PercentOutput, Constants.kBackClimberSpeed);
   }
@@ -100,6 +101,14 @@ public class BackClimber extends PIDSubsystem implements Climber {
       output = Math.copySign(Constants.kMaxBackClimberSpeedIn, output);
     } else if(output > Constants.kMaxBackClimberSpeedOut){
       output = Math.copySign(Constants.kMaxBackClimberSpeedOut, output);
+    }
+
+    // If we're targetting 90 degrees, stop within 1 degree
+    if (Math.abs(setpoint - 90) <= 1) {
+      double error = getAngle().minus(Rotation2d.fromDegrees(setpoint)).getDegrees();
+      if (Math.abs(error) <= 3) {
+        output = 0;
+      }
     }
 
     m_backClimber.set(ControlMode.PercentOutput, output);

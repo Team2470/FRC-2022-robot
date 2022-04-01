@@ -39,13 +39,14 @@ public class BackClimbAngleCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(getError().getDegrees()) <= Constants.kBackClimberErrorBound;
+    double threshold = Constants.kBackClimberErrorBound;
+    if(m_setpoint.getDegrees() == 90) { threshold = 3.0; }
+    return Math.abs(getError().getDegrees()) <= threshold;
   }
 
   @Override
   public void end(boolean interrupted) {
     SmartDashboard.putString("Climber Angle Commant", "end");
-    m_climber.disable();
     m_climber.stop();
   }
 }
