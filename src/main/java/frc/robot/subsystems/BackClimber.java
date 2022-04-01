@@ -23,7 +23,7 @@ public class BackClimber extends PIDSubsystem implements Climber {
 
   private final WPI_TalonFX m_backClimber;
   private final CANCoder m_backCanCoder;
-  private static final double kP = 0.060;
+  private static final double kP = 0.053;
   private static final double kI = 0.01;
   private static final double kD = 0.0;
 
@@ -96,8 +96,10 @@ public class BackClimber extends PIDSubsystem implements Climber {
   protected void useOutput(double output, double setpoint) {
     // TODO Auto-generated method stub
 
-    if(Math.abs(output) > Constants.kMaxBackClimberSpeed){
-      output = Math.copySign(Constants.kMaxBackClimberSpeed, output);
+    if(output < Constants.kMaxBackClimberSpeedIn){
+      output = Math.copySign(Constants.kMaxBackClimberSpeedIn, output);
+    } else if(output > Constants.kMaxBackClimberSpeedOut){
+      output = Math.copySign(Constants.kMaxBackClimberSpeedOut, output);
     }
 
     m_backClimber.set(ControlMode.PercentOutput, output);

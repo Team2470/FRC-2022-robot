@@ -60,12 +60,13 @@ public class MoveFrontClimberCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    //if (m_climber.isAtSoftLimit()) { return true; }
     switch (m_direction) {
       case kInward:
-        return m_climber.getAngle().getDegrees() < m_setpoint.plus(Rotation2d.fromDegrees(1)).getDegrees();
+        return m_climber.getAngle().getDegrees() < m_setpoint.plus(Rotation2d.fromDegrees(1)).getDegrees()
+            || m_climber.isAtReverseSoftLimit();
       case kOutward:
-        return m_climber.getAngle().getDegrees() > m_setpoint.minus(Rotation2d.fromDegrees(1)).getDegrees();
+        return m_climber.getAngle().getDegrees() > m_setpoint.minus(Rotation2d.fromDegrees(1)).getDegrees()
+            || m_climber.isAtForwardSoftLimit();
     }
     return false;
   }

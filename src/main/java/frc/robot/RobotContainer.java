@@ -36,10 +36,11 @@ public class RobotContainer {
   private final BackClimber m_backClimber = new BackClimber();
   private final Vision m_vision = new Vision();
 
-
   // Controller
   private final XboxController m_controller = new XboxController(Constants.kControllerA);
   private final Joystick m_buttopad = new Joystick(1);
+
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -128,23 +129,16 @@ public class RobotContainer {
     JoystickButton BackwardClimbInwardButton = new JoystickButton(m_buttopad, 3);
     BackwardClimbInwardButton.whileActiveContinuous(new MoveBackClimberInwards(m_backClimber));
 
-    JoystickButton MoveBackClimbToAngle = new JoystickButton(m_buttopad, 5);
-    MoveBackClimbToAngle.whenPressed(new BackClimbAngleCommand(
-        m_backClimber,
-        Rotation2d.fromDegrees(Constants.kBackAngle1)
-    ).perpetually());
+    ClimbSequenceCommandGroup climbCommand = new ClimbSequenceCommandGroup(m_frontClimber, m_backClimber);
 
-    JoystickButton MoveBackClimbToAngle2 = new JoystickButton(m_buttopad, 6);
-    MoveBackClimbToAngle2.whenPressed(new BackClimbAngleCommand(
-        m_backClimber,
-        Rotation2d.fromDegrees(Constants.kBackAngle2)
-    ).perpetually());
+    JoystickButton NextStepButton = new JoystickButton(m_buttopad, 5);
+    NextStepButton.whenPressed(climbCommand);
 
-    JoystickButton MoveBackClimbToAngle3 = new JoystickButton(m_buttopad, 7);
-    MoveBackClimbToAngle3.whenPressed(new BackClimbAngleCommand(
-        m_backClimber,
-        Rotation2d.fromDegrees(Constants.kBackAngle3)
-    ).perpetually());
+    JoystickButton BailButton = new JoystickButton(m_buttopad, 6);
+    BailButton.cancelWhenPressed(climbCommand);
+
+    JoystickButton Reset = new JoystickButton(m_buttopad, 7);
+    Reset.whenPressed(new PrintCommand("Resetting").andThen(() -> ClimbSequenceCommandGroup.reset()));
 
     //: Intake control
     JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
@@ -172,7 +166,6 @@ public class RobotContainer {
     );
 
   }
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
