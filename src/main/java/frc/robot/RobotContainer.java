@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
@@ -53,6 +52,21 @@ public class RobotContainer {
 
     m_drive.setDefaultCommand(new DriveWithGamepadCommand(m_drive, m_controller));
     m_intake.setDefaultCommand(new RetractIntakeCommand(m_intake));
+    m_vision.init();
+  }
+
+  public void disabledInit() {
+    m_vision.init();
+  }
+
+  public void teleopInit() {
+    m_shooter.init();
+    m_vision.init();
+  }
+
+  public void autoInit() {
+    m_shooter.init();
+    m_vision.init();
   }
 
   private void configureTestingCommands() {
@@ -62,6 +76,9 @@ public class RobotContainer {
         .withPosition(0, 0)
         .withProperties(Map.of("Label position", "HIDDEN"));
     visionCommands.add(new AutoAlign(m_vision, m_drive));
+    visionCommands.add(new InstantCommand(() -> m_vision.setCameraMode(Vision.CameraMode.kCalibration), m_vision));
+    //visionCommands.add(new InstantCommand(() -> m_vision.setCameraMode(Vision.CameraMode.kDriving), m_vision));
+
     ShuffleboardLayout conveyorCommands = Shuffleboard.getTab("Commands")
         .getLayout("Conveyor", BuiltInLayouts.kGrid)
         .withSize(2, 2)
@@ -71,19 +88,6 @@ public class RobotContainer {
     conveyorCommands.add("Move 1 in. down", new MoveConveyorDistanceCommand(m_conveyor, Units.inchesToMeters(-5)));
     conveyorCommands.add("Move up", new RunConveyorCommand(m_conveyor, Direction.kUp));
     conveyorCommands.add("Move down", new RunConveyorCommand(m_conveyor, Direction.kDown));
-    ShuffleboardLayout shooterCommands = Shuffleboard.getTab("Commands")
-        .getLayout("Shooter", BuiltInLayouts.kGrid)
-        .withSize(2, 2)
-        .withPosition(0, 2);
-    SendableChooser<Integer> rpmChooser = new SendableChooser<>();
-    // Add options 2500 to 5000 with steps of 100
-    rpmChooser.addOption("0", 0);
-    for (int i = 2500; i <= 5000; i += 100) {
-      rpmChooser.addOption(String.format("%s", i), i);
-    }
-    rpmChooser.setDefaultOption("0", 0);
-    shooterCommands.add(rpmChooser);
-    shooterCommands.add("Set RPM", new RunShooterCommand(m_shooter, rpmChooser::getSelected));
   }
 
 
@@ -102,14 +106,16 @@ public class RobotContainer {
     conveyorDown.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kDown));
     // //: Shooter control
     JoystickButton rpmButton1 = new JoystickButton(m_buttopad, 9);
-    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, Constants.kRPM1));
+    rpmButton1.whileHeld(new RunShooterCommand(m_shooter, -800));
 
     JoystickButton rpmButton2 = new JoystickButton(m_buttopad, 10);
-    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, Constants.kRPM2));
+    rpmButton2.whileHeld(new RunShooterCommand(m_shooter, 800));
 
     JoystickButton rpmButton3 = new JoystickButton(m_buttopad, 11);
     rpmButton3.whileHeld(new RunShooterCommand(m_shooter, Constants.kRPM3));
 
+    JoystickButton rpmControlButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
+    rpmControlButton.whileHeld(new DriveShooterWithSmartDashboardCommand(m_shooter));
     //: Climber control
     JoystickButton ForwardClimbOutwardsButton = new JoystickButton(m_buttopad, 2);
     ForwardClimbOutwardsButton.whileActiveContinuous(new MoveFrontClimberOutwards(m_frontClimber));
@@ -139,17 +145,23 @@ public class RobotContainer {
     deployIntakeButton.whenHeld(
         new ParallelCommandGroup(
             new DeployIntakeCommand(m_intake),
-            new RunConveyorCommand(m_conveyor, Direction.kUp)
-        ).withInterrupt(m_conveyor::isFull)
+            new SelectCommand(
+                Map.of(
+                    false, new RunConveyorCommand(m_conveyor, Direction.kUp),
+                    true, new InstantCommand()
+                ),
+                m_conveyor::isSecondCargoDetected
+            )
+        )
     );
 
     JoystickButton shootButton = new JoystickButton(m_controller, XboxController.Button.kStart.value);
-    shootButton.whenPressed(
+    shootButton.whileHeld(
         new SelectCommand(
             Map.of(
                 0, new PrintCommand("No cargo. Refusing to shoot"),
-                1, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, 0),
-                2, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, 1)
+                1, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0),
+                2, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 1)
             ), m_conveyor::capturedCargoCount)
     );
 
@@ -160,6 +172,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    
+    /*
+    //One Ball Auto 80 degree
     return new SequentialCommandGroup(
         new ParallelRaceGroup(
             new RunShooterCommand(m_shooter, 2500),
@@ -170,6 +185,39 @@ public class RobotContainer {
         ),
         new DriveDistanceCommand(m_drive, 3)
     );
+    */
+
+    
+    //One Ball Auto 60 degree
+    return new SequentialCommandGroup(
+        new DriveDistanceCommand(m_drive, 3),
+        new AutoAlign(m_vision, m_drive),
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0)
+    );
+    
+
+    /*
+    //Two Ball Auto 60 degree
+    return new SequentialCommandGroup(
+        new ParallelDeadlineGroup(
+            new FunctionalCommand(
+                () -> {
+                },
+                () -> {
+                },
+                (onEnd) -> {
+                },
+                m_conveyor::isSecondCargoDetected
+                , m_conveyor
+            ),
+            new DeployIntakeCommand(m_intake),
+            new DriveDistanceCommand(m_drive, 1)
+        ),
+        new AutoAlign(m_vision, m_drive),
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, 0)
+    );*/
+    
+    //Two Ball Auto 80 degree
     /*return new SequentialCommandGroup(
         // Shoot ball 1
         new ParallelRaceGroup(

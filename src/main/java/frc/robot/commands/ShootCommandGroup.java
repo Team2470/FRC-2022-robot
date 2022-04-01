@@ -4,11 +4,15 @@
 
 package frc.robot.commands;
 
+import java.util.Map;
+
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
+import frc.robot.commands.RunConveyorCommand.Direction;
 import frc.robot.subsystems.Conveyor;
+import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
@@ -16,36 +20,40 @@ import frc.robot.subsystems.Vision;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootCommandGroup extends SequentialCommandGroup {
-  private final Vision m_vision;
-
   /**
    * Creates a new ShootCommandGroup.
    */
-  public ShootCommandGroup(Conveyor conveyor, Shooter shooter, Vision vision, int endingCargoCount) {
-    m_vision = vision;
+  public ShootCommandGroup(Conveyor conveyor, Shooter shooter, Vision vision, Drive drive, int endingCargoCount) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new MoveConveyorDistanceCommand(conveyor, -1),
+        new InstantCommand(() -> vision.setCameraMode(Vision.CameraMode.kShooting), vision),
+        new InstantCommand(() -> shooter.setStateSpaceControlEnabled(true), shooter),
+        new WaitUntilCommand(vision::getTargetFound),
+        new WaitUntilCommand(vision::isShotPossible),
+        new AutoAlign(vision, drive),
+        new MoveConveyorDistanceCommand(conveyor, -Units.inchesToMeters(3)),
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
-                new WaitForShooterRPMCommand(shooter, this::getRPM),
-                new MoveConveyorDistanceCommand(conveyor, 2),
-                new RunConveyorCommand(conveyor, RunConveyorCommand.Direction.kUp)
-                    .withInterrupt(() -> conveyor.capturedCargoCount() == endingCargoCount)
+                new WaitForShooterRPMCommand(shooter, vision::getRPM, 100),
+                new RunConveyorCommand(conveyor, Direction.kUp)
+                .withInterrupt(()-> shooter.getError()>5)
+                //new MoveConveyorDistanceCommand(conveyor, Units.inchesToMeters(11)),
+                //new RunConveyorCommand(conveyor, RunConveyorCommand.Direction.kUp)
+                    //.withInterrupt(() -> conveyor.capturedCargoCount() == endingCargoCount)
+                
             ),
-            new RunShooterCommand(shooter, this::getRPM)
-        )
+            new RunShooterCommand(shooter, vision::getRPM)
+        ),
+        new SelectCommand(
+          Map.of(
+            0, new InstantCommand(() -> {}),
+            1, new RunConveyorCommand(conveyor, Direction.kUp)
+                  .withInterrupt(()-> conveyor.capturedCargoCount() == 1)
+          ), () -> endingCargoCount
+        ),
+        new InstantCommand(() -> vision.setCameraMode(Vision.CameraMode.kDriving), vision),
+        new InstantCommand(() -> shooter.setStateSpaceControlEnabled(false), shooter)
     );
-  }
-
-  private int getRPM() {
-    Rotation2d angle = m_vision.getVerticalAngle();
-    double distance = m_vision.geTargetDistanceM();
-
-    double v0 = (-9.81 * distance * distance) / (2 * distance * angle.getSin() - Constants.kHubHeightM);
-    double omega = (60 * v0) / (2 * Math.PI * Constants.kWheelRadiusM);
-
-    return (int) Math.round(omega);
   }
 }

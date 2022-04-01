@@ -105,7 +105,7 @@ public class Drive extends SubsystemBase {
   }
 
   public void curvatureDrive(double xSpeed, double zRotation, boolean allowTurnInPlace) {
-    xSpeed = Math.copySign(xSpeed * xSpeed, xSpeed) * 0.5;
+    xSpeed = Math.copySign(xSpeed * xSpeed, xSpeed) * 0.75;
     zRotation = Math.copySign(zRotation * zRotation, zRotation);
     m_drive.curvatureDrive(xSpeed, zRotation, allowTurnInPlace);
   }
