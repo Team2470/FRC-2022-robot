@@ -20,6 +20,6 @@ public class FrontClimbAngleCommandFactory {
             return new MoveFrontClimberOutwards(climber).alongWith(new PrintCommand("Outward"));
           }
         }
-    ).withInterrupt(() -> Math.abs(climber.getAngle().minus(setpoint).getDegrees()) <= Constants.kBackClimberErrorBound);
+    ).withInterrupt(() -> Math.abs(climber.getAngle().minus(setpoint).getDegrees()) <= Constants.Climber.kBackClimberErrorBound);
   }
 }

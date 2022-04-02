@@ -67,15 +67,15 @@ public class Drive extends SubsystemBase {
    * Creates a new Drive.
    */
   public Drive(WPI_TalonSRX gyroTalon) {
-    m_leftLeader = new WPI_TalonFX(Constants.kDriveTalonLeftAId, Constants.kCanivoreName);
-    m_leftFollower = new WPI_TalonFX(Constants.kDriveTalonLeftBId, Constants.kCanivoreName);
+    m_leftLeader = new WPI_TalonFX(Constants.Drive.kDriveTalonLeftAId, Constants.kCanivoreName);
+    m_leftFollower = new WPI_TalonFX(Constants.Drive.kDriveTalonLeftBId, Constants.kCanivoreName);
     m_leftFollower.follow(m_leftLeader);
     m_leftFollower.configFactoryDefault();
     m_leftFollower.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 1000);
     m_leftFollower.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1000);
 
-    m_rightLeader = new WPI_TalonFX(Constants.kDriveTalonRightAId, Constants.kCanivoreName);
-    m_rightFollower = new WPI_TalonFX(Constants.kDriveTalonRightBId, Constants.kCanivoreName);
+    m_rightLeader = new WPI_TalonFX(Constants.Drive.kDriveTalonRightAId, Constants.kCanivoreName);
+    m_rightFollower = new WPI_TalonFX(Constants.Drive.kDriveTalonRightBId, Constants.kCanivoreName);
     m_rightFollower.follow(m_rightLeader);
     m_rightFollower.configFactoryDefault();
     m_rightFollower.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 1000);

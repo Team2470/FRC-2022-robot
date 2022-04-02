@@ -12,8 +12,8 @@ public class Intake extends SubsystemBase {
   private final Solenoid m_deploy;
 
   public Intake() {
-    m_intakeMotor = new CANSparkMax(Constants.kIntakeMotorId, MotorType.kBrushless);
-    m_deploy = new Solenoid(PneumaticsModuleType.REVPH, Constants.kIntakeSolenoid);
+    m_intakeMotor = new CANSparkMax(Constants.Intake.kIntakeMotorId, MotorType.kBrushless);
+    m_deploy = new Solenoid(PneumaticsModuleType.REVPH, Constants.Intake.kIntakeSolenoid);
 
     m_intakeMotor.setSmartCurrentLimit(40);
     m_intakeMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
@@ -29,7 +29,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void spin() {
-    m_intakeMotor.set(Constants.kIntakeSpeed);
+    m_intakeMotor.set(Constants.Intake.kIntakeSpeed);
   }
 
   public void stopIntakeMotor() {

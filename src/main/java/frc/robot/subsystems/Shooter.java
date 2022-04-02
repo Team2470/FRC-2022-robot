@@ -69,8 +69,8 @@ public class Shooter extends SubsystemBase {
    * Creates a new Shooter.
    */
   public Shooter() {
-    m_shooterLeader = new CANSparkMax(Constants.kShooterNeoLeaderId, MotorType.kBrushless);
-    m_shooterFollower = new CANSparkMax(Constants.kShooterNeoFollowerId, MotorType.kBrushless);
+    m_shooterLeader = new CANSparkMax(Constants.Shooter.kShooterNeoLeaderId, MotorType.kBrushless);
+    m_shooterFollower = new CANSparkMax(Constants.Shooter.kShooterNeoFollowerId, MotorType.kBrushless);
     m_shooterFollower.follow(m_shooterLeader, true);
     m_shooterFollower.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 100);
     m_shooterFollower.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 500);

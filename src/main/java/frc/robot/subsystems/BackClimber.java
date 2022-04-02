@@ -34,12 +34,12 @@ public class BackClimber extends PIDSubsystem implements Climber {
     super(new PIDController(kP, kI, kD));
     getController().setIntegratorRange(0, 0.2);
 
-    m_backClimber = new WPI_TalonFX(Constants.kBackClimberTalonId, Constants.kCanivoreName);
-    m_backCanCoder = new CANCoder(Constants.kBackCanCoderId, Constants.kCanivoreName);
+    m_backClimber = new WPI_TalonFX(Constants.Climber.kBackClimberTalonId, Constants.kCanivoreName);
+    m_backCanCoder = new CANCoder(Constants.Climber.kBackCanCoderId, Constants.kCanivoreName);
 
 
     m_backCanCoder.configFactoryDefault();
-    m_backCanCoder.configMagnetOffset(Constants.kBackClimberCanCoderOffset);
+    m_backCanCoder.configMagnetOffset(Constants.Climber.kBackClimberCanCoderOffset);
     m_backCanCoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
     m_backCanCoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
     m_backCanCoder.configSensorDirection(true);
@@ -47,8 +47,8 @@ public class BackClimber extends PIDSubsystem implements Climber {
     m_backClimber.configFactoryDefault();
     m_backClimber.configForwardSoftLimitEnable(true);
     m_backClimber.configReverseSoftLimitEnable(true);
-    m_backClimber.configReverseSoftLimitThreshold(Constants.kBackClimberReverseLimit);
-    m_backClimber.configForwardSoftLimitThreshold(Constants.kBackClimberForwardLimit);
+    m_backClimber.configReverseSoftLimitThreshold(Constants.Climber.kBackClimberReverseLimit);
+    m_backClimber.configForwardSoftLimitThreshold(Constants.Climber.kBackClimberForwardLimit);
     m_backClimber.setNeutralMode(NeutralMode.Brake);
 
     m_backClimber.configRemoteFeedbackFilter(m_backCanCoder, 0);
@@ -78,11 +78,11 @@ public class BackClimber extends PIDSubsystem implements Climber {
   }
 
   public void startOutwardClimb() {
-    m_backClimber.set(ControlMode.PercentOutput, Constants.kBackClimberSpeed);
+    m_backClimber.set(ControlMode.PercentOutput, Constants.Climber.kBackClimberSpeed);
   }
 
   public void startInwardClimb() {
-    m_backClimber.set(ControlMode.PercentOutput, -Constants.kBackClimberSpeed);
+    m_backClimber.set(ControlMode.PercentOutput, -Constants.Climber.kBackClimberSpeed);
   }
 
   public Rotation2d getAngle() {
@@ -97,10 +97,10 @@ public class BackClimber extends PIDSubsystem implements Climber {
   protected void useOutput(double output, double setpoint) {
     // TODO Auto-generated method stub
 
-    if(output < Constants.kMaxBackClimberSpeedIn){
-      output = Math.copySign(Constants.kMaxBackClimberSpeedIn, output);
-    } else if(output > Constants.kMaxBackClimberSpeedOut){
-      output = Math.copySign(Constants.kMaxBackClimberSpeedOut, output);
+    if(output < Constants.Climber.kMaxBackClimberSpeedIn){
+      output = Math.copySign(Constants.Climber.kMaxBackClimberSpeedIn, output);
+    } else if(output > Constants.Climber.kMaxBackClimberSpeedOut){
+      output = Math.copySign(Constants.Climber.kMaxBackClimberSpeedOut, output);
     }
 
     // If we're targetting 90 degrees, stop within 1 degree

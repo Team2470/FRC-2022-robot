@@ -39,7 +39,7 @@ public class BackClimbAngleCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    double threshold = Constants.kBackClimberErrorBound;
+    double threshold = Constants.Climber.kBackClimberErrorBound;
     if(m_setpoint.getDegrees() == 90) { threshold = 3.0; }
     return Math.abs(getError().getDegrees()) <= threshold;
   }

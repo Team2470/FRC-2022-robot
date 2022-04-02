@@ -28,10 +28,10 @@ public class Conveyor extends SubsystemBase {
   public Conveyor() {
     setName("Conveyor");
 
-    m_conveyorMotor = new WPI_TalonSRX(Constants.kConveyorMotorID);
-    m_firstCargoSensor = new DigitalInput(Constants.kConveyorFirstCargoChannel);
-    m_secondCargoSensor = new DigitalInput(Constants.kConveyorSecondCargoChannel);
-    m_encoder = new WPI_CANCoder(Constants.kConveyorCanCoder);
+    m_conveyorMotor = new WPI_TalonSRX(Constants.Conveyor.kConveyorMotorID);
+    m_firstCargoSensor = new DigitalInput(Constants.Conveyor.kConveyorFirstCargoChannel);
+    m_secondCargoSensor = new DigitalInput(Constants.Conveyor.kConveyorSecondCargoChannel);
+    m_encoder = new WPI_CANCoder(Constants.Conveyor.kConveyorCanCoder);
 
     addChild("Motor", m_conveyorMotor);
     addChild("First Cargo Sensor", m_firstCargoSensor);

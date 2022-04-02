@@ -30,8 +30,8 @@ public class FrontClimber extends SubsystemBase implements Climber {
    * Creates a new Climber.
    */
   public FrontClimber() {
-    m_frontClimberFollower = new WPI_TalonFX(Constants.kFrontClimberFollowerTalonId, Constants.kCanivoreName);
-    m_frontClimber = new WPI_TalonFX(Constants.kFrontClimberTalonId, Constants.kCanivoreName);
+    m_frontClimberFollower = new WPI_TalonFX(Constants.Climber.kFrontClimberFollowerTalonId, Constants.kCanivoreName);
+    m_frontClimber = new WPI_TalonFX(Constants.Climber.kFrontClimberTalonId, Constants.kCanivoreName);
     m_frontClimberFollower.follow(m_frontClimber);
     m_frontClimber.setInverted(true);
     m_frontClimberFollower.setInverted(TalonFXInvertType.OpposeMaster);
@@ -39,19 +39,19 @@ public class FrontClimber extends SubsystemBase implements Climber {
     m_frontClimberFollower.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1000);
 
 
-    m_frontCanCoder = new CANCoder(Constants.kFrontCanCoderId, Constants.kCanivoreName);
-    m_ratchetSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.kRatchetSolenoid);
+    m_frontCanCoder = new CANCoder(Constants.Climber.kFrontCanCoderId, Constants.kCanivoreName);
+    m_ratchetSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.Climber.kRatchetSolenoid);
 
     m_frontCanCoder.configFactoryDefault();
-    m_frontCanCoder.configMagnetOffset(Constants.kFrontClimberCanCoderOffset);
+    m_frontCanCoder.configMagnetOffset(Constants.Climber.kFrontClimberCanCoderOffset);
     m_frontCanCoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
     m_frontCanCoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 
 
     m_frontClimber.configForwardSoftLimitEnable(true);
     m_frontClimber.configReverseSoftLimitEnable(true);
-    m_frontClimber.configReverseSoftLimitThreshold(Constants.kFrontClimberReverseLimit);
-    m_frontClimber.configForwardSoftLimitThreshold(Constants.kFrontClimberForwardLimit);
+    m_frontClimber.configReverseSoftLimitThreshold(Constants.Climber.kFrontClimberReverseLimit);
+    m_frontClimber.configForwardSoftLimitThreshold(Constants.Climber.kFrontClimberForwardLimit);
     m_frontClimber.setSensorPhase(true);
 
       try {
@@ -85,12 +85,12 @@ public class FrontClimber extends SubsystemBase implements Climber {
   public void startOutwardClimb() {
     //m_ratchetSolenoid.set(m_frontClimber.getSelectedSensorPosition() <= Constants.kFrontClimberForwardLimit);
     //m_ratchetSolenoid.set(true);
-    m_frontClimber.set(ControlMode.PercentOutput, Constants.kFrontClimberSpeed);
+    m_frontClimber.set(ControlMode.PercentOutput, Constants.Climber.kFrontClimberSpeed);
   }
 
   public void startInwardClimb() {
     //m_ratchetSolenoid.set(false);
-    m_frontClimber.set(ControlMode.PercentOutput, -Constants.kFrontClimberSpeed);
+    m_frontClimber.set(ControlMode.PercentOutput, -Constants.Climber.kFrontClimberSpeed);
   }
 
   public void engageRatchet() {
@@ -102,11 +102,11 @@ public class FrontClimber extends SubsystemBase implements Climber {
   }
 
   public boolean isAtForwardSoftLimit() {
-    return Constants.kFrontClimberForwardLimit <= m_frontClimber.getSelectedSensorPosition();
+    return Constants.Climber.kFrontClimberForwardLimit <= m_frontClimber.getSelectedSensorPosition();
   }
 
   public boolean isAtReverseSoftLimit() {
-    return m_frontClimber.getSelectedSensorPosition() <= Constants.kFrontClimberReverseLimit;
+    return m_frontClimber.getSelectedSensorPosition() <= Constants.Climber.kFrontClimberReverseLimit;
   }
 
   public boolean isAtSoftLimit() {

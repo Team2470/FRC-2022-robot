@@ -126,7 +126,7 @@ public class RobotContainer {
     rpmButton2.whileHeld(new RunShooterCommand(m_shooter, 800));
 
     JoystickButton rpmButton3 = new JoystickButton(m_buttopad, 11);
-    rpmButton3.whileHeld(new RunShooterCommand(m_shooter, Constants.kRPM3));
+    rpmButton3.whileHeld(new RunShooterCommand(m_shooter, 2600));
 
     JoystickButton rpmControlButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
     rpmControlButton.whileHeld(new DriveShooterWithSmartDashboardCommand(m_shooter));
