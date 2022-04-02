@@ -65,7 +65,7 @@ public class RobotContainer {
     revDigit_.display("BWMP");
     autoSelector_ = new AutoSelector(revDigit_, "1BLL",  new SequentialCommandGroup(
         new DriveDistanceCommand(m_drive, 3),
-        new AutoAlign(m_vision, m_drive),
+        new AlignCommand(m_vision, m_drive),
         new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0)
     ));
 
@@ -84,7 +84,7 @@ public class RobotContainer {
             new DeployIntakeCommand(m_intake),
             new DriveDistanceCommand(m_drive, 1)
         ),
-        new AutoAlign(m_vision, m_drive),
+        new AlignCommand(m_vision, m_drive),
         new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0)
     ));
     // autoSelector_.registerCommand("bar", "BAR", new PrintCommand("Bar"));
