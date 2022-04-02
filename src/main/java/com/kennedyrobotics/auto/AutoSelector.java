@@ -37,10 +37,10 @@ public class AutoSelector implements Runnable {
 
     private int selectedAutoPos_;
 
-    public AutoSelector(RevDigit revDigit, Command defaultCommand) {
+    public AutoSelector(RevDigit revDigit, String displayName, Command defaultCommand) {
         revDigit_ = revDigit;
         workerThread_ = new Thread(this);
-        registerCommand(kDefaultAutoId, "dflt", defaultCommand);
+        registerCommand(kDefaultAutoId, displayName, defaultCommand);
 
     }
 
