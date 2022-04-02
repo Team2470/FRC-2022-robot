@@ -2,18 +2,18 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 
-public class AutoDrive extends CommandBase {
+public class AutoDriveCommand extends CommandBase {
   private final Drive m_drive;
 
   /**
    * Creates a new DriveWithGamepadCommand.
    */
-  public AutoDrive(Drive drive) {
+  public AutoDriveCommand(Drive drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
 

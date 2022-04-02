@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -14,8 +15,18 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.*;
-import frc.robot.commands.RunConveyorCommand.Direction;
+import frc.robot.commands.automation.ClimbCommandGroup;
+import frc.robot.commands.automation.ShootCommandGroup;
+import frc.robot.commands.climber.*;
+import frc.robot.commands.conveyor.MoveConveyorDistanceCommand;
+import frc.robot.commands.conveyor.RunConveyorCommand;
+import frc.robot.commands.drive.AlignCommand;
+import frc.robot.commands.drive.DriveDistanceCommand;
+import frc.robot.commands.drive.DriveShooterWithSmartDashboardCommand;
+import frc.robot.commands.drive.DriveWithGamepadCommand;
+import frc.robot.commands.intake.DeployIntakeCommand;
+import frc.robot.commands.intake.RetractIntakeCommand;
+import frc.robot.commands.shooter.RunShooterCommand;
 import frc.robot.subsystems.*;
 
 import java.util.Map;
@@ -47,6 +58,7 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    DataLogManager.start();
     // Configure the button bindings
     configureButtonBindings();
     configureTestingCommands();
@@ -76,9 +88,10 @@ public class RobotContainer {
         .withSize(2, 2)
         .withPosition(0, 0)
         .withProperties(Map.of("Label position", "HIDDEN"));
-    visionCommands.add(new AutoAlign(m_vision, m_drive));
+    //visionCommands.add(new AlignCommand(m_vision, m_drive));
     visionCommands.add(new InstantCommand(() -> m_vision.setCameraMode(Vision.CameraMode.kCalibration), m_vision));
     //visionCommands.add(new InstantCommand(() -> m_vision.setCameraMode(Vision.CameraMode.kDriving), m_vision));
+
 
     ShuffleboardLayout conveyorCommands = Shuffleboard.getTab("Commands")
         .getLayout("Conveyor", BuiltInLayouts.kGrid)
@@ -87,8 +100,8 @@ public class RobotContainer {
         .withProperties(Map.of("Label position", "HIDDEN"));
     conveyorCommands.add("Move 1 in. up", new MoveConveyorDistanceCommand(m_conveyor, Units.inchesToMeters(5)));
     conveyorCommands.add("Move 1 in. down", new MoveConveyorDistanceCommand(m_conveyor, Units.inchesToMeters(-5)));
-    conveyorCommands.add("Move up", new RunConveyorCommand(m_conveyor, Direction.kUp));
-    conveyorCommands.add("Move down", new RunConveyorCommand(m_conveyor, Direction.kDown));
+    conveyorCommands.add("Move up", new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp));
+    conveyorCommands.add("Move down", new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kDown));
   }
 
 
@@ -104,7 +117,7 @@ public class RobotContainer {
     //conveyorUp.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kUp));
 
     JoystickButton conveyorDown = new JoystickButton(m_buttopad, 12);
-    conveyorDown.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kDown));
+    conveyorDown.whileHeld(new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kDown));
     // //: Shooter control
     JoystickButton rpmButton1 = new JoystickButton(m_buttopad, 9);
     rpmButton1.whileHeld(new RunShooterCommand(m_shooter, -800));
@@ -130,7 +143,7 @@ public class RobotContainer {
     JoystickButton BackwardClimbInwardButton = new JoystickButton(m_buttopad, 3);
     BackwardClimbInwardButton.whileActiveContinuous(new MoveBackClimberInwards(m_backClimber));
 
-    ClimbSequenceCommandGroup climbCommand = new ClimbSequenceCommandGroup(m_frontClimber, m_backClimber);
+    ClimbCommandGroup climbCommand = new ClimbCommandGroup(m_frontClimber, m_backClimber);
 
     JoystickButton NextStepButton = new JoystickButton(m_buttopad, 5);
     NextStepButton.whenPressed(climbCommand);
@@ -143,7 +156,7 @@ public class RobotContainer {
     ForceAdvanceButton.whenPressed(new InstantCommand(() -> climbCommand.advanceState()).andThen(()->climbCommand.schedule()));
 
     JoystickButton Reset = new JoystickButton(m_buttopad, 7);
-    Reset.whenPressed(new PrintCommand("Resetting").andThen(() -> ClimbSequenceCommandGroup.reset()));
+    Reset.whenPressed(new PrintCommand("Resetting").andThen(ClimbCommandGroup::reset));
 
     JoystickButton Move30 = new JoystickButton(m_testpad, 5);
     Move30.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(30)).perpetually());
@@ -166,11 +179,6 @@ public class RobotContainer {
     JoystickButton BackwardClimbInwardButton2 = new JoystickButton(m_testpad, 3);
     BackwardClimbInwardButton2.whileActiveContinuous(new MoveBackClimberInwards(m_backClimber));
 
-
-
-
-
-
     //: Intake control
     JoystickButton deployIntakeButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
     deployIntakeButton.whenHeld(
@@ -178,7 +186,7 @@ public class RobotContainer {
             new DeployIntakeCommand(m_intake),
             new SelectCommand(
                 Map.of(
-                    false, new RunConveyorCommand(m_conveyor, Direction.kUp),
+                    false, new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp),
                     true, new InstantCommand()
                 ),
                 m_conveyor::isSecondCargoDetected
@@ -222,7 +230,7 @@ public class RobotContainer {
     //One Ball Auto 60 degree
     return new SequentialCommandGroup(
         new DriveDistanceCommand(m_drive, 3),
-        new AutoAlign(m_vision, m_drive),
+        new AlignCommand(m_vision, m_drive),
         new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0)
     );
     
@@ -244,7 +252,7 @@ public class RobotContainer {
             new DeployIntakeCommand(m_intake),
             new DriveDistanceCommand(m_drive, 1)
         ),
-        new AutoAlign(m_vision, m_drive),
+        new AlignCommand(m_vision, m_drive),
         new ShootCommandGroup(m_conveyor, m_shooter, m_vision, 0)
     );*/
     

@@ -2,15 +2,18 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.automation;
 
 import java.util.Map;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.Constants;
-import frc.robot.commands.RunConveyorCommand.Direction;
+import frc.robot.commands.conveyor.MoveConveyorDistanceCommand;
+import frc.robot.commands.conveyor.RunConveyorCommand;
+import frc.robot.commands.conveyor.RunConveyorCommand.Direction;
+import frc.robot.commands.drive.AlignCommand;
+import frc.robot.commands.shooter.RunShooterCommand;
+import frc.robot.commands.shooter.WaitForShooterRPMCommand;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Shooter;
@@ -31,7 +34,7 @@ public class ShootCommandGroup extends SequentialCommandGroup {
         new InstantCommand(() -> shooter.setStateSpaceControlEnabled(true), shooter),
         new WaitUntilCommand(vision::getTargetFound),
         new WaitUntilCommand(vision::isShotPossible),
-        new AutoAlign(vision, drive),
+        new AlignCommand(vision, drive),
         new MoveConveyorDistanceCommand(conveyor, -Units.inchesToMeters(3)),
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
