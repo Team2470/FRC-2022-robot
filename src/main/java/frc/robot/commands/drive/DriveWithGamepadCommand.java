@@ -43,8 +43,8 @@ public class DriveWithGamepadCommand extends CommandBase {
     //         m_drive.curvatureDrive(xSpeed, zRotation, quickTurn);
     //         break;
     //  case "Arcade":
-    double move = -m_controller.getLeftY() * 0.6;
-    double rotate = m_controller.getRightX() * 0.6;
+    double move = -m_controller.getLeftY() * 0.75;
+    double rotate = m_controller.getRightX() * 0.75;
     // move = Math.copySign(move*move, move);
     // rotate = Math.copySign(rotate*rotate, rotate);
 
