@@ -20,6 +20,7 @@ import frc.robot.commands.automation.ShootCommandGroup;
 import frc.robot.commands.climber.*;
 import frc.robot.commands.conveyor.MoveConveyorDistanceCommand;
 import frc.robot.commands.conveyor.RunConveyorCommand;
+import frc.robot.commands.conveyor.RunConveyorCommand.Direction;
 import frc.robot.commands.drive.AlignCommand;
 import frc.robot.commands.drive.DriveDistanceCommand;
 import frc.robot.commands.drive.DriveShooterWithSmartDashboardCommand;
@@ -221,14 +222,8 @@ public class RobotContainer {
     deployIntakeButton.whenHeld(
         new ParallelCommandGroup(
             new DeployIntakeCommand(m_intake),
-            new SelectCommand(
-                Map.of(
-                    false, new RunConveyorCommand(m_conveyor, RunConveyorCommand.Direction.kUp),
-                    true, new InstantCommand()
-                ),
-                m_conveyor::isSecondCargoDetected
-            )
-        )
+            new RunConveyorCommand(m_conveyor, Direction.kUp)
+        ).withInterrupt(m_conveyor::isFull)
     );
 
     JoystickButton shootButton = new JoystickButton(m_controller, XboxController.Button.kStart.value);
