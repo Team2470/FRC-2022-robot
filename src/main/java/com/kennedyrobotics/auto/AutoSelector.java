@@ -99,7 +99,7 @@ public class AutoSelector implements Runnable {
      * Worker thread tick
      */
     private synchronized void tick() {
-        log("Tick");
+        //log("Tick");
         if(revDigit_.getA()) {
             // Goto next auto
             this.nextAuto();

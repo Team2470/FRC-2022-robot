@@ -114,7 +114,26 @@ public class RobotContainer {
         .withPosition(0, 0)
         .withProperties(Map.of("Label position", "HIDDEN"));
     visionCommands.add(new AutoAlign(m_vision, m_drive));
-    visionCommands.add(new InstantCommand(() -> m_vision.setCameraMode(Vision.CameraMode.kCalibration), m_vision));
+    visionCommands.add(new InstantCommand(() -> m_vision.setCameraMode(Vision.CameraMode.kCalibration), m_vision) {
+        public boolean runsWhenDisabled() {
+            return true;
+        };
+
+        @Override
+        public String getName() {
+            return "Calibration Mode";
+        }
+    });
+    visionCommands.add(new InstantCommand(() -> m_vision.setCameraMode(Vision.CameraMode.kDriving), m_vision) {
+        public boolean runsWhenDisabled() {
+            return true;
+        };
+
+        @Override
+        public String getName() {
+            return "Driver Mode";
+        }
+    });
     //visionCommands.add(new InstantCommand(() -> m_vision.setCameraMode(Vision.CameraMode.kDriving), m_vision));
 
     ShuffleboardLayout conveyorCommands = Shuffleboard.getTab("Commands")
