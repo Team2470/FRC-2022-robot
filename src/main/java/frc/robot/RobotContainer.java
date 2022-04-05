@@ -20,6 +20,9 @@ import frc.robot.subsystems.*;
 
 import java.util.Map;
 
+import com.kennedyrobotics.auto.AutoSelector;
+import com.kennedyrobotics.hardware.components.RevDigit;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -41,6 +44,10 @@ public class RobotContainer {
   private final Joystick m_testpad = new Joystick(1);
   private final Joystick m_buttopad = new Joystick(2);
 
+  //Auto
+  private final RevDigit revDigit_;
+  private final AutoSelector autoSelector_;
+
 
 
   /**
@@ -54,6 +61,36 @@ public class RobotContainer {
     m_drive.setDefaultCommand(new DriveWithGamepadCommand(m_drive, m_controller));
     m_intake.setDefaultCommand(new RetractIntakeCommand(m_intake));
     m_vision.init();
+    revDigit_ = new RevDigit();
+    revDigit_.display("BWMP");
+    autoSelector_ = new AutoSelector(revDigit_, "1BLL",  new SequentialCommandGroup(
+        new DriveDistanceCommand(m_drive, 3),
+        new AutoAlign(m_vision, m_drive),
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0)
+    ));
+
+    autoSelector_.registerCommand("2Ball", "2BLL",  new SequentialCommandGroup(
+        new ParallelDeadlineGroup(
+            new FunctionalCommand(
+                () -> {
+                },
+                () -> {
+                },
+                (onEnd) -> {
+                },
+                m_conveyor::isSecondCargoDetected
+                , m_conveyor
+            ),
+            new DeployIntakeCommand(m_intake),
+            new DriveDistanceCommand(m_drive, 1)
+        ),
+        new AutoAlign(m_vision, m_drive),
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0)
+    ));
+    // autoSelector_.registerCommand("bar", "BAR", new PrintCommand("Bar"));
+    // autoSelector_.registerCommand("foobar2000", "FB2", new PrintCommand("Foobar200"));
+    autoSelector_.initialize();
+
   }
 
   public void disabledInit() {
