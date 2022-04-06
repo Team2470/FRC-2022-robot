@@ -77,21 +77,14 @@ public class RobotContainer {
     ));
 
     autoSelector_.registerCommand("2Ball", "2BLL",  new SequentialCommandGroup(
-        new ParallelDeadlineGroup(
-            new FunctionalCommand(
-                () -> {
-                },
-                () -> {
-                },
-                (onEnd) -> {
-                },
-                m_conveyor::isSecondCargoDetected
-                , m_conveyor
-            ),
+        new ParallelRaceGroup(
             new DeployIntakeCommand(m_intake),
-            new DriveDistanceCommand(m_drive, Units.inchesToMeters(84))
+            new RunConveyorCommand(m_conveyor, Direction.kUp).withInterrupt(m_conveyor::isFull),
+            new DriveDistanceCommand(m_drive, Units.inchesToMeters(90))
         ),
         //new AutoAlign(m_vision, m_drive),
+        // new RetractIntakeCommand(m_intake),
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 1),
         new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0),
         new DriveDistanceCommand(m_drive, Units.inchesToMeters(12))
     ));
