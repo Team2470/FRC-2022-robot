@@ -15,6 +15,7 @@ import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Vision.LEDMode;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -27,7 +28,7 @@ public class ShootCommandGroup extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new InstantCommand(() -> vision.setCameraMode(Vision.CameraMode.kShooting), vision),
+        new InstantCommand(() -> vision.setLEDMode(LEDMode.kOn), vision),
         new InstantCommand(() -> shooter.setStateSpaceControlEnabled(true), shooter),
         new WaitUntilCommand(vision::getTargetFound),
         new WaitUntilCommand(vision::isShotPossible),
@@ -52,7 +53,7 @@ public class ShootCommandGroup extends SequentialCommandGroup {
                   .withInterrupt(()-> conveyor.capturedCargoCount() == 1)
           ), () -> endingCargoCount
         ),
-        new InstantCommand(() -> vision.setCameraMode(Vision.CameraMode.kDriving), vision),
+        new InstantCommand(() -> vision.setLEDMode(LEDMode.kOff), vision),
         new InstantCommand(() -> shooter.setStateSpaceControlEnabled(false), shooter)
     );
   }

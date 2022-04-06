@@ -28,11 +28,17 @@ public class DriveDistanceCommand extends PIDCommand {
         output -> {
           // Use the output here
           // drive.arcadeDrive(output, 0);
-          drive.arcadeDrive(Math.min(output, Constants.kMaxAutoDriveSpeed), 0);
+          if (Math.abs(output) < 0.1) {
+            output = Math.copySign(0.1, output);
+          }
+          output = Math.min(output, Constants.kMaxAutoDriveSpeed);
+          System.out.println(output);
+          drive.tankDrive(output, output);
         });
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
     m_drive = drive;
+
     // Configure additional PID options by calling `getController` here.
   }
 
@@ -42,9 +48,15 @@ public class DriveDistanceCommand extends PIDCommand {
     m_drive.resetEncoders();
   }
 
+  @Override
+  public void execute() {
+    super.execute();
+    System.out.println("Driving"+getController().getPositionError());
+  }
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return getController().getPositionError() < Units.inchesToMeters(3);
+    return Math.abs(getController().getPositionError()) < Units.inchesToMeters(3);
   }
 }

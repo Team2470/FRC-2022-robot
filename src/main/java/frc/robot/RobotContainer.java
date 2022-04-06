@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
 import frc.robot.commands.RunConveyorCommand.Direction;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Vision.LEDMode;
 
 import java.util.Map;
 
@@ -64,8 +65,13 @@ public class RobotContainer {
     revDigit_ = new RevDigit();
     revDigit_.display("BWMP");
     autoSelector_ = new AutoSelector(revDigit_, "1BLL",  new SequentialCommandGroup(
-        new DriveDistanceCommand(m_drive, 3),
-        new AutoAlign(m_vision, m_drive),
+        new ParallelCommandGroup (
+            new RunConveyorCommand(m_conveyor, Direction.kUp)
+                .withInterrupt(m_conveyor::isFirstCargoDetected),
+            new DriveDistanceCommand(m_drive, 3)
+        ),
+        new PrintCommand("Shooting"),
+        //new AutoAlign(m_vision, m_drive),
         new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0)
     ));
 
@@ -84,7 +90,7 @@ public class RobotContainer {
             new DeployIntakeCommand(m_intake),
             new DriveDistanceCommand(m_drive, 1)
         ),
-        new AutoAlign(m_vision, m_drive),
+        //new AutoAlign(m_vision, m_drive),
         new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0)
     ));
     // autoSelector_.registerCommand("bar", "BAR", new PrintCommand("Bar"));
@@ -114,7 +120,7 @@ public class RobotContainer {
         .withPosition(0, 0)
         .withProperties(Map.of("Label position", "HIDDEN"));
     visionCommands.add(new AutoAlign(m_vision, m_drive));
-    visionCommands.add(new InstantCommand(() -> m_vision.setCameraMode(Vision.CameraMode.kCalibration), m_vision) {
+    visionCommands.add(new InstantCommand(() -> m_vision.setLEDMode(LEDMode.kOn), m_vision) {
         public boolean runsWhenDisabled() {
             return true;
         };
@@ -124,7 +130,7 @@ public class RobotContainer {
             return "Calibration Mode";
         }
     });
-    visionCommands.add(new InstantCommand(() -> m_vision.setCameraMode(Vision.CameraMode.kDriving), m_vision) {
+    visionCommands.add(new InstantCommand(() -> m_vision.setLEDMode(LEDMode.kOff), m_vision) {
         public boolean runsWhenDisabled() {
             return true;
         };
@@ -173,6 +179,7 @@ public class RobotContainer {
 
     JoystickButton rpmControlButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
     rpmControlButton.whileHeld(new DriveShooterWithSmartDashboardCommand(m_shooter));
+
     //: Climber control
     JoystickButton ForwardClimbOutwardsButton = new JoystickButton(m_buttopad, 2);
     ForwardClimbOutwardsButton.whileActiveContinuous(new MoveFrontClimberOutwards(m_frontClimber));
@@ -253,6 +260,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+      return autoSelector_.selected();
     
     /*
     //One Ball Auto 80 degree
@@ -270,11 +278,11 @@ public class RobotContainer {
 
     
     //One Ball Auto 60 degree
-    return new SequentialCommandGroup(
+    /*return new SequentialCommandGroup(
         new DriveDistanceCommand(m_drive, 3),
-        new AutoAlign(m_vision, m_drive),
+        //new AutoAlign(m_vision, m_drive),
         new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0)
-    );
+    );*/
     
 
     /*

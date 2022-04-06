@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.stream.Stream;
+
 import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
@@ -83,24 +85,10 @@ public class Vision extends SubsystemBase {
     SmartDashboard.putNumber("Desired RPM", getRPM());
   }
 
-  public void setStreamMode(StreamMode mode) { m_limelightTable.getEntry("stream").setNumber(mode.value); }
-  public void setProcessingMode(ProcessingMode mode) { m_limelightTable.getEntry("camMode").setNumber(mode.value); }
   public void setLEDMode(LEDMode mode) { m_limelightTable.getEntry("ledMode").setNumber(mode.value); }
-  public void setCameraMode(CameraMode mode) {
-    setStreamMode(mode.streamMode);
-    setProcessingMode(mode.processingMode);
-    switch(mode.processingMode) {
-      case kDriver:
-        setLEDMode(LEDMode.kOff);
-        break;
-      case kPipeline:
-        setLEDMode(LEDMode.kOn);
-        break;
-    }
-  }
 
   public void init() {
-    setCameraMode(CameraMode.kDriving);
+    setLEDMode(LEDMode.kOff);
   }
 
   public int getRPM() {

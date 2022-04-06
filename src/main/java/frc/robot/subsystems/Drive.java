@@ -99,6 +99,9 @@ public class Drive extends SubsystemBase {
     m_odometry = new DifferentialDriveOdometry(getHeading());
   }
 
+  public void tankDrive(double left, double right) {
+    m_drive.tankDrive(left, right, false);
+  }
 
   public void arcadeDrive(double forward, double rotate) {
     m_drive.arcadeDrive(forward, rotate);

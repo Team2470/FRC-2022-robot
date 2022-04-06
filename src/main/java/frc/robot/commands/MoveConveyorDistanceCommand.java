@@ -32,7 +32,7 @@ public class MoveConveyorDistanceCommand extends CommandBase {
   public void execute() {
     double error = getError();
     if (error > 0) {
-      m_conveyor.up();
+      //m_conveyor.up();
     } else {
       m_conveyor.down();
     }
