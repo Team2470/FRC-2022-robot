@@ -31,7 +31,9 @@ public class ShootCommandGroup extends SequentialCommandGroup {
         new InstantCommand(() -> vision.setLEDMode(LEDMode.kOn), vision),
         new InstantCommand(() -> shooter.setStateSpaceControlEnabled(true), shooter),
         new WaitUntilCommand(vision::getTargetFound),
-        new WaitUntilCommand(vision::isShotPossible),
+        new PrintCommand("Target found"),
+        //new WaitUntilCommand(vision::isShotPossible),
+        //new PrintCommand("Shot Possible"),
         new AutoAlign(vision, drive),
         new MoveConveyorDistanceCommand(conveyor, -Units.inchesToMeters(4)),
         new ParallelDeadlineGroup(

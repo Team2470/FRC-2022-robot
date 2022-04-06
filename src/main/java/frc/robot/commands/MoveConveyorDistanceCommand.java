@@ -45,6 +45,6 @@ public class MoveConveyorDistanceCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(getError()) <= Constants.kConveyorErrorBoundM;
+    return getError() > Constants.kConveyorErrorBoundM;
   }
 }

@@ -19,7 +19,7 @@ public class DriveDistanceCommand extends PIDCommand {
   public DriveDistanceCommand(Drive drive, double distance) {
     super(
         // The controller that the command will use
-        new PIDController(0.5, 0, 0),
+        new PIDController(0.4, 0, 0),
         // This should return the measurement
         drive::getAverageEncoderDistance,
         // This should return the setpoint (can also be a constant)
@@ -28,11 +28,10 @@ public class DriveDistanceCommand extends PIDCommand {
         output -> {
           // Use the output here
           // drive.arcadeDrive(output, 0);
-          if (Math.abs(output) < 0.1) {
-            output = Math.copySign(0.1, output);
+          if (Math.abs(output) < 0.15) {
+            output = Math.copySign(0.15, output);
           }
           output = Math.min(output, Constants.kMaxAutoDriveSpeed);
-          System.out.println(output);
           drive.tankDrive(output, output);
         });
     // Use addRequirements() here to declare subsystem dependencies.
@@ -51,7 +50,6 @@ public class DriveDistanceCommand extends PIDCommand {
   @Override
   public void execute() {
     super.execute();
-    System.out.println("Driving"+getController().getPositionError());
   }
 
   // Returns true when the command should end.

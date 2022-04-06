@@ -68,11 +68,12 @@ public class RobotContainer {
         new ParallelCommandGroup (
             new RunConveyorCommand(m_conveyor, Direction.kUp)
                 .withInterrupt(m_conveyor::isFirstCargoDetected),
-            new DriveDistanceCommand(m_drive, 3)
+            new DriveDistanceCommand(m_drive, Units.inchesToMeters(84))
         ),
-        new PrintCommand("Shooting"),
+
         //new AutoAlign(m_vision, m_drive),
-        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0)
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0),
+        new DriveDistanceCommand(m_drive, Units.inchesToMeters(12))
     ));
 
     autoSelector_.registerCommand("2Ball", "2BLL",  new SequentialCommandGroup(
@@ -88,10 +89,11 @@ public class RobotContainer {
                 , m_conveyor
             ),
             new DeployIntakeCommand(m_intake),
-            new DriveDistanceCommand(m_drive, 1)
+            new DriveDistanceCommand(m_drive, Units.inchesToMeters(84))
         ),
         //new AutoAlign(m_vision, m_drive),
-        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0)
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0),
+        new DriveDistanceCommand(m_drive, Units.inchesToMeters(12))
     ));
     // autoSelector_.registerCommand("bar", "BAR", new PrintCommand("Bar"));
     // autoSelector_.registerCommand("foobar2000", "FB2", new PrintCommand("Foobar200"));

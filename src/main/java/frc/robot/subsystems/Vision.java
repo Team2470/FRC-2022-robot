@@ -137,7 +137,7 @@ public class Vision extends SubsystemBase {
 
   public Rotation2d getHorizontalAngle() {
     if (m_tv.getDouble(0.0) == 1.0) {
-      return Rotation2d.fromDegrees(m_tx.getDouble(0.0));
+      return Rotation2d.fromDegrees(m_tx.getDouble(0.0)).plus(Rotation2d.fromDegrees(5));
     } else {
       return Rotation2d.fromDegrees(0);
     }
