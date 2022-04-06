@@ -32,7 +32,7 @@ public class ShootCommandGroup extends SequentialCommandGroup {
         new WaitUntilCommand(vision::getTargetFound),
         new WaitUntilCommand(vision::isShotPossible),
         new AutoAlign(vision, drive),
-        new MoveConveyorDistanceCommand(conveyor, -Units.inchesToMeters(3)),
+        new MoveConveyorDistanceCommand(conveyor, -Units.inchesToMeters(4)),
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
                 new WaitForShooterRPMCommand(shooter, vision::getRPM, 100),

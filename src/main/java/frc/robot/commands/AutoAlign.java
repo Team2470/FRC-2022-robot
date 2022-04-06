@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Vision;
@@ -12,7 +13,7 @@ import frc.robot.subsystems.Vision;
 public class AutoAlign extends CommandBase {
   private final Vision m_vision;
   private final Drive m_drive;
-  private final double m_kp = 0.01;
+  private final double m_kp = 0.005;
   private final Rotation2d m_minimum = Rotation2d.fromDegrees(0.29);
 
   /**
@@ -40,9 +41,9 @@ public class AutoAlign extends CommandBase {
   @Override
   public void execute() {
     if (m_vision.getTargetFound()) {
-      Rotation2d angle = m_vision.getHorizontalAngle().plus(Rotation2d.fromDegrees(5));
+      Rotation2d angle = m_vision.getHorizontalAngle();
       Rotation2d angleOutput = getAngleAdjust(angle);
-
+      
       m_drive.arcadeDrive(0, angleOutput.getDegrees());
     }
   }
@@ -51,7 +52,7 @@ public class AutoAlign extends CommandBase {
   @Override
   public boolean isFinished() {
 
-    return Math.abs(m_vision.getHorizontalAngle().getDegrees()) < 0.2;
+    return Math.abs(m_vision.getHorizontalAngle().getDegrees()) < 2;
 
   }
 
