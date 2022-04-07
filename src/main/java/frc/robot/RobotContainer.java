@@ -68,7 +68,7 @@ public class RobotContainer {
         new ParallelCommandGroup (
             new RunConveyorCommand(m_conveyor, Direction.kUp)
                 .withInterrupt(m_conveyor::isFirstCargoDetected),
-            new DriveDistanceCommand(m_drive, Units.inchesToMeters(84))
+            new DriveDistanceCommand(m_drive, Units.inchesToMeters(50))
         ),
 
         //new AutoAlign(m_vision, m_drive),
@@ -80,7 +80,7 @@ public class RobotContainer {
         new ParallelRaceGroup(
             new DeployIntakeCommand(m_intake),
             new RunConveyorCommand(m_conveyor, Direction.kUp).withInterrupt(m_conveyor::isFull),
-            new DriveDistanceCommand(m_drive, Units.inchesToMeters(90))
+            new DriveDistanceCommand(m_drive, Units.inchesToMeters(40))
         ),
         //new AutoAlign(m_vision, m_drive),
         // new RetractIntakeCommand(m_intake),
@@ -160,8 +160,8 @@ public class RobotContainer {
     //JoystickButton conveyorUp = new JoystickButton(m_buttopad, 8);
     //conveyorUp.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kUp));
 
-    JoystickButton conveyorDown = new JoystickButton(m_buttopad, 12);
-    conveyorDown.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kDown));
+    //JoystickButton conveyorDown = new JoystickButton(m_buttopad, 12);
+    //conveyorDown.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kDown));
     // //: Shooter control
     JoystickButton rpmButton1 = new JoystickButton(m_buttopad, 9);
     rpmButton1.whileHeld(new RunShooterCommand(m_shooter, -800));
@@ -203,6 +203,9 @@ public class RobotContainer {
     JoystickButton Reset = new JoystickButton(m_buttopad, 7);
     Reset.whenPressed(new PrintCommand("Resetting").andThen(() -> ClimbSequenceCommandGroup.reset()));
 
+    JoystickButton StartPosition = new JoystickButton(m_buttopad, 12);
+    StartPosition.whenPressed(new MoveFrontClimberCommand(m_frontClimber, Rotation2d.fromDegrees(75)));
+
     JoystickButton Move30 = new JoystickButton(m_testpad, 5);
     Move30.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(30)).perpetually());
 
@@ -238,11 +241,11 @@ public class RobotContainer {
         ).withInterrupt(m_conveyor::isFull)
     );
 
-    JoystickButton shootButton = new JoystickButton(m_controller, XboxController.Button.kStart.value);
+    JoystickButton shootButton = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
     shootButton.whileHeld(
         new SelectCommand(
             Map.of(
-                0, new PrintCommand("No cargo. Refusing to shoot"),
+                0, new RunConveyorCommand(m_conveyor, Direction.kUp).withInterrupt(() -> m_conveyor.capturedCargoCount() > 0),
                 1, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0),
                 2, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 1)
             ), m_conveyor::capturedCargoCount)
