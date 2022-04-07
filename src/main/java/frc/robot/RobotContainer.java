@@ -84,9 +84,10 @@ public class RobotContainer {
         ),
         //new AutoAlign(m_vision, m_drive),
         // new RetractIntakeCommand(m_intake),
+            new DriveDistanceCommand(m_drive, Units.inchesToMeters(12)),
         new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 1),
-        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0),
-        new DriveDistanceCommand(m_drive, Units.inchesToMeters(12))
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0)
+        //new DriveDistanceCommand(m_drive, Units.inchesToMeters(12))
     ));
     // autoSelector_.registerCommand("bar", "BAR", new PrintCommand("Bar"));
     // autoSelector_.registerCommand("foobar2000", "FB2", new PrintCommand("Foobar200"));

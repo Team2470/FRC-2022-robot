@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Constants;
 import frc.robot.subsystems.BackClimber;
 import frc.robot.subsystems.FrontClimber;
 
@@ -28,15 +29,15 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
             Map.ofEntries(
                     Map.entry(ClimbState.kStartingPosition, new ParallelCommandGroup(
                             new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(75)),
-                            new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(45))
+                            new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(45), -Constants.kMaxBackClimberSpeedIn, 0.5)
                     )),
                 // Fully auto section
                 Map.entry(ClimbState.kSequence1, new SequentialCommandGroup(
                         new ParallelCommandGroup(
-                                new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90)),
+                                new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90), -Constants.kMaxBackClimberSpeedIn, 0.5),
                                 new SequentialCommandGroup(
                                         new WaitUntilCommand(() -> backClimber.getAngle().getDegrees() >= 75),
-                                        new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(10))
+                                        new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(10), 0.6)
                                 )
                         ),
                   //new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(10)),
@@ -57,7 +58,7 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
                   new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(125)),
                   new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(30)),
                   new ParallelCommandGroup(
-                      new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(10)),
+                      new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(10), 0.6),
                       new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90)))
                   )
                 ),

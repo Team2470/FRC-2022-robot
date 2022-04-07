@@ -4,8 +4,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.FrontClimber;
-
 
 public class MoveFrontClimberCommand extends CommandBase {
   private final FrontClimber m_climber;
@@ -13,17 +13,24 @@ public class MoveFrontClimberCommand extends CommandBase {
   private final Timer m_timer = new Timer();
   private Direction m_direction;
   private OutwardState m_outwardState;
-  public MoveFrontClimberCommand(FrontClimber climber, Rotation2d setpoint) {
+  private final double m_speed;
+  public MoveFrontClimberCommand(FrontClimber climber, Rotation2d setpoint, double speed) {
     m_direction = Direction.kUnknown;
     m_setpoint = setpoint;
     m_climber = climber;
     m_outwardState = OutwardState.kWaitForRatchet;
+    m_speed = speed;
     addRequirements(climber);
+  }
+
+  public MoveFrontClimberCommand(FrontClimber climber, Rotation2d setpoint) {
+    this(climber, setpoint, Constants.kFrontClimberSpeed);
   }
 
   @Override
   public void initialize() {
     m_outwardState = OutwardState.kWaitForRatchet;
+    m_climber.setSpeed(m_speed);
     m_timer.reset();
     m_timer.start();
     if (m_climber.getAngle().minus(m_setpoint).getDegrees() > 0) {
@@ -75,6 +82,7 @@ public class MoveFrontClimberCommand extends CommandBase {
   public void end(boolean interrupted) {
     m_climber.stop();
     m_climber.releaseRatchet();
+    m_climber.resetSpeed();
   }
 
   private enum OutwardState {

@@ -25,7 +25,7 @@ public class FrontClimber extends SubsystemBase implements Climber {
   private final WPI_TalonFX m_frontClimberFollower;
   private final CANCoder m_frontCanCoder;
   private final Solenoid m_ratchetSolenoid;
-
+  private double m_speed = Constants.kFrontClimberSpeed;
   /**
    * Creates a new Climber.
    */
@@ -80,17 +80,24 @@ public class FrontClimber extends SubsystemBase implements Climber {
     return Rotation2d.fromDegrees(this.m_frontCanCoder.getAbsolutePosition());
   }
 
+  public void resetSpeed() {
+    m_speed = Constants.kFrontClimberSpeed;
+  }
+
+  public void setSpeed(double speed) {
+    m_speed = speed;
+  }
 
   // TODO: Needs to be adjusted to match hardware
   public void startOutwardClimb() {
     //m_ratchetSolenoid.set(m_frontClimber.getSelectedSensorPosition() <= Constants.kFrontClimberForwardLimit);
     //m_ratchetSolenoid.set(true);
-    m_frontClimber.set(ControlMode.PercentOutput, Constants.kFrontClimberSpeed);
+    m_frontClimber.set(ControlMode.PercentOutput, m_speed);
   }
 
   public void startInwardClimb() {
     //m_ratchetSolenoid.set(false);
-    m_frontClimber.set(ControlMode.PercentOutput, -Constants.kFrontClimberSpeed);
+    m_frontClimber.set(ControlMode.PercentOutput, -m_speed);
   }
 
   public void engageRatchet() {
