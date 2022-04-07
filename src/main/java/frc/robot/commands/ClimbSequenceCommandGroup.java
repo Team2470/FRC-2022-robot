@@ -19,17 +19,27 @@ import java.util.Map;
 import java.util.zip.Deflater;
 
 public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
-  private static ClimbState m_climbState = ClimbState.kSequence1;
+  private static ClimbState m_climbState = ClimbState.kStartingPosition;
   private static BarState m_barState = BarState.kMid;
 
   public ClimbSequenceCommandGroup(FrontClimber frontClimber, BackClimber backClimber) {
     addCommands(
         new SelectCommand(
             Map.ofEntries(
+                    Map.entry(ClimbState.kStartingPosition, new ParallelCommandGroup(
+                            new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(75)),
+                            new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(45))
+                    )),
                 // Fully auto section
                 Map.entry(ClimbState.kSequence1, new SequentialCommandGroup(
-                  new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90)),
-                  new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(10)),
+                        new ParallelCommandGroup(
+                                new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90)),
+                                new SequentialCommandGroup(
+                                        new WaitUntilCommand(() -> backClimber.getAngle().getDegrees() >= 75),
+                                        new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(10))
+                                )
+                        ),
+                  //new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(10)),
                   new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(30)), // Handover
                   new ParallelCommandGroup(
                     new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(110)),
@@ -62,7 +72,7 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
   }
 
   public static void reset() {
-    m_climbState = ClimbState.kSequence1;
+    m_climbState = ClimbState.kStartingPosition;
     m_barState = BarState.kMid;
     SmartDashboard.putString("Arm State", m_climbState.name());
     SmartDashboard.putString("Bar", m_barState.name());
@@ -70,6 +80,9 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
 
   public void advanceState() {
     switch (m_climbState) {
+      case kStartingPosition:
+        m_climbState = ClimbState.kSequence1;
+        break;
       case kSequence1:
         m_climbState = ClimbState.kGrabBar;
         break;
@@ -103,6 +116,7 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
   public ClimbState getClimbState() { return m_climbState; }
 
   private enum ClimbState {
+    kStartingPosition,
     kSequence1, // B30->0
     kGrabBar, // F100
     kDropTraverse,
