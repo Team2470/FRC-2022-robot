@@ -25,6 +25,9 @@ public class Vision extends SubsystemBase {
   private final MedianFilter m_distanceFilter = new MedianFilter(5);
   private double m_filteredDistance;
 
+  private final NetworkTable m_cameraTable = NetworkTableInstance.getDefault().getTable("CameraPublisher");
+  private final NetworkTableEntry m_cameraSelector = m_cameraTable.getEntry("selector");
+
   public enum StreamMode {
     kSideBySide(0),
     kLimelightPrimary(1),
@@ -83,6 +86,8 @@ public class Vision extends SubsystemBase {
     SmartDashboard.putNumber("Distance to Target", getTargetDistance());
     SmartDashboard.putNumber("Filtered distnce", getFilteredDistance());
     SmartDashboard.putNumber("Desired RPM", getRPM());
+
+    m_cameraSelector.setDouble(0.0);
   }
 
   public void setLEDMode(LEDMode mode) { m_limelightTable.getEntry("ledMode").setNumber(mode.value); }
