@@ -104,7 +104,7 @@ public class Vision extends SubsystemBase {
 
     int rpm = (int) Math.round(omega);
 
-    return Math.min(Math.max(rpm, 1000), 3500);
+    return Math.min(Math.max(rpm, 1000), 4500);
   }
 
   public boolean isShotPossible() {
