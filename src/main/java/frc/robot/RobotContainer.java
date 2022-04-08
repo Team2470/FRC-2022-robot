@@ -164,14 +164,14 @@ public class RobotContainer {
     //JoystickButton conveyorDown = new JoystickButton(m_buttopad, 12);
     //conveyorDown.whileHeld(new RunConveyorCommand(m_conveyor, Direction.kDown));
     // //: Shooter control
-    JoystickButton rpmButton1 = new JoystickButton(m_buttopad, 9);
+    /*JoystickButton rpmButton1 = new JoystickButton(m_buttopad, 9);
     rpmButton1.whileHeld(new RunShooterCommand(m_shooter, -800));
 
     JoystickButton rpmButton2 = new JoystickButton(m_buttopad, 10);
     rpmButton2.whileHeld(new RunShooterCommand(m_shooter, 800));
 
     JoystickButton rpmButton3 = new JoystickButton(m_buttopad, 11);
-    rpmButton3.whileHeld(new RunShooterCommand(m_shooter, Constants.kRPM3));
+    rpmButton3.whileHeld(new RunShooterCommand(m_shooter, Constants.kRPM3));*/
 
     JoystickButton rpmControlButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
     rpmControlButton.whileHeld(new DriveShooterWithSmartDashboardCommand(m_shooter));
@@ -207,14 +207,23 @@ public class RobotContainer {
     JoystickButton StartPosition = new JoystickButton(m_buttopad, 12);
     StartPosition.whenPressed(new MoveFrontClimberCommand(m_frontClimber, Rotation2d.fromDegrees(75)));
 
-    JoystickButton Move30 = new JoystickButton(m_testpad, 5);
+    JoystickButton Move30 = new JoystickButton(m_buttopad, 9);
     Move30.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(30)).perpetually());
 
-    JoystickButton Move90 = new JoystickButton(m_testpad, 6);
+    JoystickButton Move90 = new JoystickButton(m_buttopad, 10);
     Move90.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(90)).perpetually());
 
-    JoystickButton Move125 = new JoystickButton(m_testpad, 7);
-    Move125.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(125)).perpetually());
+    JoystickButton Move125 = new JoystickButton(m_buttopad, 11);
+    Move125.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(140)).perpetually());
+
+    JoystickButton Move30_2 = new JoystickButton(m_testpad, 5);
+    Move30_2.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(30)).perpetually());
+
+    JoystickButton Move90_2 = new JoystickButton(m_testpad, 6);
+    Move90_2.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(90)).perpetually());
+
+    JoystickButton Move125_2 = new JoystickButton(m_testpad, 7);
+    Move125_2.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(125)).perpetually());
 
     JoystickButton ForwardClimbOutwardsButton2 = new JoystickButton(m_testpad, 2);
     ForwardClimbOutwardsButton2.whileActiveContinuous(new MoveFrontClimberOutwards(m_frontClimber));
@@ -238,7 +247,10 @@ public class RobotContainer {
     deployIntakeButton.whenHeld(
         new ParallelCommandGroup(
             new DeployIntakeCommand(m_intake),
-            new RunConveyorCommand(m_conveyor, Direction.kUp)
+            new SequentialCommandGroup(
+                    new WaitCommand(0.2),
+                    new RunConveyorCommand(m_conveyor, Direction.kUp)
+            )
         ).withInterrupt(m_conveyor::isFull)
     );
 

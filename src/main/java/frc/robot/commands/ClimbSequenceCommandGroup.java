@@ -55,15 +55,15 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
                 Map.entry(ClimbState.kGrabBar, new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(95))),
                 // Pull up
                 Map.entry(ClimbState.kPullUp, new SequentialCommandGroup(
+                  new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(140)),
                   new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(125)),
-                  //new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(30)),
                   new ParallelCommandGroup(
                       new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(10), 0.6),
                       new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90)))
                   )
                 ),
                 // Drop traverse
-                Map.entry(ClimbState.kDropTraverse, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(125))),
+                Map.entry(ClimbState.kDropTraverse, new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(135))),
                 //Finish on traverse
                 Map.entry(ClimbState.kDone, new PrintCommand("Climb Done"))
             ),
