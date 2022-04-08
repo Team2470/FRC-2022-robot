@@ -28,7 +28,7 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
         new SelectCommand(
             Map.ofEntries(
                     Map.entry(ClimbState.kStartingPosition, new ParallelCommandGroup(
-                            new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(75)),
+                            new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(70)),
                             new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(45), -Constants.kMaxBackClimberSpeedIn, 0.5)
                     )),
                 // Fully auto section
@@ -56,7 +56,7 @@ public class ClimbSequenceCommandGroup extends SequentialCommandGroup {
                 // Pull up
                 Map.entry(ClimbState.kPullUp, new SequentialCommandGroup(
                   new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(125)),
-                  new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(30)),
+                  //new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(30)),
                   new ParallelCommandGroup(
                       new MoveFrontClimberCommand(frontClimber, Rotation2d.fromDegrees(10), 0.6),
                       new BackClimbAngleCommand(backClimber, Rotation2d.fromDegrees(90)))
