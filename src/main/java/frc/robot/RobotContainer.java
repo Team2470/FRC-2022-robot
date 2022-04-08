@@ -72,7 +72,7 @@ public class RobotContainer {
         ),
 
         //new AutoAlign(m_vision, m_drive),
-        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0),
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0, Rotation2d.fromDegrees(0)),
         new DriveDistanceCommand(m_drive, Units.inchesToMeters(12))
     ));
 
@@ -85,8 +85,8 @@ public class RobotContainer {
         //new AutoAlign(m_vision, m_drive),
         // new RetractIntakeCommand(m_intake),
             new DriveDistanceCommand(m_drive, Units.inchesToMeters(24)),
-        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 1),
-        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0)
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 1, Rotation2d.fromDegrees(0)),
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0, Rotation2d.fromDegrees(0))
         //new DriveDistanceCommand(m_drive, Units.inchesToMeters(12))
     ));
     // autoSelector_.registerCommand("bar", "BAR", new PrintCommand("Bar"));
@@ -247,9 +247,19 @@ public class RobotContainer {
         new SelectCommand(
             Map.of(
                 0, new RunConveyorCommand(m_conveyor, Direction.kUp).withInterrupt(() -> m_conveyor.capturedCargoCount() > 0),
-                1, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0),
-                2, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 1)
+                1, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0, Rotation2d.fromDegrees(0)),
+                2, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 1, Rotation2d.fromDegrees(0))
             ), m_conveyor::capturedCargoCount)
+    );
+
+    JoystickButton shootOffsetButton = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
+    shootOffsetButton.whileHeld(
+          new SelectCommand(
+                  Map.of(
+                          0, new RunConveyorCommand(m_conveyor, Direction.kUp).withInterrupt(() -> m_conveyor.capturedCargoCount() > 0),
+                          1, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0, Rotation2d.fromDegrees(3)),
+                          2, new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 1, Rotation2d.fromDegrees(3))
+                  ), m_conveyor::capturedCargoCount)
     );
 
   }

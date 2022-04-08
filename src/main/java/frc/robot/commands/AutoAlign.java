@@ -15,16 +15,22 @@ public class AutoAlign extends CommandBase {
   private final Drive m_drive;
   private final double m_kp = 0.005;
   private final Rotation2d m_minimum = Rotation2d.fromDegrees(0.29);
+  private final Rotation2d m_offset;
 
   /**
    * Creates a new DriveWithGamepadCommand.
    */
-  public AutoAlign(Vision vision, Drive drive) {
+  public AutoAlign(Vision vision, Drive drive, Rotation2d offset) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_vision = vision;
     m_drive = drive;
+    m_offset = offset;
 
     addRequirements(drive);
+  }
+
+  public AutoAlign(Vision vision, Drive drive){
+    this(vision, drive, Rotation2d.fromDegrees(0));
   }
 
   private Rotation2d getAngleAdjust(Rotation2d angle) {
@@ -41,7 +47,7 @@ public class AutoAlign extends CommandBase {
   @Override
   public void execute() {
     if (m_vision.getTargetFound()) {
-      Rotation2d angle = m_vision.getHorizontalAngle();
+      Rotation2d angle = m_vision.getHorizontalAngle().plus(m_offset);
       Rotation2d angleOutput = getAngleAdjust(angle);
       
       m_drive.arcadeDrive(0, angleOutput.getDegrees());
@@ -52,7 +58,7 @@ public class AutoAlign extends CommandBase {
   @Override
   public boolean isFinished() {
 
-    return Math.abs(m_vision.getHorizontalAngle().getDegrees()) < 2;
+    return Math.abs(m_vision.getHorizontalAngle().plus(m_offset).getDegrees()) < 2;
 
   }
 

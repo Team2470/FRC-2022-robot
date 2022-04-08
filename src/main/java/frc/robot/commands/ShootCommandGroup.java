@@ -24,7 +24,9 @@ public class ShootCommandGroup extends SequentialCommandGroup {
   /**
    * Creates a new ShootCommandGroup.
    */
-  public ShootCommandGroup(Conveyor conveyor, Shooter shooter, Vision vision, Drive drive, int endingCargoCount) {
+  private int m_RPM;
+
+  public ShootCommandGroup(Conveyor conveyor, Shooter shooter, Vision vision, Drive drive, int endingCargoCount, Rotation2d offset) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -35,10 +37,12 @@ public class ShootCommandGroup extends SequentialCommandGroup {
         //new WaitUntilCommand(vision::isShotPossible),
         //new PrintCommand("Shot Possible"),
         new AutoAlign(vision, drive),
+        new InstantCommand(()->m_RPM = vision.getRPM()),
+        new AutoAlign(vision, drive, offset),
         new MoveConveyorDistanceCommand(conveyor, -Units.inchesToMeters(4)),
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
-                new WaitForShooterRPMCommand(shooter, vision::getRPM, 100),
+                new WaitForShooterRPMCommand(shooter, ()->m_RPM, 100),
                 new RunConveyorCommand(conveyor, Direction.kUp)
                 .withInterrupt(()-> shooter.getError()>5)
                 //new MoveConveyorDistanceCommand(conveyor, Units.inchesToMeters(11)),
@@ -46,7 +50,7 @@ public class ShootCommandGroup extends SequentialCommandGroup {
                     //.withInterrupt(() -> conveyor.capturedCargoCount() == endingCargoCount)
                 
             ),
-            new RunShooterCommand(shooter, vision::getRPM)
+            new RunShooterCommand(shooter, ()->m_RPM)
         ),
         new SelectCommand(
           Map.of(
