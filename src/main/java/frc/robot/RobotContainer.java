@@ -72,7 +72,7 @@ public class RobotContainer {
         ),
 
         //new AutoAlign(m_vision, m_drive),
-        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0, Rotation2d.fromDegrees(0)),
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0, Rotation2d.fromDegrees(3)),
         new DriveDistanceCommand(m_drive, Units.inchesToMeters(12))
     ));
 
@@ -85,8 +85,8 @@ public class RobotContainer {
         //new AutoAlign(m_vision, m_drive),
         // new RetractIntakeCommand(m_intake),
             new DriveDistanceCommand(m_drive, Units.inchesToMeters(24)),
-        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 1, Rotation2d.fromDegrees(0)),
-        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0, Rotation2d.fromDegrees(0))
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 1, Rotation2d.fromDegrees(3)),
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0, Rotation2d.fromDegrees(3))
         //new DriveDistanceCommand(m_drive, Units.inchesToMeters(12))
     ));
     // autoSelector_.registerCommand("bar", "BAR", new PrintCommand("Bar"));
