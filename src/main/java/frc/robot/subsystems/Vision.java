@@ -24,7 +24,7 @@ public class Vision extends SubsystemBase {
   private final NetworkTableEntry m_usbCam = m_limelightTable.getEntry("stream");
   private final MedianFilter m_distanceFilter = new MedianFilter(5);
   private double m_filteredDistance;
-  private double m_multiplier = 1.06;
+  private double m_multiplier = 1.00;
 
   private final NetworkTable m_cameraTable = NetworkTableInstance.getDefault().getTable("CameraPublisher");
   private final NetworkTableEntry m_cameraSelector = m_cameraTable.getEntry("selector");
@@ -152,7 +152,7 @@ public class Vision extends SubsystemBase {
 
   public Rotation2d getVerticalAngle() {
     if (m_tv.getDouble(0.0) == 1.0) {
-      return Rotation2d.fromDegrees(m_ty.getDouble(0.0)).plus(Rotation2d.fromDegrees(26.94483621));
+      return Rotation2d.fromDegrees(m_ty.getDouble(0.0)).plus(Rotation2d.fromDegrees(31.6022145));
     } else {
       return Rotation2d.fromDegrees(0.0);
     }
@@ -160,10 +160,10 @@ public class Vision extends SubsystemBase {
 
   public void AdjustMultiplier(double step){
     m_multiplier += step;
-    if(m_multiplier > 1.25){
-      m_multiplier = 1.25;
-    }else if(m_multiplier < 0.75){
-      m_multiplier = 0.75;
+    if(m_multiplier > 1.02){
+      m_multiplier = 1.02;
+    }else if(m_multiplier < 0.98){
+      m_multiplier = 0.98;
     }
   }
 }

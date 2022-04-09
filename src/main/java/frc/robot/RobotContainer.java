@@ -239,10 +239,10 @@ public class RobotContainer {
     BackwardClimbInwardButton2.whileActiveContinuous(new MoveBackClimberInwards(m_backClimber));
 
     DPadTrigger IncreaseVisionMultiplier = new DPadTrigger(m_controller, DPadTrigger.DPad.kUp);
-    IncreaseVisionMultiplier.whenActive(new InstantCommand(()-> m_vision.AdjustMultiplier(0.01)));
+    IncreaseVisionMultiplier.whenActive(new InstantCommand(()-> m_vision.AdjustMultiplier(0.001)));
 
     DPadTrigger DecreaseVisionMultiplier = new DPadTrigger(m_controller, DPadTrigger.DPad.KDown);
-    DecreaseVisionMultiplier.whenActive(new InstantCommand(()-> m_vision.AdjustMultiplier(-0.01)));
+    DecreaseVisionMultiplier.whenActive(new InstantCommand(()-> m_vision.AdjustMultiplier(-0.001)));
 
 
 
