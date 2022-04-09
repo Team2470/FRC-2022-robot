@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.kennedyrobotics.triggers.DPadTrigger;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -236,6 +237,12 @@ public class RobotContainer {
 
     JoystickButton BackwardClimbInwardButton2 = new JoystickButton(m_testpad, 3);
     BackwardClimbInwardButton2.whileActiveContinuous(new MoveBackClimberInwards(m_backClimber));
+
+    DPadTrigger IncreaseVisionMultiplier = new DPadTrigger(m_controller, DPadTrigger.DPad.kUp);
+    IncreaseVisionMultiplier.whenActive(new InstantCommand(()-> m_vision.AdjustMultiplier(0.01)));
+
+    DPadTrigger DecreaseVisionMultiplier = new DPadTrigger(m_controller, DPadTrigger.DPad.KDown);
+    DecreaseVisionMultiplier.whenActive(new InstantCommand(()-> m_vision.AdjustMultiplier(-0.01)));
 
 
 

@@ -24,6 +24,7 @@ public class Vision extends SubsystemBase {
   private final NetworkTableEntry m_usbCam = m_limelightTable.getEntry("stream");
   private final MedianFilter m_distanceFilter = new MedianFilter(5);
   private double m_filteredDistance;
+  private double m_multiplier = 1.06;
 
   private final NetworkTable m_cameraTable = NetworkTableInstance.getDefault().getTable("CameraPublisher");
   private final NetworkTableEntry m_cameraSelector = m_cameraTable.getEntry("selector");
@@ -86,6 +87,7 @@ public class Vision extends SubsystemBase {
     SmartDashboard.putNumber("Distance to Target", getTargetDistance());
     SmartDashboard.putNumber("Filtered distnce", getFilteredDistance());
     SmartDashboard.putNumber("Desired RPM", getRPM());
+    SmartDashboard.putNumber("Vision Offset", m_multiplier);
 
     m_cameraSelector.setDouble(0.0);
   }
@@ -98,7 +100,7 @@ public class Vision extends SubsystemBase {
 
   public int getRPM() {
     // Add offset from base of target to center of hoop
-    double distance = (getFilteredDistance() + 34 + 6) * 1.06;
+    double distance = (getFilteredDistance() + 34 + 6) * m_multiplier;
 
     double omega = 10.485 * distance + 1694.7;
 
@@ -153,6 +155,15 @@ public class Vision extends SubsystemBase {
       return Rotation2d.fromDegrees(m_ty.getDouble(0.0)).plus(Rotation2d.fromDegrees(26.94483621));
     } else {
       return Rotation2d.fromDegrees(0.0);
+    }
+  }
+
+  public void AdjustMultiplier(double step){
+    m_multiplier += step;
+    if(m_multiplier > 1.25){
+      m_multiplier = 1.25;
+    }else if(m_multiplier < 0.75){
+      m_multiplier = 0.75;
     }
   }
 }
