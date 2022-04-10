@@ -99,13 +99,16 @@ public class Drive extends SubsystemBase {
     m_odometry = new DifferentialDriveOdometry(getHeading());
   }
 
+  public void tankDrive(double left, double right) {
+    m_drive.tankDrive(left, right, false);
+  }
 
   public void arcadeDrive(double forward, double rotate) {
     m_drive.arcadeDrive(forward, rotate);
   }
 
   public void curvatureDrive(double xSpeed, double zRotation, boolean allowTurnInPlace) {
-    xSpeed = Math.copySign(xSpeed * xSpeed, xSpeed) * 0.5;
+    xSpeed = Math.copySign(xSpeed * xSpeed, xSpeed);
     zRotation = Math.copySign(zRotation * zRotation, zRotation);
     m_drive.curvatureDrive(xSpeed, zRotation, allowTurnInPlace);
   }

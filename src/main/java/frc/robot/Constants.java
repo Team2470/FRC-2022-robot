@@ -26,7 +26,8 @@ public final class Constants {
   public static final double kConveyorWheelRadiusM = Units.inchesToMeters(1.416);
   public static final double kTargetHeightM = 2.52;
   public static final double kCameraHeightM = 1.143;
-  public static final Rotation2d kCameraAngle = Rotation2d.fromDegrees(10);
+  public static final Rotation2d kCameraAngle = Rotation2d.fromDegrees(24);
+  //public static final double kCameraOffsetM = 1;
 
   // General
   public static final int kRPM1 = 3100;
@@ -122,12 +123,16 @@ public final class Constants {
   public static final double kFrontClimberErrorBound = 2;
   // Back
   public static final int kBackClimberReverseLimit = 100;
-  public static final int kBackClimberForwardLimit = 1390;
+  public static final int kBackClimberForwardLimit = 1800;
   public static final double kBackClimberCanCoderOffset = -104.35546875 - 91;
   public static final double kBackClimberSpeed = 0.2;
-  public static final double kMaxBackClimberSpeed = 0.25;
+  public static final double kMaxBackClimberSpeedIn = -0.25;
+  public static final double kMaxBackClimberSpeedOut = 0.25;
   public static final double kBackClimberErrorBound = 2; // Degrees
 
   // Intake
-  public static final double kIntakeSpeed = 1.0;
+  public static final double kIntakeSpeed = 0.5;
+
+  //Shooter
+  public static final int kFlywheelIdleSpeed = -60;
 }

@@ -23,9 +23,11 @@ public class BackClimber extends PIDSubsystem implements Climber {
 
   private final WPI_TalonFX m_backClimber;
   private final CANCoder m_backCanCoder;
-  private static final double kP = 0.060;
+  private static final double kP = 0.06;
   private static final double kI = 0.01;
   private static final double kD = 0.0;
+  private double m_maxInwardSpeed = Constants.kMaxBackClimberSpeedIn;
+  private double m_maxOutwardSpeed = Constants.kMaxBackClimberSpeedOut;
 
   /**
    * Creates a new Climber.
@@ -57,6 +59,12 @@ public class BackClimber extends PIDSubsystem implements Climber {
 
     m_backClimber.setInverted(true);
 
+    m_backClimber.configVoltageCompSaturation(10);
+    m_backClimber.enableVoltageCompensation(true);
+    
+
+    // PID is by default disabled
+    disable();
   }
 
   @Override
@@ -71,11 +79,6 @@ public class BackClimber extends PIDSubsystem implements Climber {
     SmartDashboard.putNumber("Climber Back Error", getController().getPositionError());
   }
 
-  public void startClimbMotor(int direction, double speed) {
-    m_backClimber.set(ControlMode.PercentOutput, direction * speed);
-  }
-
-  // TODO: Adjust to match hardware
   public void startOutwardClimb() {
     m_backClimber.set(ControlMode.PercentOutput, Constants.kBackClimberSpeed);
   }
@@ -92,12 +95,32 @@ public class BackClimber extends PIDSubsystem implements Climber {
     m_backClimber.neutralOutput();
   }
 
+  public void resetSpeed() {
+    m_maxOutwardSpeed = Constants.kMaxBackClimberSpeedOut;
+    m_maxInwardSpeed = Constants.kMaxBackClimberSpeedIn;
+  }
+
+  public void setSpeed(double in, double out) {
+    m_maxInwardSpeed = in;
+    m_maxOutwardSpeed = out;
+  }
+
   @Override
   protected void useOutput(double output, double setpoint) {
     // TODO Auto-generated method stub
 
-    if(Math.abs(output) > Constants.kMaxBackClimberSpeed){
-      output = Math.copySign(Constants.kMaxBackClimberSpeed, output);
+    if(output < m_maxInwardSpeed){
+      output = Math.copySign(m_maxInwardSpeed, output);
+    } else if(output > m_maxOutwardSpeed){
+      output = Math.copySign(m_maxOutwardSpeed, output);
+    }
+
+    // If we're targetting 90 degrees, stop within 1 degree
+    if (Math.abs(setpoint - 90) <= 1) {
+      double error = getAngle().minus(Rotation2d.fromDegrees(setpoint)).getDegrees();
+      if (Math.abs(error) <= 3) {
+        output = 0;
+      }
     }
 
     m_backClimber.set(ControlMode.PercentOutput, output);
