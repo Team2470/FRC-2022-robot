@@ -261,6 +261,17 @@ public class RobotContainer {
         ).withInterrupt(m_conveyor::isFull)
     );
 
+//    JoystickButton outButton = new JoystickButton(m_controller, XboxController.Button.kX.value);
+//    outButton.whenHeld(
+//            new ParallelCommandGroup(
+//                    new DeployIntakeCommand(m_intake),
+//                    new SequentialCommandGroup(
+//                            new WaitCommand(0.2),
+//                            new RunConveyorCommand(m_conveyor, Direction.kDown)
+//                    )
+//            )
+//    );
+
     JoystickButton shootButton = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
     shootButton.whileHeld(
         new SelectCommand(
