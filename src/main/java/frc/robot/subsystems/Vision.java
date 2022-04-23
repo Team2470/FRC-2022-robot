@@ -100,9 +100,9 @@ public class Vision extends SubsystemBase {
 
   public int getRPM() {
     // Add offset from base of target to center of hoop
-    double distance = (getFilteredDistance() + 34 + 6) * m_multiplier;
+    double distance = (getFilteredDistance()) * m_multiplier;
 
-    double omega = 10.485 * distance + 1694.7;
+    double omega = 12.297 * distance + 2442.4;
 
     int rpm = (int) Math.round(omega);
 
