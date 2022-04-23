@@ -30,7 +30,7 @@ public class Shooter extends SubsystemBase {
   private boolean m_stateSpaceControlEnabled = false;
 
   // State space stuff
-  private static final double kFlywheelKv = 0.02083978;
+  private static final double kFlywheelKv = 0.02083978 * 0.961182762;
   private static final double kFlywheelKa = 0.0011182;
   // The plant holds a state-space model of our flywheel. This system has the following properties:
   //

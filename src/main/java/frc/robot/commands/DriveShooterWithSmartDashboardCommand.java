@@ -18,6 +18,7 @@ public class DriveShooterWithSmartDashboardCommand extends CommandBase {
 
   @Override
   public void execute() {
+    m_shooter.setStateSpaceControlEnabled(true);
     m_shooter.setRPM(SmartDashboard.getNumber("Shooter Control RPM", 0));
   }
 
@@ -29,6 +30,7 @@ public class DriveShooterWithSmartDashboardCommand extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
+    m_shooter.setStateSpaceControlEnabled(false);
     m_shooter.stop();
   }
 }
