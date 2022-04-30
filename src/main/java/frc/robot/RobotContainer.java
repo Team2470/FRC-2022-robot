@@ -81,7 +81,10 @@ public class RobotContainer {
         new ParallelRaceGroup(
             new DeployIntakeCommand(m_intake),
             new RunConveyorCommand(m_conveyor, Direction.kUp).withInterrupt(m_conveyor::isFull),
-            new DriveDistanceCommand(m_drive, Units.inchesToMeters(40))
+            new ParallelRaceGroup(
+                new DriveDistanceCommand(m_drive, Units.inchesToMeters(40)),
+                new WaitCommand(8)
+            )
         ),
         //new AutoAlign(m_vision, m_drive),
         // new RetractIntakeCommand(m_intake),
