@@ -42,7 +42,7 @@ public class ShootCommandGroup extends SequentialCommandGroup {
         new MoveConveyorDistanceCommand(conveyor, -Units.inchesToMeters(4)),
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
-                new WaitForShooterRPMCommand(shooter, ()->m_RPM, 30),
+                new WaitForShooterRPMPercentCommand(shooter, ()->m_RPM, 1.5),
                 new RunConveyorCommand(conveyor, Direction.kUp)
                 .withInterrupt(()-> shooter.getError()>5)
                 //new MoveConveyorDistanceCommand(conveyor, Units.inchesToMeters(11)),

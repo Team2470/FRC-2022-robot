@@ -102,11 +102,11 @@ public class Vision extends SubsystemBase {
     // Add offset from base of target to center of hoop
     double distance = (getFilteredDistance()) * m_multiplier;
 
-    double omega = 12.297 * distance + 2442.4;
+    double omega = 12.994 * distance + 1814.7;
 
     int rpm = (int) Math.round(omega);
 
-    return Math.min(Math.max(rpm, 1000), 4500);
+    return Math.min(Math.max(rpm, 1000), 5500);
   }
 
   public boolean isShotPossible() {
@@ -127,7 +127,7 @@ public class Vision extends SubsystemBase {
       // 104 = height of target
       // 45 = height of camera
       // 29 = distance from front of robot to camera
-      return (102 - 45) / getVerticalAngle().getTan() - 29;
+      return (102 - 45) / getVerticalAngle().getTan();
     } else {
       return 0;
     }
@@ -152,7 +152,7 @@ public class Vision extends SubsystemBase {
 
   public Rotation2d getVerticalAngle() {
     if (m_tv.getDouble(0.0) == 1.0) {
-      return Rotation2d.fromDegrees(m_ty.getDouble(0.0)).plus(Rotation2d.fromDegrees(31.6022145));
+      return Rotation2d.fromDegrees(m_ty.getDouble(0.0)).plus(Rotation2d.fromDegrees(16.02001449));
     } else {
       return Rotation2d.fromDegrees(0.0);
     }

@@ -22,6 +22,8 @@ import frc.robot.subsystems.Vision.LEDMode;
 
 import java.util.Map;
 
+import javax.swing.text.ParagraphView;
+
 import com.kennedyrobotics.auto.AutoSelector;
 import com.kennedyrobotics.hardware.components.RevDigit;
 
@@ -73,7 +75,7 @@ public class RobotContainer {
         ),
 
         //new AutoAlign(m_vision, m_drive),
-        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0, Rotation2d.fromDegrees(3)),
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0, Rotation2d.fromDegrees(0)),
         new DriveDistanceCommand(m_drive, Units.inchesToMeters(12))
     ));
 
@@ -81,15 +83,30 @@ public class RobotContainer {
         new ParallelRaceGroup(
             new DeployIntakeCommand(m_intake),
             new RunConveyorCommand(m_conveyor, Direction.kUp).withInterrupt(m_conveyor::isFull),
-            new DriveDistanceCommand(m_drive, Units.inchesToMeters(40))
+            new DriveDistanceCommand(m_drive, Units.inchesToMeters(50))
         ),
         //new AutoAlign(m_vision, m_drive),
         // new RetractIntakeCommand(m_intake),
             new DriveDistanceCommand(m_drive, Units.inchesToMeters(24)),
-        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 1, Rotation2d.fromDegrees(3)),
-        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0, Rotation2d.fromDegrees(3))
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 1, Rotation2d.fromDegrees(0)),
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0, Rotation2d.fromDegrees(0))
         //new DriveDistanceCommand(m_drive, Units.inchesToMeters(12))
     ));
+    
+    autoSelector_.registerCommand("2BallWall", "2BlW", new SequentialCommandGroup(
+        new ParallelDeadlineGroup(
+            new DriveDistanceCommand(m_drive, Units.inchesToMeters(46)),
+            new SequentialCommandGroup(
+                new DeployIntakeCommand(m_intake).withInterrupt(() -> m_drive.getAverageEncoderDistance() >= Units.inchesToMeters(42)),
+                new RetractIntakeCommand(m_intake)
+            ),
+            new RunConveyorCommand(m_conveyor, Direction.kUp),
+            new WaitCommand(8)
+        ),
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 1, Rotation2d.fromDegrees(0)),
+        new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 0, Rotation2d.fromDegrees(0))
+    ));
+    
     // autoSelector_.registerCommand("bar", "BAR", new PrintCommand("Bar"));
     // autoSelector_.registerCommand("foobar2000", "FB2", new PrintCommand("Foobar200"));
     autoSelector_.initialize();
