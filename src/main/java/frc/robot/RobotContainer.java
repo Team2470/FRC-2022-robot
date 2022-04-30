@@ -97,10 +97,12 @@ public class RobotContainer {
         new ParallelDeadlineGroup(
             new DriveDistanceCommand(m_drive, Units.inchesToMeters(46)),
             new SequentialCommandGroup(
-                new DeployIntakeCommand(m_intake).withInterrupt(() -> m_drive.getAverageEncoderDistance() >= Units.inchesToMeters(42)),
+                new ParallelRaceGroup(
+                    new DeployIntakeCommand(m_intake).withInterrupt(() -> m_drive.getAverageEncoderDistance() >= Units.inchesToMeters(42)),
+                    new RunConveyorCommand(m_conveyor, Direction.kUp)
+                ),
                 new RetractIntakeCommand(m_intake)
             ),
-            new RunConveyorCommand(m_conveyor, Direction.kUp),
             new WaitCommand(8)
         ),
         new ShootCommandGroup(m_conveyor, m_shooter, m_vision, m_drive, 1, Rotation2d.fromDegrees(0)),
