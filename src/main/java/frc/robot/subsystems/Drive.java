@@ -8,7 +8,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.sensors.PigeonIMU;
+//import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -58,7 +58,7 @@ public class Drive extends SubsystemBase {
   private final DifferentialDrive m_drive;
 
   // The gyro sensor
-  private final PigeonIMU m_gyro;
+  //private final PigeonIMU m_gyro;
 
   // Odometry class for tracking robot pose
   private final DifferentialDriveOdometry m_odometry;
@@ -93,7 +93,7 @@ public class Drive extends SubsystemBase {
     m_rightFollower.setNeutralMode(NeutralMode.Coast);
     
     m_drive = new DifferentialDrive(m_leftLeader, m_rightLeader);
-    m_gyro = new PigeonIMU(gyroTalon);
+  //  m_gyro = new PigeonIMU(gyroTalon);
 
     resetEncoders();
     m_odometry = new DifferentialDriveOdometry(getHeading());
@@ -231,7 +231,7 @@ public class Drive extends SubsystemBase {
    * Zeroes the heading of the robot.
    */
   public void zeroHeading() {
-    m_gyro.setFusedHeading(0);
+    //m_gyro.setFusedHeading(0);
   }
 
   /**
@@ -240,7 +240,8 @@ public class Drive extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public Rotation2d getHeading() {
-    return Rotation2d.fromDegrees(m_gyro.getFusedHeading());
+   // return Rotation2d.fromDegrees(m_gyro.getFusedHeading());
+   return Rotation2d.fromDegrees(0);
   }
 
   /**
@@ -259,7 +260,7 @@ public class Drive extends SubsystemBase {
    */
   public double getTurnRate() {
     double[] xyz_dps = new double[3];
-    m_gyro.getRawGyro(xyz_dps);
+    //m_gyro.getRawGyro(xyz_dps);
     return xyz_dps[2];
   }
 }

@@ -74,6 +74,12 @@ public class FrontClimber extends SubsystemBase implements Climber {
     SmartDashboard.putBoolean("Climber Front at forward softlimit", isAtForwardSoftLimit());
     SmartDashboard.putBoolean("Climber Front at any softlimit", isAtSoftLimit());
     SmartDashboard.putBoolean("Climber Front at reverse softlimit", isAtReverseSoftLimit());
+
+    SmartDashboard.putNumber("Front Leader Climber Stator Current", m_frontClimber.getStatorCurrent());
+    SmartDashboard.putNumber("Front Leader Climber Supply Currnet", m_frontClimber.getSupplyCurrent());
+
+    SmartDashboard.putNumber("Front Follower Climber Stator Current", m_frontClimberFollower.getStatorCurrent());
+    SmartDashboard.putNumber("Front Follower Climber Supply Currnet", m_frontClimberFollower.getSupplyCurrent());
   }
 
   public Rotation2d getAngle() {

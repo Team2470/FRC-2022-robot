@@ -45,7 +45,6 @@ public class RobotContainer {
 
   // Controller
   private final XboxController m_controller = new XboxController(Constants.kControllerA);
-  private final Joystick m_testpad = new Joystick(1);
   private final Joystick m_buttopad = new Joystick(2);
 
   //Auto
@@ -235,27 +234,6 @@ public class RobotContainer {
 
     JoystickButton Move125 = new JoystickButton(m_buttopad, 11);
     Move125.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(140)).perpetually());
-
-    JoystickButton Move30_2 = new JoystickButton(m_testpad, 5);
-    Move30_2.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(30)).perpetually());
-
-    JoystickButton Move90_2 = new JoystickButton(m_testpad, 6);
-    Move90_2.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(90)).perpetually());
-
-    JoystickButton Move125_2 = new JoystickButton(m_testpad, 7);
-    Move125_2.whenPressed(new BackClimbAngleCommand(m_backClimber, Rotation2d.fromDegrees(125)).perpetually());
-
-    JoystickButton ForwardClimbOutwardsButton2 = new JoystickButton(m_testpad, 2);
-    ForwardClimbOutwardsButton2.whileActiveContinuous(new MoveFrontClimberOutwards(m_frontClimber));
-
-    JoystickButton ForwardClimbInwardsButton2 = new JoystickButton(m_testpad, 1);
-    ForwardClimbInwardsButton2.whileActiveContinuous(new MoveFrontClimberInwards(m_frontClimber));
-
-    JoystickButton BackwardClimbOutwardsButtons2 = new JoystickButton(m_testpad, 4);
-    BackwardClimbOutwardsButtons2.whileActiveContinuous(new MoveBackClimberOutwards(m_backClimber));
-
-    JoystickButton BackwardClimbInwardButton2 = new JoystickButton(m_testpad, 3);
-    BackwardClimbInwardButton2.whileActiveContinuous(new MoveBackClimberInwards(m_backClimber));
 
     DPadTrigger IncreaseVisionMultiplier = new DPadTrigger(m_controller, DPadTrigger.DPad.kUp);
     IncreaseVisionMultiplier.whenActive(new InstantCommand(()-> m_vision.AdjustMultiplier(0.001)));
