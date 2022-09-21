@@ -96,21 +96,25 @@ public class Vision extends SubsystemBase {
 
   public void init() {
     setLEDMode(LEDMode.kOff);
+    SmartDashboard.putNumber("Shooter Control RPM", 0);
   }
 
   public int getRPM() {
-    // Add offset from base of target to center of hoop
-    double distance = (getFilteredDistance()) * m_multiplier;
+    return (int)SmartDashboard.getNumber("Shooter Control RPM", 0);
 
-    double omega = 12.994 * distance + 1814.7;
+    // // Add offset from base of target to center of hoop
+    // double distance = (getFilteredDistance()) * m_multiplier;
 
-    int rpm = (int) Math.round(omega);
+    // double omega = 12.994 * distance + 1814.7;
 
-    return Math.min(Math.max(rpm, 1000), 5500);
+    // int rpm = (int) Math.round(omega);
+
+    // return Math.min(Math.max(rpm, 1000), 5500);
   }
 
   public boolean isShotPossible() {
-    return getRPM() < 3500 && getFilteredDistance() > 5 * 12;
+    return true;
+    // return getRPM() < 3500 && getFilteredDistance() > 5 * 12;
   }
 
   public double getFilteredDistance() {
@@ -139,7 +143,8 @@ public class Vision extends SubsystemBase {
    * @return true if found
    */
   public boolean getTargetFound() {
-    return m_tv.getDouble(0.0) == 1.0;
+    return true;
+    // return m_tv.getDouble(0.0) == 1.0;
   }
 
   public Rotation2d getHorizontalAngle() {
